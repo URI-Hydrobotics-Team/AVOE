@@ -18,13 +18,15 @@ class vehicle_t{
 		char name[32];
 		char version[16];
 		char type[16];
+
+		int control_mode = 0;
 		
-		int sensors_in_use;
-		int motors_in_use;
-		sensor_t sensors[MAX_PER_VEHICLE_SENSORS];
-		motor_t motors[MAX_PER_VEHICLE_SENSORS];
+		int sensors_count;
+		int motor_count;
 
 		stopwatch_t clocks[MAX_PER_VEHICLE_CLOCKS];
+		
+		char sensor_table[MAX_PER_VEHICLE_SENSORS][32];
 
 
 	public:
@@ -52,25 +54,36 @@ class vehicle_t{
 		return type;
 	}
 
-	void update(){
+	void update(int m){
 		//update values and clocks
+		control_mode = m;
+
+	}
+
+	void updateSensorTable(sensor_t *sensors[], int count){
+		for (int i = 0; i < count; i++){
+			strncpy(sensor_table[i], sensors[i]->getType(), 32);
+			
+		}
+	}
 
 
+	void print(){
+		//print vehicle information for debugging purposes
+		std::cout << "vehicle_t print:\n";
+		std::cout << "\tPrimary Information:\n";
+		std::cout << "\t\tNAME: " << name << '\n';
+		std::cout << "\t\tVERSION: " << version << '\n';
+		std::cout << "\t\tTYPE: " << type << '\n';
+		
+		std::cout << "\tSensor List:\n";
+		for (int i = 0; i < sensors_count; i++){
+			std::cout << sensor_table[i] << '\n';
+		}
+	
 	}
 
 	
-
-	void initSensors(){
-
-		for (int i = 0; i < sensors_in_use; i++){
-
-			sensors[i].init();
-		}
-
-	}
-
-
-
 
 
 

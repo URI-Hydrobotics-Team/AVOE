@@ -17,12 +17,39 @@
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
-#include "network.h"
+#include "../lib/network.h"
 
 
 /* global variables for main */
+time_t global_time;
+int verbose;
+int control_mode;
 
-//input parsing
+
+/* sensor funcctions */
+
+void initSensors(sensor_t *sensors[], int sensor_count){
+
+	for (int i = 0; i < sensor_count; i++){
+
+		sensors[i]->init();
+	}
+
+}
+
+void printSensors(sensor_t *sensors[], int sensor_count){
+
+	for (int i = 0; i < sensor_count; i++){
+		sensors[i]->print();
+	}
+
+}
+
+
+
+
+
+
 
 
 /* the main loop */
@@ -30,19 +57,10 @@
 
 void run(){
 
-
-
-
 	while (1){
 		//"we call this, the loop"
 		
-
-
 	}
-
-
-
-
 }
 
 
@@ -65,7 +83,6 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	//std::cout << "\tparse <manifest file>\t(parse manifest file but do not run)\n";
 	std::cout << "\trun\t(run)\n";
 	std::cout << "\tverbose\t(run, but displays more debugging information)\n";
 	std::cout << "\tlog\t(run with verbose and log to a file)\n";

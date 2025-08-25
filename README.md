@@ -23,6 +23,13 @@ AVOE is the replacement for most of the control code in the AUV repository inclu
 Create a open source ROS alternative that is fast, minimal, highly modular, and flexible that can drive Tardigrade reliably in time for RoboSub 2026. Maybe we can even gather some outside interest in terms of code contributions.
 
 
+### TODO
+- implement controller support
+- skeleton for Tardigrade
+- PID controller
+- build a refrence frontend
+- manifest parser
+
 ## Documentation
 
 ## Quick start

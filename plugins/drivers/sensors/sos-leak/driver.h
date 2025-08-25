@@ -1,6 +1,6 @@
 /* Devin's leak sensor code implemented as a header file that can be included into other projects */
 #include <iostream>
-#include <wiringPi.h>
+#include <pigpio.h>
 #define LEAK_PIN 17 // Use the actual GPIO pin you connected to
 
 
@@ -12,34 +12,32 @@ class leak_sensor_t{
 
 	public:
 
-		void cold_init(){
+		void fullInit(){
 		
-			wiringPiSetupGpio();
-			pinMode(LEAK_PIN, INPUT); // Set the leak sensor pin as input
-    			pullUpDnControl(LEAK_PIN, PUD_DOWN); // Enable pull-down resistor
+			if(gpioInitialise() == PI_INIT_FAILED){
+				std::cout << "Failed to init pigpio\n";
+				return false;
+			}
 
+			init();
 		}
 
 		void init(){
-			pinMode(LEAK_PIN, INPUT); // Set the leak sensor pin as input
-			pullUpDnControl(LEAK_PIN, PUD_DOWN); // Enable pull-down resistor
+			gpioSetMode(LEAK_PIN, PI_INPUT); // Set the leak sensor pin as input
+			gpioSetPullDown(LEAK_PIN, PI_PUD_DOWN); // Enable pull-down resistor
 
 
 		}		
 
 		int probe(){
 			//probe the sensor
-			if (digitalRead(LEAK_PIN) == HIGH){
+			if (gpioRead(LEAK_PIN) > 0){
 				return 1;
 			}else{
 				return 0;
 			}
 	
 		}
-
-
-
-
 
 
 

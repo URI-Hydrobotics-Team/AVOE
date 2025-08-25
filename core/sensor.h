@@ -14,10 +14,10 @@
 class sensor_t{
 
 	private:
-		char name[32];
+		char model[32];
 		char vendor[32];
 		char protocol[16];
-		int type; 
+		char type[32]; 
 		int state = 0; //0 = uninit. , 1 = ready		
 
 		char variable_names[MAX_SENSOR_ENTRIES][64];
@@ -28,17 +28,18 @@ class sensor_t{
 
 	}
 
-	void init(char *n, char *v, char *p){
+	void init(char *m, char *v, char *p, char *t){
 
-		strncpy(name, n, 32);
+		strncpy(model, m, 32);
 		strncpy(vendor, v, 32);
 		strncpy(protocol, p, 16);
+		strncpy(type, t, 16);
 
 	}
 
 
-	char *getName(){
-		return name;
+	char *getModel(){
+		return model;
 	}
 
 	char *getVendor(){
@@ -49,6 +50,9 @@ class sensor_t{
 		return protocol;
 	}
 
+	char *getType(){
+		return type;
+	}
 
 	int setValue(char *name, char *value){
 		int index;
@@ -95,6 +99,16 @@ class sensor_t{
 		}
 		
 	}
+
+	void print(){
+
+		std::cout << "\t\tMODEL: " << model << '\n';
+                std::cout << "\t\tVENDOR: " << vendor << '\n';
+                std::cout << "\t\tPROTOCOL: " << protocol << '\n';
+
+
+	}
+
 
 
 };
