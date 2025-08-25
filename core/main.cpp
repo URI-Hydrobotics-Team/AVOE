@@ -13,14 +13,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 /* AVOE specific*/
+#include "lib.h"
 #include "config.h"
+#include "log.h"
 #include "vehicle.h"
-
+#include "network.h"
 
 
 /* global variables for main */
 
 //input parsing
+
+
+/* the main loop */
+
+
+void run(){
+
+
+
+
+	while (1){
+		//"we call this, the loop"
+		
+
+
+	}
+
+
+
+
+}
+
+
+
+
+
+
 
 
 
@@ -39,8 +68,7 @@ void printHelp(){
 	//std::cout << "\tparse <manifest file>\t(parse manifest file but do not run)\n";
 	std::cout << "\trun\t(run)\n";
 	std::cout << "\tverbose\t(run, but displays more debugging information)\n";
-	
-
+	std::cout << "\tlog\t(run with verbose and log to a file)\n";
 }
 
 

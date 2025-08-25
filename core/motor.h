@@ -1,30 +1,28 @@
 /*
 
 	URI Hydrdobotics
-	AVOE sensor class
+	AVOE motor class
 
-	Sensor drivers will interface with each sensor object. The vehicle class will hold sensor objects and provide an interface for accessing them.
-
+	motor objects work very similary to sensor objects
 */
 
 
 
 
 
-class sensor_t{
+class motor_t{
 
 	private:
 		char name[32];
 		char vendor[32];
 		char protocol[16];
 		int type; 
-		int state = 0; //0 = uninit. , 1 = ready		
-
+	
 		char variable_names[MAX_SENSOR_ENTRIES][64];
 		char values[MAX_SENSOR_ENTRIES][64];
 	public:
 
-	sensor_t(){
+	motor_t(){
 
 	}
 
@@ -69,32 +67,7 @@ class sensor_t{
 
 	}
 
-	void init(){
 
-		state = 0;
-		//tells sensors.h that intilization is ready
-		
-	}
-
-	int getState(){
-		
-		return state;
-
-	}
-
-	void log(log_t *log){
-		/* automatically log all values to a log_t */
-		std::string entry = "";
-		for (int i = 0; i < MAX_SENSOR_ENTRIES; i++){
-			entry += variable_names[i];
-			entry += ' ';
-			entry += values[i];
-			log->log(entry.c_str());
-			entry = "";
-
-		}
-		
-	}
 
 
 };

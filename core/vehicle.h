@@ -8,7 +8,8 @@
 
 
 #include "sensor.h"
-
+#include "motor.h"
+#include "clock.h"
 class vehicle_t{
 
 
@@ -18,8 +19,12 @@ class vehicle_t{
 		char version[16];
 		char type[16];
 		
-
+		int sensors_in_use;
+		int motors_in_use;
 		sensor_t sensors[MAX_PER_VEHICLE_SENSORS];
+		motor_t motors[MAX_PER_VEHICLE_SENSORS];
+
+		stopwatch_t clocks[MAX_PER_VEHICLE_CLOCKS];
 
 
 	public:
@@ -47,7 +52,23 @@ class vehicle_t{
 		return type;
 	}
 
+	void update(){
+		//update values and clocks
+
+
+	}
+
 	
+
+	void initSensors(){
+
+		for (int i = 0; i < sensors_in_use; i++){
+
+			sensors[i].init();
+		}
+
+	}
+
 
 
 
