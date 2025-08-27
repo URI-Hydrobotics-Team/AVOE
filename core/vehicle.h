@@ -26,13 +26,13 @@ class vehicle_t{
 
 		stopwatch_t clocks[MAX_PER_VEHICLE_CLOCKS];
 		
-		char sensor_table[MAX_PER_VEHICLE_SENSORS][32];
+		char sensor_table[MAX_PER_VEHICLE_SENSORS][16];
 
 
 	public:
 
 
-	vehicle_t (char *n, char *v, char *t){
+	vehicle_t (const char *n, const char *v, const char *t){
 
 		strncpy(name, n, 32);
 		strncpy(version, v, 16);
@@ -60,9 +60,11 @@ class vehicle_t{
 
 	}
 
-	void updateSensorTable(sensor_t *sensors[], int count){
-		for (int i = 0; i < count; i++){
-			strncpy(sensor_table[i], sensors[i]->getType(), 32);
+	void updateSensorTable(sensor_t sensors[], int count){
+		sensors_count = count;
+		for (int i = 0; i < sensors_count; i++){
+			initStr(sensor_table[i], 16);
+			strncpy(sensor_table[i], sensors[i].getType(), 16);
 			
 		}
 	}
@@ -78,7 +80,7 @@ class vehicle_t{
 		
 		std::cout << "\tSensor List:\n";
 		for (int i = 0; i < sensors_count; i++){
-			std::cout << sensor_table[i] << '\n';
+			std::cout << "\t\t" << sensor_table[i] << '\n';
 		}
 	
 	}

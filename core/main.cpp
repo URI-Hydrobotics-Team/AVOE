@@ -17,7 +17,12 @@
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
+#include "mission.h"
 #include "../lib/network.h"
+
+/* Robot specific*/
+#include "sensors.h"
+#include "motors.h"
 
 
 /* global variables for main */
@@ -26,27 +31,38 @@ int verbose;
 int control_mode;
 
 
-/* sensor funcctions */
+/* sensor functions */
 
-void initSensors(sensor_t *sensors[], int sensor_count){
+void initSensors(sensor_t sensors[], int sensor_count){
 
 	for (int i = 0; i < sensor_count; i++){
 
-		sensors[i]->init();
+		sensors[i].init();
 	}
 
 }
 
-void printSensors(sensor_t *sensors[], int sensor_count){
+void printSensors(sensor_t sensors[], int sensor_count){
 
 	for (int i = 0; i < sensor_count; i++){
-		sensors[i]->print();
+		sensors[i].print();
 	}
 
 }
 
 
+/* test function */
 
+
+void test(){
+	setupSensors();
+	vehicle_t tardigrade("Tardigrade", "2", "AUV");
+	tardigrade.updateSensorTable(tardigrade_sensors, 3);
+	tardigrade.print();
+
+
+	//printSensors(tardigrade_sensors, 3);
+}
 
 
 
@@ -56,21 +72,12 @@ void printSensors(sensor_t *sensors[], int sensor_count){
 
 
 void run(){
-
+	setupSensors();
 	while (1){
 		//"we call this, the loop"
 		
 	}
 }
-
-
-
-
-
-
-
-
-
 
 /* support functions for main */
 
@@ -86,6 +93,7 @@ void printHelp(){
 	std::cout << "\trun\t(run)\n";
 	std::cout << "\tverbose\t(run, but displays more debugging information)\n";
 	std::cout << "\tlog\t(run with verbose and log to a file)\n";
+	std::cout << "\ttest\t(run the test() function and quit)\n"; 
 }
 
 
@@ -103,6 +111,12 @@ int main(int argc, char *argv[]){
 		printHelp();
 		return 0;
 	}
+	if (strncmp(argv[1], "test", 16) == 0){
+		test();
+		return 0;
+	}
+
+
 
 
 

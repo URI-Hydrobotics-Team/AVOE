@@ -22,13 +22,18 @@ class sensor_t{
 
 		char variable_names[MAX_SENSOR_ENTRIES][64];
 		char values[MAX_SENSOR_ENTRIES][64];
+		/* positioning */
+
+		vector_t offset; //position offset from center of vehicle in mm
+
+
 	public:
 
 	sensor_t(){
 
 	}
 
-	void init(char *m, char *v, char *p, char *t){
+	void init(const char *m, const char *v, const char *p, const char *t){
 
 		strncpy(model, m, 32);
 		strncpy(vendor, v, 32);
@@ -108,7 +113,4 @@ class sensor_t{
 
 
 	}
-
-
-
 };

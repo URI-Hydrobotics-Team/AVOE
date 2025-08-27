@@ -14,3 +14,14 @@ void initStr(char *str, int len){
 	}
 }
 
+
+
+class vector_t{
+	//vector for 3d space
+	public:
+		double x;
+		double y;
+		double z;	
+
+};
+
