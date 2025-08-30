@@ -10,7 +10,7 @@
 
 #include <time.h>
 
-class stopwatch_t{
+class avoe_clock_t{
 
 
 	private:

@@ -12,3 +12,6 @@ Plugins that do not interface with hardware directly. A PID controller is an exa
 Motor drivers are responsible for devices that conduct movement (i.e. servos, thrusters, etc.)
 #### Sensor Drivers
 Senosr drivers are self explanatory
+
+### Gamepad Maps
+Header files that include a function to convert between a generic controller data type into a more refined profile type that can be used by frontends

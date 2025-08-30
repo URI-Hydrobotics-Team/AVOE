@@ -24,7 +24,7 @@ class vehicle_t{
 		int sensors_count;
 		int motor_count;
 
-		stopwatch_t clocks[MAX_PER_VEHICLE_CLOCKS];
+		avoe_clock_t clocks[MAX_PER_VEHICLE_CLOCKS];
 		
 		char sensor_table[MAX_PER_VEHICLE_SENSORS][16];
 

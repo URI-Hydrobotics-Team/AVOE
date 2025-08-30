@@ -20,14 +20,25 @@
 #include "mission.h"
 #include "../lib/network.h"
 
+
 /* Robot specific*/
 #include "sensors.h"
 #include "motors.h"
 
 
 /* global variables for main */
-time_t global_time;
+avoe_clock_t system_time;
 int verbose;
+/* 
+	verbose values: 
+	0 - no verbose
+	1 - full verbose
+	(subject to change)	
+
+
+
+*/
+
 int control_mode;
 
 
@@ -39,6 +50,12 @@ void initSensors(sensor_t sensors[], int sensor_count){
 
 		sensors[i].init();
 	}
+
+	if (verbose > 0){
+
+		std::cout << "[MAIN] Sensors Initiliazed\n";
+	}
+
 
 }
 
@@ -64,6 +81,47 @@ void test(){
 	//printSensors(tardigrade_sensors, 3);
 }
 
+/* networking functions */
+
+void transmitTelemetry(tx_socket socket, const char *header, const char *data, int time_stamp){
+	/*
+		transmit telemetry, such as sensor data to a reciever
+		header string should adhere to a standard
+
+	*/
+	
+	std::string str = "$VT "; // VEHICLE TELEMETRY 
+	str += header; 
+	str += ' ';
+	if (time_stamp != 0){
+		str += system_time.getTimeStr();
+		str += ' ';
+	
+	}
+	
+	str += data;
+	str += '$'; //Terminating character
+
+
+	socket.transmit(str.c_str()); 
+
+	if (verbose > 0){	
+		std::cout << "[MAIN] transmitTelemtry Message: " << str.c_str() << '\n';;
+	}
+}
+
+
+/* logging functions */
+
+void logTelemetry(log_t log, const char *in, int arguments){
+	/*
+		log telemetry data
+
+	*/
+	
+
+
+}
 
 
 
@@ -74,7 +132,7 @@ void test(){
 void run(){
 	setupSensors();
 	while (1){
-		//"we call this, the loop"
+		//"we call this, the loop -LTG"
 		
 	}
 }
