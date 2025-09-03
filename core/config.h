@@ -7,7 +7,7 @@
 
 
 
-#define AVOE_VERSION "0.0.1"
+//#define AVOE_VERSION "0.0.1"
 
 
 

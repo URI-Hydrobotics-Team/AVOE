@@ -13,7 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 /* AVOE specific*/
-#include "lib.h"
+#include "../lib/globals.h"
+#include "../lib/lib.h"
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
