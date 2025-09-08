@@ -9,7 +9,7 @@
 
 #include "sensor.h"
 #include "motor.h"
-#include "clock.h"
+#include "../lib/clock.h"
 class vehicle_t{
 
 

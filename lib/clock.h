@@ -22,9 +22,9 @@ class avoe_clock_t{
 
 
 
-		float getElaspedTime(){
+		int getElaspedTimeMS(){
 			clock_t t = clock() - timer;
-			return ((float)t)/CLOCKS_PER_SEC;
+			return (t * 100000 / CLOCKS_PER_SEC);
 
 
 		}
