@@ -1,0 +1,7 @@
+/*
+
+	AVOE autonmous tasks
+	URI Hydrbotics
+	This file includes all hardcoded AI logic for your usecase
+
+*/

@@ -17,14 +17,14 @@
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
-#include "mission.h"
+#include "controller.h"
 #include "../lib/network.h"
 
 
 /* Robot specific*/
 #include "sensors.h"
 #include "motors.h"
-
+#include "tasks.h"
 
 /* global variables for main */
 avoe_clock_t system_time;
@@ -40,6 +40,9 @@ int verbose;
 */
 
 int control_mode;
+
+
+
 
 
 /* sensor functions */
