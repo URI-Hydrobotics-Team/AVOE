@@ -4,6 +4,12 @@
 The core source for AVOE, and direct successor to auv-hub.
 
 
+## TODO
+- robust message encoder and decoder
+- functional and quick sensor data gathering
+- robust raw motor control
+
+
 ## Important Files
 ### main.cpp
 Includes all other header files and provides important functions for general vehicle control. The 'test()' function should be the only place where hardcoded elements are permitted. Also handles command line arguments. 
