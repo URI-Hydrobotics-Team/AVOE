@@ -65,7 +65,7 @@ void initSensors(sensor_t sensors[], int sensor_count){
 void printSensors(sensor_t sensors[], int sensor_count){
 
 	for (int i = 0; i < sensor_count; i++){
-		sensors[i].print();
+		//sensors[i].print();
 	}
 
 }

@@ -20,8 +20,7 @@ class sensor_t{
 		char type[32]; 
 		int state = 0; //0 = uninit. , 1 = ready		
 
-		char variable_names[MAX_SENSOR_ENTRIES][64];
-		char values[MAX_SENSOR_ENTRIES][64];
+		char data[512];	
 		/* positioning */
 
 		vector_t offset; //position offset from center of vehicle in mm
@@ -59,22 +58,8 @@ class sensor_t{
 		return type;
 	}
 
-	int setValue(char *name, char *value){
-		int index;
-
-		for (int i = 0; i < MAX_SENSOR_ENTRIES; i++){
-			if (strncmp(name, variable_names[i], 64) == 0){
-				// found name
-				index = i;
-			}else{
-				return 0; //error
-				
-			}
-			//clear value first
-			strncpy(values[index], value, 64);
-
-			return 1;
-		}
+	char *read(){
+		return data;
 
 	}
 
@@ -91,8 +76,15 @@ class sensor_t{
 
 	}
 
+
+	void write(char *input){
+		strncpy(data, input, 512);
+		
+	}
+
+	/*
 	void log(log_t *log){
-		/* automatically log all values to a log_t */
+		//	automatically log all values to a log_t 
 		std::string entry = "";
 		for (int i = 0; i < MAX_SENSOR_ENTRIES; i++){
 			entry += variable_names[i];
@@ -104,7 +96,7 @@ class sensor_t{
 		}
 		
 	}
-
+	
 	void print(){
 
 		std::cout << "\t\tMODEL: " << model << '\n';
@@ -113,4 +105,6 @@ class sensor_t{
 
 
 	}
+
+	*/
 };

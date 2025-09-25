@@ -17,9 +17,14 @@ class motor_t{
 		char vendor[32];
 		char protocol[16];
 		int type; 
+
+
+		vector_t position;
+		vector_t direction;		
+		float *force_func;
+
+		char data[512];			
 	
-		char variable_names[MAX_SENSOR_ENTRIES][64];
-		char values[MAX_SENSOR_ENTRIES][64];
 	public:
 
 	motor_t(){
@@ -48,25 +53,16 @@ class motor_t{
 	}
 
 
-	int setValue(char *name, char *value){
-		int index;
+	char *read(){
 
-		for (int i = 0; i < MAX_SENSOR_ENTRIES; i++){
-			if (strncmp(name, variable_names[i], 64) == 0){
-				// found name
-				index = i;
-			}else{
-				return 0; //error
-				
-			}
-			//clear value first
-			strncpy(values[index], value, 64);
-
-			return 1;
-		}
-
+		return data;
 	}
 
+	void write(const char *input){
+		strncpy(data, input, 512);
+
+
+	}
 
 
 
