@@ -3,9 +3,39 @@
 
 #include "sensor.h"
 
-sensor_t::sensor_t(){
+sensor_t::sensor_t(size_t fields){
+	field_count = fields;
+	model = new char[32];
+	vendor = new char[32];
+	protocol = new char[16];
+	type = new char[32];
+
+	data = new char*[field_count];
+
+	for (size_t i = 0; i < field_count; i++){
+		data[i] = new char[128];
+
+	}
+
 
 }
+
+sensor_t::~sensor_t(){
+	delete[] model;
+	delete[] vendor;
+	delete[] protocol;
+	delete[] type;
+
+	for (size_t i = 0; i < field_count; i++){
+		delete[] data[i];
+
+	}
+
+	delete[] data;
+
+}
+
+
 
 void sensor_t::init(const char *m, const char *v, const char *p, const char *t){
 
@@ -33,8 +63,8 @@ char *sensor_t::getType(){
 	return type;
 }
 
-char *sensor_t::read(){
-	return data;
+char *sensor_t::read(size_t field){
+	return data[field];
 
 }
 
@@ -52,8 +82,8 @@ int sensor_t::getState(){
 }
 
 
-void sensor_t::write(char *input){
-	strncpy(data, input, 512);
+void sensor_t::write(char *input, size_t field){
+	strncpy(data[field], input, 128);
 
 }
 
@@ -71,16 +101,19 @@ entry = "";
 }
 
 }
+ */
+void sensor_t::print(){
 
-void print(){
+	std::cout << "\t\tMODEL: " << model << '\n';
+	std::cout << "\t\tVENDOR: " << vendor << '\n';
+	std::cout << "\t\tPROTOCOL: " << protocol << '\n';
+	std::cout << "DATA:\n";
+	for (size_t i = 0; i < field_count; i++){
+		std::cout << "\tFIELD " << i << ": " << data[i] << '\n';
 
-std::cout << "\t\tMODEL: " << model << '\n';
-std::cout << "\t\tVENDOR: " << vendor << '\n';
-std::cout << "\t\tPROTOCOL: " << protocol << '\n';
-
+	}
 
 }
-*/
 
 
 

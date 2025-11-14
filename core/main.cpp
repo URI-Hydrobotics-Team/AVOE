@@ -75,11 +75,12 @@ void printSensors(sensor_t sensors[], int sensor_count){
 
 
 void test(){
+	/*
 	setupSensors();
 	vehicle_t tardigrade("Tardigrade", "2", "AUV");
 	tardigrade.updateSensorTable(tardigrade_sensors, 3);
 	tardigrade.print();
-
+	*/
 
 	//printSensors(tardigrade_sensors, 3);
 }

@@ -12,13 +12,15 @@
 
 /* tardigrade example */
 
-sensor_t tardigrade_sensors[4];
+
+
+//sensor_t tardigrade_sensors[4];
 
 
 void setupSensors(){
-	tardigrade_sensors[0].init("BNO055", "Adafruit", "I2C", "IMU");
-	tardigrade_sensors[1].init("Bar 30m", "BlueRobotics", "I2C", "pressure");
-	tardigrade_sensors[2].init("SOS Leak", "BlueRobotics", "GPIO", "leak");
+	//tardigrade_sensors[0].init("BNO055", "Adafruit", "I2C", "IMU");
+	//tardigrade_sensors[1].init("Bar 30m", "BlueRobotics", "I2C", "pressure");
+	//tardigrade_sensors[2].init("SOS Leak", "BlueRobotics", "GPIO", "leak");
 }
 
 

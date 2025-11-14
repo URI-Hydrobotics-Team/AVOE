@@ -18,13 +18,9 @@
 class sensor_t{
 
 	private:
-		char model[32];
-		char vendor[32];
-		char protocol[16];
-		char type[32]; 
+		char *model, *vendor, *protocol, *type, **data;
 		int state = 0; //0 = uninit. , 1 = ready		
-
-		char data[512];	
+		size_t field_count;
 		/* positioning */
 
 		vector_t offset; //position offset from center of vehicle in mm
@@ -32,16 +28,17 @@ class sensor_t{
 
 	public:
 
-		sensor_t();
+		sensor_t(size_t fields);
+		~sensor_t();
 		void init(const char *m, const char *v, const char *p, const char *t);
 		char *getModel();
 		char *getVendor();
 		char *getProtocol();
 		char *getType();
-		char *read();
+		char *read(size_t field);
 		void init();
 		int getState();
-		void write(char *input);
+		void write(char *input, size_t field);
 		void log(log_t *log);
 		void print();
 
