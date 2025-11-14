@@ -23,29 +23,26 @@ class vehicle_t{
 
 	private:
 
-		char name[32];
-		char version[16];
-		char type[16];
+		char *name; //32
+		char *version; //16
+		char *type; //16
 
 		int control_mode = 0;
 
-		int sensors_count;
-		int motor_count;
+		size_t sensor_count, motor_count;
 
 		avoe_clock_t clocks[MAX_PER_VEHICLE_CLOCKS];
-
-		char sensor_table[MAX_PER_VEHICLE_SENSORS][16];
-
+		sensor_t **sensor_table;
+		motor_t **motor_table;
 
 	public:
-
-
 		vehicle_t (const char *n, const char *v, const char *t);
+		~vehicle_t();
 		char *getName();
 		char *getVersion();
 		char *getType();
 		void update(int m);
-		void updateSensorTable(sensor_t sensors[], int count);
+		void addSensor(sensor_t *sensor);
 		void print();
 
 };

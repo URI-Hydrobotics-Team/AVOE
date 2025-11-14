@@ -6,11 +6,26 @@
 
 vehicle_t::vehicle_t (const char *n, const char *v, const char *t){
 
+	sensor_count = 0;
+	motor_count = 0;
+	sensor_table = nullptr;
+	name = new char[32];
+	version = new char[16];
+	type = new char[16];
+
 	strncpy(name, n, 32);
 	strncpy(version, v, 16);
 	strncpy(type, t, 16);
 
 }
+
+vehicle_t::~vehicle_t(){
+	delete[] name;
+	delete[] version;
+	delete[] type;
+
+}
+
 
 
 char *vehicle_t::getName(){
@@ -22,7 +37,6 @@ char *vehicle_t::getVersion(){
 }
 
 char *vehicle_t::getType(){
-
 	return type;
 }
 
@@ -32,13 +46,26 @@ void vehicle_t::update(int m){
 
 }
 
-void vehicle_t::updateSensorTable(sensor_t sensors[], int count){
-	sensors_count = count;
-	for (int i = 0; i < sensors_count; i++){
-		initStr(sensor_table[i], 16);
-		strncpy(sensor_table[i], sensors[i].getType(), 16);
+void vehicle_t::addSensor(sensor_t *sensor){
+
+	if (sensor_count == 0){
+		sensor_table = new sensor_t*[1];
+		sensor_table[0] = sensor;	
+	}else{
+	
+		sensor_t **temp = new sensor_t*[sensor_count + 1];
+		for (size_t i = 0; i < sensor_count; i++){
+			temp[i] = sensor_table[i];
+		}
+		sensor_count++;
+
+		delete[] sensor_table;
+		sensor_table = temp;
+	
+
 
 	}
+
 }
 
 
@@ -51,8 +78,8 @@ void vehicle_t::print(){
 	std::cout << "\t\tTYPE: " << type << '\n';
 
 	std::cout << "\tSensor List:\n";
-	for (int i = 0; i < sensors_count; i++){
-		std::cout << "\t\t" << sensor_table[i] << '\n';
+	for (int i = 0; i < sensor_count; i++){
+		sensor_table[i]->print();
 	}
 }
 
