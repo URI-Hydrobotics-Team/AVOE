@@ -38,7 +38,7 @@ class sensor_t{
 		char *read(size_t field);
 		void init();
 		int getState();
-		void write(char *input, size_t field);
+		void write(const char *input, size_t field, size_t n);
 		void log(log_t *log);
 		void print();
 
