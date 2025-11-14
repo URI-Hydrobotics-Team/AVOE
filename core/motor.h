@@ -1,14 +1,15 @@
 /*
 
-	URI Hydrdobotics
-	AVOE motor class
+   URI Hydrdobotics
+   AVOE motor class
 
-	motor objects work very similary to sensor objects
+   motor objects work very similary to sensor objects
 */
 
+#ifndef MOTOR_H
+#define MOTOR_H
 
-
-
+#include "../lib/lib.h"
 
 class motor_t{
 
@@ -24,46 +25,18 @@ class motor_t{
 		float *force_func;
 
 		char data[512];			
-	
+
 	public:
 
-	motor_t(){
-
-	}
-
-	void init(char *n, char *v, char *p){
-
-		strncpy(name, n, 32);
-		strncpy(vendor, v, 32);
-		strncpy(protocol, p, 16);
-
-	}
-
-
-	char *getName(){
-		return name;
-	}
-
-	char *getVendor(){
-		return vendor;
-	}
-
-	char *getProtocol(){
-		return protocol;
-	}
-
-
-	char *read(){
-
-		return data;
-	}
-
-	void write(const char *input){
-		strncpy(data, input, 512);
-
-
-	}
-
+		motor_t();
+		void init(char *n, char *v, char *p);
+		char *getName();
+		char *getVendor();
+		char *getProtocol();
+		char *read();
+		void write(const char *input);
 
 
 };
+
+#endif

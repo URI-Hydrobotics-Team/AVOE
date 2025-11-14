@@ -10,6 +10,9 @@
 
 #include <time.h>
 
+#ifndef AVOE_CLOCK_H
+#define AVOE_CLOCK_H
+
 class avoe_clock_t{
 
 
@@ -46,3 +49,4 @@ class avoe_clock_t{
 
 
 };
+#endif

@@ -13,7 +13,7 @@
 #include <stdlib.h>
 /* AVOE specific*/
 #include "../lib/globals.h"
-#include "../lib/lib.h"
+//#include "../lib/lib.h"
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
@@ -176,13 +176,6 @@ int main(int argc, char *argv[]){
 		test();
 		return 0;
 	}
-
-
-
-
-
-
-
 	return 0;
 
 }

@@ -4,7 +4,8 @@
 
 */
 
-
+#ifndef CONFIG_H
+#define CONFIG_H
 
 
 //#define AVOE_VERSION "0.0.1"
@@ -24,4 +25,4 @@
 #define SOCKET_SLEEP 1000
 #define SOCKET_TIMEOUT 10000
 
-
+#endif

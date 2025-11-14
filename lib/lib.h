@@ -5,23 +5,19 @@
 	useful functions
 
 */
+#ifndef AVOE_LIB_H
+#define AVOE_LIB_H
 
 
-void initStr(char *str, int len){
-	/* initiate a string with a series of null terminators */
-	for (int i = 0; i < len; i++){
-		str[i] = 0;
-	}
-}
+void initStr(char *str, int len);
 
 
-
-class vector_t{
+struct vector_t{
 	//vector for 3d space
-	public:
-		double x;
-		double y;
-		double z;	
+	double x;
+	double y;
+	double z;	
 
 };
 
+#endif
