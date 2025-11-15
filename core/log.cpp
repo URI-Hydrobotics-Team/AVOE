@@ -33,7 +33,7 @@ void log_t::init(){
 	/* make a file */
 	filePtr = fopen(working_file.c_str(), "w");
 	/* write header */
-	fputs("AUV LOG FILE: ", filePtr);
+	fputs("AVOE LOG FILE: ", filePtr);
 	fputs(time_str.c_str(), filePtr);
 	fputs("\n", filePtr);
 	std::cout << "header written\n";
