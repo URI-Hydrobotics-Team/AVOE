@@ -57,6 +57,7 @@ void vehicle_t::addSensor(sensor_t *sensor){
 		for (size_t i = 0; i < sensor_count; i++){
 			temp[i] = sensor_table[i];
 		}
+		temp[sensor_count] = sensor;
 		sensor_count++;
 
 		delete[] sensor_table;

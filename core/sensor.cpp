@@ -17,7 +17,6 @@ sensor_t::sensor_t(size_t fields){
 
 	}
 
-
 }
 
 sensor_t::~sensor_t(){

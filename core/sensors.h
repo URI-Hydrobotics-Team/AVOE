@@ -11,16 +11,53 @@
 
 
 /* tardigrade example */
+// include sensors
+
+#include <ctime>
+#include "../plugins/drivers/sensors/imu-dummy/driver.h"
+#include "general-sensor/imu.h"
 
 
+/* raw drivers */
+Dummy_BNO055 dummy_imu;
 
-//sensor_t tardigrade_sensors[4];
+
+/* AVOE sensors */
+vehicle_t tardigrade("Tardigrade", "2", "AUV");
+sensor_t imu(8); 	
+sensor_t pressure(4);
+sensor_t leak(4);
+
+void tardigrade_setup_sensors(){
+
+	/* AVOE init */
+	imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU");
+	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure");
+	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak");
+	
+	tardigrade.addSensor(&imu);	
+	tardigrade.addSensor(&pressure);
+	tardigrade.addSensor(&leak);
+	
+	/* raw driver init */	
+	srand(time(NULL));
 
 
-void setupSensors(){
-	//tardigrade_sensors[0].init("BNO055", "Adafruit", "I2C", "IMU");
-	//tardigrade_sensors[1].init("Bar 30m", "BlueRobotics", "I2C", "pressure");
-	//tardigrade_sensors[2].init("SOS Leak", "BlueRobotics", "GPIO", "leak");
 }
+
+
+void tardigrade_update_sensors(){
+
+	/* dummy imu */
+	//get temp
+	double temp = dummy_imu.get_temperature();
+	sensor_set_imu_TEMPERATURE(&imu, temp);
+
+
+}
+
+
+
+
 
 

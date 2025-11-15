@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-/* setting */
+/* getting */
 vector_t sensor_get_imu_ABSOULUTE_ORIENTATION_EULER(sensor_t *obj);
 vector_t sensor_get_imu_ABSOLUTE_ORIENTAION_QUATERNION(sensor_t *obj);
 vector_t sensor_get_imu_ANGULAR_VELOCITY(sensor_t *obj);

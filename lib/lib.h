@@ -17,7 +17,17 @@ struct vector_t{
 	double x;
 	double y;
 	double z;	
-
 };
+
+struct vector4_t{
+	//vector for 4d space
+	double x;
+	double y;
+	double z;	
+	double i;	
+};
+
+
+
 
 #endif

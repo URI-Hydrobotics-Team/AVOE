@@ -49,28 +49,22 @@ int control_mode;
 
 void test(){
 	
-	sensor_t imu(8); 	
-	sensor_t pressure(4);
-	sensor_t leak(4);
-	imu.init("BNO055", "Adafruit", "I2C", "IMU");
-	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure");
-	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak");
+	tardigrade_setup_sensors();
+
+	avoe_clock_t tel_timer; //telemetry timer
+
+	while (1){
+
+		if (tel_timer.getElaspedTimeMS() > 1000){
+			tardigrade_update_sensors();
+			tardigrade.print();
+			tel_timer.reset();
+		}
+
+	}
+
 	
-	vehicle_t tardigrade("Tardigrade", "2", "AUV");
-	tardigrade.addSensor(&imu);	
-	tardigrade.addSensor(&pressure);
-	tardigrade.addSensor(&leak);
 
-	tardigrade.print();
-
-
-	/*
-	setupSensors();
-	vehicle_t tardigrade("Tardigrade", "2", "AUV");
-	tardigrade.updateSensorTable(tardigrade_sensors, 3);
-	*/
-
-	//printSensors(tardigrade_sensors, 3);
 }
 
 /* networking functions */
@@ -122,7 +116,6 @@ void logTelemetry(log_t log, const char *in, int arguments){
 
 
 void run(){
-	setupSensors();
 	while (1){
 		//"we call this, the loop -LTG"
 		

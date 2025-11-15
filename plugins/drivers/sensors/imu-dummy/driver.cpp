@@ -25,77 +25,81 @@ xyz_val Dummy_BNO055::get_rand_data(int min, int max) {
 }
 
 // Return the Euler orientation of the IMU
-imu::Vector<3> Dummy_BNO055::get_Euler_Orientation(){
+vector_t Dummy_BNO055::get_Euler_Orientation(){
     xyz_val test_euler_orientation = get_rand_data(0, 360);
 
-    Euler_Orientation[0] = test_euler_orientation.x;
-    Euler_Orientation[1] = test_euler_orientation.y;
-    Euler_Orientation[2] = test_euler_orientation.z;
+    Euler_Orientation.x = test_euler_orientation.x;
+    Euler_Orientation.y = test_euler_orientation.y;
+    Euler_Orientation.z = test_euler_orientation.z;
 
     return Euler_Orientation;
 }
 
 // Return the quaternions orientation
-imu::Quaternion Dummy_BNO055::get_Quaterion_Orientation(){
+vector4_t Dummy_BNO055::get_Quaterion_Orientation(){
     xyz_val test_quat_orientation = get_rand_data(0, 360);
     int rand_w = rand() % 100;
 
-    imu::Quaternion quat(double(rand_w), test_quat_orientation.x, test_quat_orientation.y, test_quat_orientation.z);
+    vector4_t quat;
+    quat.i = double(rand_w); 
+    quat.x = test_quat_orientation.x; 
+    quat.y = test_quat_orientation.y;
+    quat.z = test_quat_orientation.z;
 
     return quat;
 }
 
 // Return the angular velocity
-imu::Vector<3> Dummy_BNO055::get_Angular_Velocity(){
+vector_t Dummy_BNO055::get_Angular_Velocity(){
     xyz_val test_Angular_Velocity = get_rand_data(0, 500);
 
-    Angular_Velocity[0] = test_Angular_Velocity.x;
-    Angular_Velocity[1] = test_Angular_Velocity.y;
-    Angular_Velocity[2] = test_Angular_Velocity.z;
+    Angular_Velocity.x = test_Angular_Velocity.x;
+    Angular_Velocity.y = test_Angular_Velocity.y;
+    Angular_Velocity.z = test_Angular_Velocity.z;
 
     return Angular_Velocity;
 }
 
 // Return the acceleration vector
-imu::Vector<3> Dummy_BNO055::get_Acceleration_Vector(){
+vector_t Dummy_BNO055::get_Acceleration_Vector(){
     xyz_val test_Acceleration_Vector = get_rand_data(0, 700);
 
-    Acceleration_Vector[0] = test_Acceleration_Vector.x;
-    Acceleration_Vector[1] = test_Acceleration_Vector.y;
-    Acceleration_Vector[2] = test_Acceleration_Vector.z;
+    Acceleration_Vector.x = test_Acceleration_Vector.x;
+    Acceleration_Vector.y = test_Acceleration_Vector.y;
+    Acceleration_Vector.z = test_Acceleration_Vector.z;
 
     return Acceleration_Vector;
 }
 
 // Return the magnetic field strength
-imu::Vector<3> Dummy_BNO055::get_Magnetic_Field_Strength(){
+vector_t Dummy_BNO055::get_Magnetic_Field_Strength(){
     xyz_val test_Magnetic_Field_Strength = get_rand_data(0, 100);
 
-    Magnetic_Field_Strength[0] = test_Magnetic_Field_Strength.x;
-    Magnetic_Field_Strength[1] = test_Magnetic_Field_Strength.y;
-    Magnetic_Field_Strength[2] = test_Magnetic_Field_Strength.z;
+    Magnetic_Field_Strength.x = test_Magnetic_Field_Strength.x;
+    Magnetic_Field_Strength.y = test_Magnetic_Field_Strength.y;
+    Magnetic_Field_Strength.z = test_Magnetic_Field_Strength.z;
 
     return Magnetic_Field_Strength;
 }
 
 // Return the linear acceleration
-imu::Vector<3> Dummy_BNO055::get_Linear_Acceleration(){
+vector_t Dummy_BNO055::get_Linear_Acceleration(){
     xyz_val test_Linear_Acceleration = get_rand_data(0, 230);
 
-    Linear_Acceleration[0] = test_Linear_Acceleration.x;
-    Linear_Acceleration[1] = test_Linear_Acceleration.y;
-    Linear_Acceleration[2] = test_Linear_Acceleration.z;
+    Linear_Acceleration.x = test_Linear_Acceleration.x;
+    Linear_Acceleration.y = test_Linear_Acceleration.y;
+    Linear_Acceleration.z = test_Linear_Acceleration.z;
 
     return Linear_Acceleration;
 }
 
 // Return the gravity vector
-imu::Vector<3> Dummy_BNO055::get_Gravity_Vector(){
+vector_t Dummy_BNO055::get_Gravity_Vector(){
     xyz_val test_gravity = get_rand_data(0, 10);
 
-    Gravity_Vector[0] = test_gravity.x;
-    Gravity_Vector[1] = test_gravity.y;
-    Gravity_Vector[2] = test_gravity.z;
+    Gravity_Vector.x = test_gravity.x;
+    Gravity_Vector.y = test_gravity.y;
+    Gravity_Vector.z = test_gravity.z;
 
     return Gravity_Vector;
 }
