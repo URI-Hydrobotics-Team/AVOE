@@ -104,14 +104,17 @@ entry = "";
  */
 void sensor_t::print(){
 
-	std::cout << "\t\tMODEL: " << model << '\n';
-	std::cout << "\t\tVENDOR: " << vendor << '\n';
-	std::cout << "\t\tPROTOCOL: " << protocol << '\n';
+	std::cout << "START SENSOR_T PRINT\n";
+	std::cout << "METADATA:\n";
+	std::cout << "\tMODEL: " << model << '\n';
+	std::cout << "\tVENDOR: " << vendor << '\n';
+	std::cout << "\tPROTOCOL: " << protocol << '\n';
 	std::cout << "DATA:\n";
 	for (size_t i = 0; i < field_count; i++){
 		std::cout << "\tFIELD " << i << ": " << data[i] << '\n';
 
 	}
+	std::cout << "END SENSOR_T PRINT\n";
 
 }
 

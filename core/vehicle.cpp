@@ -50,9 +50,9 @@ void vehicle_t::addSensor(sensor_t *sensor){
 
 	if (sensor_count == 0){
 		sensor_table = new sensor_t*[1];
-		sensor_table[0] = sensor;	
+		sensor_table[0] = sensor;
+		sensor_count++;	
 	}else{
-	
 		sensor_t **temp = new sensor_t*[sensor_count + 1];
 		for (size_t i = 0; i < sensor_count; i++){
 			temp[i] = sensor_table[i];
@@ -66,6 +66,8 @@ void vehicle_t::addSensor(sensor_t *sensor){
 
 	}
 
+	std::cout << "sensor " << sensor->getModel() << " added\n"; 
+
 }
 
 
@@ -77,8 +79,8 @@ void vehicle_t::print(){
 	std::cout << "\t\tVERSION: " << version << '\n';
 	std::cout << "\t\tTYPE: " << type << '\n';
 
-	std::cout << "\tSensor List:\n";
-	for (int i = 0; i < sensor_count; i++){
+	std::cout << "\t" << sensor_count << " sensor(s):\n";
+	for (size_t i = 0; i < sensor_count; i++){
 		sensor_table[i]->print();
 	}
 }

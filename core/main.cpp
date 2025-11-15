@@ -44,42 +44,30 @@ int control_mode;
 
 
 
-
-/* sensor functions */
-
-void initSensors(sensor_t sensors[], int sensor_count){
-
-	for (int i = 0; i < sensor_count; i++){
-
-		sensors[i].init();
-	}
-
-	if (verbose > 0){
-
-		std::cout << "[MAIN] Sensors Initiliazed\n";
-	}
-
-
-}
-
-void printSensors(sensor_t sensors[], int sensor_count){
-
-	for (int i = 0; i < sensor_count; i++){
-		//sensors[i].print();
-	}
-
-}
-
-
 /* test function */
 
 
 void test(){
+	
+	sensor_t imu(8); 	
+	sensor_t pressure(4);
+	sensor_t leak(4);
+	imu.init("BNO055", "Adafruit", "I2C", "IMU");
+	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure");
+	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak");
+	
+	vehicle_t tardigrade("Tardigrade", "2", "AUV");
+	tardigrade.addSensor(&imu);	
+	tardigrade.addSensor(&pressure);
+	tardigrade.addSensor(&leak);
+
+	tardigrade.print();
+
+
 	/*
 	setupSensors();
 	vehicle_t tardigrade("Tardigrade", "2", "AUV");
 	tardigrade.updateSensorTable(tardigrade_sensors, 3);
-	tardigrade.print();
 	*/
 
 	//printSensors(tardigrade_sensors, 3);
