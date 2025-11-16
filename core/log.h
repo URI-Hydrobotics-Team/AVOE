@@ -13,20 +13,17 @@
 
 class log_t{
 	private:
-		int entries = 0;
-		std::string working_file = "";
-		std::string time_str;
-		//fstream file; //declare a file
-		FILE *filePtr;
+		size_t entries;
+		char working_file[64];
+		FILE *fptr;
 		time_t rawtime;
 		struct tm * timeinfo;
 
 	public:
-		std::string makeFileName(std::string input);
+		char* makeFileName(const char *);
 		void init();
-		void setTimeStr(std::string input);
-		void log(std::string input);
-		std::string getName();
+		void log(const char *data);
+		char* getName();
 		void endLog();
 };
 

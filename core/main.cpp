@@ -51,7 +51,6 @@ void test(){
 
 	avoe_clock_t tel_timer; //telemetry timer
 	log_t test_log;
-	test_log.setTimeStr(tel_timer.getTimeStr());
 	test_log.init();
 
 	tardigrade_setup_sensors();
@@ -62,7 +61,7 @@ void test(){
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			tardigrade_update_sensors();
 			tardigrade.print();
-			//test_log.log(imu.read(7)); //log temp
+			test_log.log(imu.read(7)); //log temp
 			//std::cout << imu.read(7);
 
 			tel_timer.reset();
