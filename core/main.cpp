@@ -8,9 +8,9 @@
 */
 /* system */
 #include <iostream>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 /* AVOE specific*/
 #include "../lib/globals.h"
 //#include "../lib/lib.h"
@@ -29,6 +29,8 @@
 /* global variables for main */
 avoe_clock_t system_time;
 int verbose;
+
+
 /* 
 	verbose values: 
 	0 - no verbose
@@ -49,28 +51,26 @@ int control_mode;
 
 void test(){
 
-	avoe_clock_t tel_timer; //telemetry timer
-	log_t test_log;
-	test_log.init();
+	/* this is a reference setup */
 
-	tardigrade_setup_sensors();
+	avoe_clock_t tel_timer; //telemetry timer
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	tardigrade_setup_sensors(); //run the setup function in the sensors.h file
 	
 
-	while (1){
-
+	while (1){ //the loop
+		
 		if (tel_timer.getElaspedTimeMS() > 1000){
+			//update, print and log every one second
 			tardigrade_update_sensors();
 			tardigrade.print();
-			test_log.log(imu.read(7)); //log temp
-			//std::cout << imu.read(7);
+			test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 
-			tel_timer.reset();
+			tel_timer.reset(); //always reset
 		}
-
 	}
-
-	
-
 }
 
 /* networking functions */
@@ -110,7 +110,6 @@ void logTelemetry(log_t log, const char *in, int arguments){
 		log telemetry data
 
 	*/
-	
 
 
 }
@@ -118,12 +117,10 @@ void logTelemetry(log_t log, const char *in, int arguments){
 
 
 
-/* the main loop */
-
-
+/* this could be your main loop for deployment*/
 void run(){
 	while (1){
-		//"we call this, the loop -LTG"
+		//"we call this the loop -LTG"
 		
 	}
 }
