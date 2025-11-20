@@ -11,40 +11,28 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+
 /* AVOE specific*/
 #include "../lib/globals.h"
-//#include "../lib/lib.h"
 #include "config.h"
 #include "log.h"
 #include "vehicle.h"
 #include "controller.h"
 #include "../lib/network.h"
 
-
-/* Robot specific*/
+/* target specific*/
 #include "sensors.h"
 #include "motors.h"
 #include "tasks.h"
-
-/* global variables for main */
-avoe_clock_t system_time;
-int verbose;
-
+#include "io.h"
 
 /* 
-	verbose values: 
-	0 - no verbose
-	1 - full verbose
-	(subject to change)	
-
-
+	MAIN.CPP
+	Essentially, this is where you setup your vehicle. Assuming you have already defined your vehicle's devices in sensors.h and motors.h, you can now
+	write a function to that sets up all of your devices and other components (loggers, timers, controllers, network channels, etc.). Now you can do stuff
+	(by calling another functions or by doing everything in here, say in a while(1) loop).
 
 */
-
-int control_mode;
-
-
-
 
 /* test function */
 
@@ -62,7 +50,6 @@ void test(){
 
 	while (1){ //the loop
 		
-
 		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			//update, print and log every one second
@@ -72,58 +59,11 @@ void test(){
 			imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
 		}
-
-
-
-
-	}
-}
-
-/* networking functions */
-
-void transmitTelemetry(tx_socket socket, const char *header, const char *data, int time_stamp){
-	/*
-		transmit telemetry, such as sensor data to a reciever
-		header string should adhere to a standard
-
-	*/
-	
-	std::string str = "$VT "; // VEHICLE TELEMETRY 
-	str += header; 
-	str += ' ';
-	if (time_stamp != 0){
-		str += system_time.getTimeStr();
-		str += ' ';
-	
-	}
-	
-	str += data;
-	str += '$'; //Terminating character
-
-
-	socket.transmit(str.c_str()); 
-
-	if (verbose > 0){	
-		std::cout << "[MAIN] transmitTelemtry Message: " << str.c_str() << '\n';;
 	}
 }
 
 
-/* logging functions */
-
-void logTelemetry(log_t log, const char *in, int arguments){
-	/*
-		log telemetry data
-
-	*/
-
-
-}
-
-
-
-
-/* this could be your main loop for deployment*/
+/* This could be your main loop for deployment*/
 void run(){
 	while (1){
 		//"we call this the loop -LTG"
@@ -131,7 +71,7 @@ void run(){
 	}
 }
 
-/* support functions for main */
+/* Support functions for main */
 
 
 void printHelp(){
@@ -147,8 +87,6 @@ void printHelp(){
 	std::cout << "\tlog\t(run with verbose and log to a file)\n";
 	std::cout << "\ttest\t(run the test() function and quit)\n"; 
 }
-
-
 
 
 int main(int argc, char *argv[]){
@@ -170,8 +108,6 @@ int main(int argc, char *argv[]){
 		test(); //points to a test config
 		return 0;
 	}
-
-
 
 	return 0;
 
