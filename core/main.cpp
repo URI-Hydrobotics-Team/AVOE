@@ -51,7 +51,7 @@ int control_mode;
 
 void test(){
 
-	/* this is a reference setup */
+	/* This is a reference setup / configuration */
 
 	avoe_clock_t tel_timer; //telemetry timer
 	log_t test_log; // setup a logger
@@ -62,14 +62,20 @@ void test(){
 
 	while (1){ //the loop
 		
+
+		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			//update, print and log every one second
 			tardigrade_update_sensors();
 			tardigrade.print();
-			test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
-
+			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
+			imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
 		}
+
+
+
+
 	}
 }
 
@@ -147,7 +153,7 @@ void printHelp(){
 
 int main(int argc, char *argv[]){
 
-
+	/* DEFAULT ARGUMENTS */
 	if (argv[1] == NULL){
 		std::cout << "Must specify at least one argument. Try \"./avoe help\".\n";
 		return 0;
@@ -157,10 +163,16 @@ int main(int argc, char *argv[]){
 		printHelp();
 		return 0;
 	}
+
+	/* Define arguments for custom configurations here */
+
 	if (strncmp(argv[1], "test", 16) == 0){
-		test();
+		test(); //points to a test config
 		return 0;
 	}
+
+
+
 	return 0;
 
 }

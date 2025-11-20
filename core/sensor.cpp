@@ -86,21 +86,27 @@ void sensor_t::write(const char *input, size_t field, size_t n){
 	//NOTE n should be 128 or less
 }
 
-/*
-   void log(log_t *log){
-//	automatically log all values to a log_t 
-std::string entry = "";
-for (int i = 0; i < MAX_SENSOR_ENTRIES; i++){
-entry += variable_names[i];
-entry += ' ';
-entry += values[i];
-log->log(entry.c_str());
-entry = "";
+
+void sensor_t::log(log_t *log){
+	//automatically log all values to a log_t object
+	char *data_n = new char[64 + field_count * 130]; //130 just to add some extra room for other chars
+	initStr(data_n, 64 + field_count *130);
+	appendStr(data_n, type, 0);
+	appendStr(data_n, ":", strlen(data_n));
+	appendStr(data_n, model, strlen(data_n));
+	appendStr(data_n, " ", strlen(data_n));
+	
+	appendStr(data_n, std::to_string(field_count).c_str(), strlen(data_n));	
+	appendStr(data_n, " fields: ", strlen(data_n));
+	for (size_t i = 0; i < field_count; i++){
+		appendStr(data_n, data[i], strlen(data_n));
+		appendStr(data_n, " ", strlen(data_n));
+	}
+
+	log->log(data_n);	
+	delete[] data_n;
 
 }
-
-}
- */
 void sensor_t::print(){
 
 	std::cout << "START SENSOR_T PRINT\n";

@@ -4,10 +4,12 @@
 The core source for AVOE, and direct successor to auv-hub.
 
 
-## TODO
-- robust message encoder and decoder
-- functional and quick sensor data gathering
-- robust raw motor control
+## Features (Not all implemented)
+- robust message system (io.h)
+- robust raw motor control (motor.h)
+- felixbile sensor system (sensor.h)
+- simple logging capability (log.h)
+- simple but reliable control system (controller.h, vehicle.h)
 
 
 ## Important Files
