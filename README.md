@@ -6,13 +6,12 @@ AVOE is the replacement for most of the control code in the AUV repository inclu
 ### New Features (promised)
 - markup language to define sensors, thrusters, cameras, etc. in a seperate config file
 - PID controller implementation
-- overall refinement
+- more refined networking
 - integrated logging
 - overhauled frontends
-- simulation capabilities
-- plugins (in the form of class definitions in header files that are included at compile time)
-- zero dependency on hardcoded class objects
-
+- refined plugin structure
+- major codebase cleanup
+- zero dependency on hardcoded objects
 
 ### Carryovers
 - C++ codebase
@@ -24,12 +23,12 @@ Create a open source ROS alternative that is fast, minimal, highly modular, and 
 
 
 ### TODO
-- implement controller support
-- skeleton for Tardigrade
+- finish motor_support
 - PID controller
-- build a refrence frontend
+- build a reference frontend
 - manifest parser
 
 ## Documentation
-
+Check out the READMEs
 ## Quick start
+At the moment, AVOE is in heavy development, but you can test some stuff. Check out the test() function in `core/main.cpp` for a simple reference. This section will expand as more development occurs.
