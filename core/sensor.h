@@ -41,7 +41,7 @@ class sensor_t{
 		void write(const char *input, size_t field, size_t n);
 		void log(log_t *log);
 		void print();
-
+		size_t getFieldCount();
 };
 
 #endif

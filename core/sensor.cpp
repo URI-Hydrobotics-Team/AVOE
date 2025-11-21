@@ -124,4 +124,8 @@ void sensor_t::print(){
 }
 
 
+size_t sensor_t::getFieldCount(){
+	return field_count;
+}
+
 

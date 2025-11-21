@@ -6,27 +6,6 @@
 #include "../lib/lib.h"
 #include "dirent.h"
 
-/*
-std::string log_t::makeFileName(std::string input){
-	// replace spaces with '_'
-	std::string temp = "";
-	for (int i = 0; i < (input.length() - 1); i++){
-		if ((input[i] != ' ') && (input[i] != ':')){
-			temp += input[i];
-		}else {
-			temp += '_';
-		}
-
-	}
-
-	//temp[temp.length() - 1] = '_';
-	return temp;
-}
-*/
-
-
-
-
 void log_t::init(){
 	entries = 0;
 

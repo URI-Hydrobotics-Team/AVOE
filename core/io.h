@@ -13,7 +13,7 @@
 #include "../lib/network.h"
 #include "../lib/clock.h"
 
-
+#define PER_FIELD_BUFFER_LEN 128
 
 class avoe_comm_transmitter{
 
@@ -23,7 +23,7 @@ class avoe_comm_transmitter{
 		char channel_name[32];
 		char type[32];
 		//timing
-		unsigned int tx_period;
+		unsigned int tx_period; //in ms
 		avoe_clock_t clock;
 
 		//data fields
@@ -33,14 +33,14 @@ class avoe_comm_transmitter{
 		sensor_t *data_sensor;
 		motor_t *data_motor;
 
-		tx_socket socket;
+		tx_socket *socket;
 	public:
-		avoe_comm_transmitter(const char *type, const char *channel, int port_in);
-		avoe_comm_transmitter(const char *type, const char *channel, int port_in, const char *ip);
+		avoe_comm_transmitter(const char *type_in, const char *channel, int port_in, const char *ip);
 
+		void set_timer(unsigned int period); 
 		void set_message(char *mptr, size_t len);
 		void set_sensor(sensor_t *sensor);
-		void set_motor(motor_t *motor);		
+		void set_motor(motor_t *motor);
 		void tx();
 		void refresh();
 

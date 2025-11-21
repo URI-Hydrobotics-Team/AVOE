@@ -18,6 +18,24 @@
 
 
 
+tx_socket::tx_socket(size_t buffer_size){
+	tx_buffer_len = buffer_size;
+	tx_buffer = new char[buffer_size];
+
+}
+
+tx_socket::tx_socket(){	
+	tx_buffer_len = NETWORK_BUFFER_SIZE;
+	tx_buffer = new char[NETWORK_BUFFER_SIZE];
+}
+
+
+tx_socket::~tx_socket(){	
+	delete[] tx_buffer;	
+}
+
+
+
 
 void tx_socket::init(const char *host, int port){
 	strncpy(server, host, 32);
@@ -65,8 +83,8 @@ void tx_socket::init(const char *host, int port){
 }
 void tx_socket::transmit(const char *bufferIn){
 	initStr(tx_buffer, 256); 
-	strncpy(tx_buffer, bufferIn, strlen(bufferIn));
-	if (sendto(fd, tx_buffer, strlen(tx_buffer), 0, (struct sockaddr *)&remote_addr, slen) == -1){
+	strncpy(tx_buffer, bufferIn, tx_buffer_len);
+	if (sendto(fd, tx_buffer, tx_buffer_len, 0, (struct sockaddr *)&remote_addr, slen) == -1){
 		std::cout << "error sendto\n";
 	}
 
@@ -78,7 +96,21 @@ void tx_socket::closefd(){
 
 
 
+rx_socket::rx_socket(size_t buffer_size){
+	rx_buffer_len = buffer_size;
+	rx_buffer = new char[buffer_size];
 
+}
+
+rx_socket::rx_socket(){	
+	rx_buffer_len = NETWORK_BUFFER_SIZE;
+	rx_buffer = new char[NETWORK_BUFFER_SIZE];
+}
+
+
+rx_socket::~rx_socket(){	
+	delete[] rx_buffer;	
+}
 
 
 char* rx_socket::rec(int print){
