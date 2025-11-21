@@ -4,7 +4,7 @@
 #include "log.h"
 #include "config.h"
 #include "../lib/lib.h"
-
+#include "dirent.h"
 
 /*
 std::string log_t::makeFileName(std::string input){
@@ -45,10 +45,18 @@ void log_t::init(){
 	
 	initStr(working_file, 64);
 	strncpy(working_file, LOG_DIR, 64);
+	
 	appendStr(working_file, "/", strlen(working_file));
+	DIR* dir = opendir(working_file);
+	if(!dir)
+	{
+		char mkdirtoken[7] = "mkdir ";
+		strcat(mkdirtoken,working_file);
+		printf("%s",mkdirtoken);
+		int newfdr = system(mkdirtoken);
+	}
 	appendStr(working_file, new_time_str, strlen(working_file));
 	appendStr(working_file, ".txt", strlen(working_file));
-
 
 	// make a file
 	fptr = fopen(working_file, "w");
@@ -91,10 +99,4 @@ char* log_t::getName(){
 	return working_file;
 }
 
-
-
-void log_t::endLog(){
-
-	fclose(fptr);
-}
 
