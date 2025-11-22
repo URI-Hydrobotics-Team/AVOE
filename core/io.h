@@ -22,6 +22,13 @@ class avoe_comm_transmitter{
 		char dest_ip[32];
 		char channel_name[32];
 		char type[32];
+		short mode;
+		/*
+			-1	undefined
+			0	generic string data
+			1	sensor
+			2	motor	
+		*/
 		//timing
 		unsigned int tx_period; //in ms
 		avoe_clock_t clock;
