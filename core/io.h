@@ -15,6 +15,18 @@
 
 #define PER_FIELD_BUFFER_LEN 128
 
+
+/*
+	message format:
+	$AVOE:<channel_name>:<type>:<data>$
+	"$AVOE:<channel_name>:<type>:" is the header and can be up to 64 chars long
+
+*/
+
+
+
+
+
 class avoe_comm_transmitter{
 
 	private:
@@ -37,6 +49,8 @@ class avoe_comm_transmitter{
 		size_t data_message_len;
 		char *data_message; //pointer to character array
 		
+		size_t data_sensor_message_len;
+		size_t data_motor_message_len;
 		sensor_t *data_sensor;
 		motor_t *data_motor;
 

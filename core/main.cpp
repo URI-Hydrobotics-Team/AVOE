@@ -46,14 +46,27 @@ void test(){
 	test_log.init(); // initilize the logger
 
 	tardigrade_setup_sensors(); //run the setup function in the sensors.h file
-	
+	//transmit sensor data over network
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "192.168.1.129");	
+	tx_device1.set_sensor(&imu); //set source to imu
+	tx_device1.set_timer(100); //set 500ms transmit interval
+	//transmit char array over network
+	char message[] = "look here look listen";
+	avoe_comm_transmitter tx_device2("message", "test_message", 8200, "192.168.1.129");	
+	tx_device2.set_message(message, 32); //set source to imu
+	tx_device2.set_timer(200); //set 200ms transmit interval
+
+
 
 	while (1){ //the loop
-		
+	
+
+		tardigrade_update_sensors();
+		tx_device1.refresh();
+		tx_device2.refresh();
 		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			//update, print and log every one second
-			tardigrade_update_sensors();
 			tardigrade.print();
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 			imu.log(&test_log); //log imu sensor data

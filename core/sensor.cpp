@@ -82,6 +82,7 @@ int sensor_t::getState(){
 
 
 void sensor_t::write(const char *input, size_t field, size_t n){
+	initStr(data[field], 128);
 	strncpy(data[field], input, n);
 	//NOTE n should be 128 or less
 }
