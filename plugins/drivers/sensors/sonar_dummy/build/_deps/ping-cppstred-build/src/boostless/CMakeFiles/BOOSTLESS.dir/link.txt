@@ -1,2 +1,0 @@
-/usr/bin/ar qc libBOOSTLESS.a CMakeFiles/BOOSTLESS.dir/dummy_data.cpp.o
-/usr/bin/ranlib libBOOSTLESS.a

@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/test-device-ping1d.dir/link.d "CMakeFiles/test-device-ping1d.dir/test/test-device-ping1d.cpp.o" -o test-device-ping1d  src/device/libDEVICE.a src/hal/libHAL.a src/boostless/libBOOSTLESS.a
