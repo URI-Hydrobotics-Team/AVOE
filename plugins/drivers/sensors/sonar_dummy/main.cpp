@@ -1,9 +1,11 @@
+/***
+ * BY ANDREW DAWSON
+ * Good Luck Translating this shit
+ */
 #include <cstdio>
 #include <iostream>
 #include "../../../../Sonar/ping-cppcstred/src/device/ping-device-ping1d.h"
-/**
- * @brief Test ping 1D devices
- */
+
 int main()
 {
 

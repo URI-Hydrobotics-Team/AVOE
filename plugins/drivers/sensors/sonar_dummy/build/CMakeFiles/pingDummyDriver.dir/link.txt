@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/pingDummyDriver.dir/link.d CMakeFiles/pingDummyDriver.dir/main.cpp.o -o pingDummyDriver  _deps/ping-cppstred-build/src/device/libDEVICE.a _deps/ping-cppstred-build/src/hal/libHAL.a _deps/ping-cppstred-build/src/boostless/libBOOSTLESS.a

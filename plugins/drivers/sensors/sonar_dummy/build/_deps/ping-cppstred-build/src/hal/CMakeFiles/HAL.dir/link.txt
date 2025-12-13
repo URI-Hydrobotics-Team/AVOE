@@ -1,0 +1,2 @@
+/usr/bin/ar qc libHAL.a "CMakeFiles/HAL.dir/time/desktop/ping-time.cpp.o"
+/usr/bin/ranlib libHAL.a

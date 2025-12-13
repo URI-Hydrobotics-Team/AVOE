@@ -1,0 +1,2 @@
+/usr/bin/ar qc libDEVICE.a "CMakeFiles/DEVICE.dir/ping-device-ping1d.cpp.o" "CMakeFiles/DEVICE.dir/ping-device.cpp.o"
+/usr/bin/ranlib libDEVICE.a

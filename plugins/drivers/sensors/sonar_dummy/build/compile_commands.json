@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/pingDummyDriver.dir/main.cpp.o -c /home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/main.cpp",
+  "file": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/main.cpp",
+  "output": "CMakeFiles/pingDummyDriver.dir/main.cpp.o"
+},
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/test-device-ping1d.dir/test/test-device-ping1d.cpp.o -c /home/Andrew/Documents/Sonar/ping-cppcstred/test/test-device-ping1d.cpp",
+  "file": "/home/Andrew/Documents/Sonar/ping-cppcstred/test/test-device-ping1d.cpp",
+  "output": "_deps/ping-cppstred-build/CMakeFiles/test-device-ping1d.dir/test/test-device-ping1d.cpp.o"
+},
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/device",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/DEVICE.dir/ping-device-ping1d.cpp.o -c /home/Andrew/Documents/Sonar/ping-cppcstred/src/device/ping-device-ping1d.cpp",
+  "file": "/home/Andrew/Documents/Sonar/ping-cppcstred/src/device/ping-device-ping1d.cpp",
+  "output": "_deps/ping-cppstred-build/src/device/CMakeFiles/DEVICE.dir/ping-device-ping1d.cpp.o"
+},
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/device",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/DEVICE.dir/ping-device.cpp.o -c /home/Andrew/Documents/Sonar/ping-cppcstred/src/device/ping-device.cpp",
+  "file": "/home/Andrew/Documents/Sonar/ping-cppcstred/src/device/ping-device.cpp",
+  "output": "_deps/ping-cppstred-build/src/device/CMakeFiles/DEVICE.dir/ping-device.cpp.o"
+},
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/hal",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/HAL.dir/time/desktop/ping-time.cpp.o -c /home/Andrew/Documents/Sonar/ping-cppcstred/src/hal/time/desktop/ping-time.cpp",
+  "file": "/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal/time/desktop/ping-time.cpp",
+  "output": "_deps/ping-cppstred-build/src/hal/CMakeFiles/HAL.dir/time/desktop/ping-time.cpp.o"
+},
+{
+  "directory": "/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/boostless",
+  "command": "/usr/bin/c++  -I/home/Andrew/Documents/Sonar/ping-cppcstred/src -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/device -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/hal -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/message -I/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless -std=c++14 -o CMakeFiles/BOOSTLESS.dir/dummy_data.cpp.o -c /home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless/dummy_data.cpp",
+  "file": "/home/Andrew/Documents/Sonar/ping-cppcstred/src/boostless/dummy_data.cpp",
+  "output": "_deps/ping-cppstred-build/src/boostless/CMakeFiles/BOOSTLESS.dir/dummy_data.cpp.o"
+}
+]
