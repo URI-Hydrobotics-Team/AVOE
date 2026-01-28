@@ -1,0 +1,2 @@
+# `motor_t` helper functions for motors
+These are bot specific functions that translate the `motor_t` data field or fields (a string representation of a numerical value) into a float, double, or int that can be sent to a motor driver. Other helper functions that work in an opposite direction (translate integer and floating point numbers into strings that can be stored in `motor_t` objects will also be implemented here. The AVOE controller will call such functions when setting motors.
