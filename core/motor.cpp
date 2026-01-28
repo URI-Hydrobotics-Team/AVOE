@@ -3,7 +3,7 @@
 #include "motor.h"
 
 
-
+/*
 void motor_t::init(char *n, char *v, char *p){
 
 	strncpy(name, n, 32);
@@ -37,3 +37,5 @@ void motor_t::write(const char *input){
 
 }
 
+
+*/
