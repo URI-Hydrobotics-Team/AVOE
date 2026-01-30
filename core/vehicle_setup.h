@@ -68,6 +68,8 @@ void tardigrade_setup_motors(){
 	vector_t BPH_pos(0.0, 0.0, 0.0);
 	vector_t BPH_dir(1.0, 1.0, 1.0);
 	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	
+	tardigrade.addMotor(&thruster_BPH);
 	//thruster_BPH.print();
 
 

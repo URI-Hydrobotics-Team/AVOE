@@ -43,6 +43,7 @@ class vehicle_t{
 		char *getType();
 		void update(int m);
 		void addSensor(sensor_t *sensor);
+		void addMotor(motor_t *motor);
 		void print();
 
 };
