@@ -16,15 +16,12 @@
 #include "../lib/globals.h"
 #include "config.h"
 #include "log.h"
-#include "vehicle.h"
 #include "controller.h"
-#include "../lib/network.h"
+#include "io.h"
 
 /* target specific*/
-#include "sensors.h"
-#include "motors.h"
+#include "vehicle_setup.h"
 #include "tasks.h"
-#include "io.h"
 
 /* 
 	MAIN.CPP
@@ -45,7 +42,9 @@ void test(){
 	log_t test_log; // setup a logger
 	test_log.init(); // initilize the logger
 
-	tardigrade_setup_sensors(); //run the setup function in the sensors.h file
+	tardigrade_setup_sensors(); //run the setup function in the vehicle_setup.h file
+	tardigrade_setup_motors(); //run the setup function in the vehicle_setup.h file
+
 	//transmit sensor data over network
 	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "192.168.1.129");	
 	tx_device1.set_sensor(&imu); //set source to imu

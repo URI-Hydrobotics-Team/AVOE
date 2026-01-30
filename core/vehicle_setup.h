@@ -14,13 +14,31 @@
 // include sensors
 
 #include <ctime>
+#include "sensor.h"
+#include "motor.h"
+#include "vehicle.h"
+
+
 #include "../plugins/drivers/sensors/imu-dummy/driver.h"
 #include "general-sensor/imu.h"
+
+
 
 
 /* raw drivers */
 Dummy_BNO055 dummy_imu;
 
+
+
+/* AVOE motors */
+//bph, bsh, sh, y, ps, ss
+
+motor_t thruster_BPH(1);
+motor_t thruster_BSH(1);
+motor_t thruster_SH(1);
+motor_t thruster_Y(1);
+motor_t thruster_PS(1);
+motor_t thruster_SS(1);
 
 /* AVOE sensors */
 vehicle_t tardigrade("Tardigrade", "2", "AUV");
@@ -44,6 +62,17 @@ void tardigrade_setup_sensors(){
 
 
 }
+
+void tardigrade_setup_motors(){
+
+	vector_t BPH_pos(0.0, 0.0, 0.0);
+	vector_t BPH_dir(1.0, 1.0, 1.0);
+	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	//thruster_BPH.print();
+
+
+}
+
 
 
 void tardigrade_update_sensors(){

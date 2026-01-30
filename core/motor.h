@@ -39,6 +39,7 @@ class motor_t{
 		char *getLabel();
 		char *getVendor();
 		char *getProtocol();
+		char *getType();
 		char *read(size_t field);
 		void write(const char *input, size_t field, size_t n);
 		void log(log_t *log);
