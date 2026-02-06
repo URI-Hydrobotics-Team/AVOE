@@ -7,8 +7,8 @@
 #ifndef AVOE_HELPER_IMU_H
 #define AVOE_HELPER_IMU_H
 
-#include "../../lib/lib.h"
-#include "../sensor.h"
+#include "../../../lib/lib.h"
+#include "../../../core/sensor.h"
 
 /* getting */
 vector_t sensor_get_imu_ABSOULUTE_ORIENTATION_EULER(sensor_t *obj);

@@ -1,1 +1,1 @@
-g++ -o avoe main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp
+g++ -o avoe main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp

@@ -20,7 +20,7 @@
 
 
 #include "../plugins/drivers/sensors/imu-dummy/driver.h"
-#include "general-sensor/imu.h"
+#include "../plugins/middleware/general-sensor/imu.h"
 
 
 
