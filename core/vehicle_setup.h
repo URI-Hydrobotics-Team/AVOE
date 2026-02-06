@@ -44,14 +44,16 @@ motor_t thruster_SS(1);
 vehicle_t tardigrade("Tardigrade", "2", "AUV");
 sensor_t imu(8); 	
 sensor_t pressure(4);
-sensor_t leak(4);
+sensor_t leak(1);
 
 void tardigrade_setup_sensors(){
 
+
+	vector_t dummyPosition(0.0, 0.0, 0.0);
 	/* AVOE init */
-	imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU");
-	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure");
-	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak");
+	imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU", dummyPosition);
+	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
+	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
 	
 	tardigrade.addSensor(&imu);	
 	tardigrade.addSensor(&pressure);
