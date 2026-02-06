@@ -8,13 +8,15 @@
 #include "../sensor.h"
 
 //Getting
+float sensor_get_pres_get_altitude(sensor_t *obj);
+float sensor_get_pres_get_depth(sensor_t *obj);
 float sensor_get_pres_get_pressure(sensor_t *obj);
 float sensor_get_pres_get_temperature(sensor_t *obj);
-float sensor_get_pres_get_depth(sensor_t *obj);
 
 //Setting
+void sensor_get_pres_set_altitude(sensor_t *obj, float alitutde);
+void sensor_set_pres_set_depth(sensor_t *obj, float temp);
 void sensor_set_pres_set_pressure(sensor_t *obj, float pressure);
 void sensor_set_pres_set_temperature(sensor_t *obj, float temp);
-void sensor_set_pres_set_depth(sensor_t *obj, float temp);
 
 #endif

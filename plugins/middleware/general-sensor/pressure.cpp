@@ -4,44 +4,57 @@
 #include <iostream>
 
 //Getting
-float sensor_get_pres_get_pressure(sensor_t *obj){
+float sensort_get_pres_get_altitude(sensor_t *obj){
+    //Pulls data from Data area 0
+    std::string str = obj->read(0);
+    return std::stof(str);
+}
+float sensor_get_pres_get_depth(sensor_t *obj){
     //Pulls data from Data area 1
     std::string str =  obj->read(1);
     return std::stof(str);
 }
-float sensor_get_pres_get_temperature(sensor_t *obj){
+float sensor_get_pres_get_pressure(sensor_t *obj){
     //Pulls data from Data area 2
     std::string str =  obj->read(2);
     return std::stof(str);
 }
-float sensor_get_pres_get_depth(sensor_t *obj){
-    //Pulls data from Data area 3
+float sensor_get_pres_get_temperature(sensor_t *obj){
+    //Pulls data from Data area 4
     std::string str =  obj->read(3);
     return std::stof(str);
 }
 
 //Setting
 //Data areas listed in each function
-void sensor_set_pres_set_pressure(sensor_t *obj, float pressure){
-    //Data area 1
-    //Converts pressure float value to String
-    std::string str;
-    str = std::to_string(pressure);
-    obj->write(str.c_str(), 1, str.size());
-}
-void sensor_set_pres_set_temperature(sensor_t *obj, float temp){
-    //Data area 2
-    //Converts temperature float value to String
+void sensor_set_pres_set_altitude(sensor_t *obj, float altitude){
+    //Data area 0
+    //Converts depth float value to String
 
     std::string str;
-    str = std::to_string(temp);
-    obj->write(str.c_str(), 2, str.size());
+    str = std::to_string(altitude);
+    obj->write(str.c_str(), 0, str.size());
 }
 void sensor_set_pres_set_depth(sensor_t *obj, float depth){
-    //Data area 3
+    //Data area 1
     //Converts depth float value to String
 
     std::string str;
     str = std::to_string(depth);
+    obj->write(str.c_str(), 1, str.size());
+}
+void sensor_set_pres_set_pressure(sensor_t *obj, float pressure){
+    //Data area 2
+    //Converts pressure float value to String
+    std::string str;
+    str = std::to_string(pressure);
+    obj->write(str.c_str(), 2, str.size());
+}
+void sensor_set_pres_set_temperature(sensor_t *obj, float temp){
+    //Data area 3
+    //Converts temperature float value to String
+
+    std::string str;
+    str = std::to_string(temp);
     obj->write(str.c_str(), 3, str.size());
 }
