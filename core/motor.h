@@ -34,11 +34,12 @@ class motor_t{
 
 		motor_t(size_t fields);
 		~motor_t();
-		void init(const char *l, const char *n, const char *v, const char *p, const char *t, vector_t pos, vector_t dir);
+		void init(const char *l, const char *m, const char *v, const char *p, const char *t, vector_t pos, vector_t dir);
 		char *getModel();
 		char *getLabel();
 		char *getVendor();
 		char *getProtocol();
+		char *getType();
 		char *read(size_t field);
 		void write(const char *input, size_t field, size_t n);
 		void log(log_t *log);

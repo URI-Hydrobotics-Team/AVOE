@@ -36,13 +36,13 @@ sensor_t::~sensor_t(){
 
 
 
-void sensor_t::init(const char *m, const char *v, const char *p, const char *t){
+void sensor_t::init(const char *m, const char *v, const char *p, const char *t, vector_t off){
 
 	strncpy(model, m, 32);
 	strncpy(vendor, v, 32);
 	strncpy(protocol, p, 16);
 	strncpy(type, t, 16);
-
+	offset = off;
 }
 
 

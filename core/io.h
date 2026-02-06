@@ -26,7 +26,7 @@
 
 
 
-
+// communication transmitter, send out info to other devices
 class avoe_comm_transmitter{
 
 	private:
@@ -41,11 +41,13 @@ class avoe_comm_transmitter{
 			1	sensor
 			2	motor	
 		*/
+
 		//timing
 		unsigned int tx_period; //in ms
 		avoe_clock_t clock;
 
 		//data fields
+		// length of data message
 		size_t data_message_len;
 		char *data_message; //pointer to character array
 		
@@ -62,7 +64,11 @@ class avoe_comm_transmitter{
 		void set_message(char *mptr, size_t len);
 		void set_sensor(sensor_t *sensor);
 		void set_motor(motor_t *motor);
+
+		// send info to other device
 		void tx();
+
+		// utilize tx to continously sending data in a while loop
 		void refresh();
 
 		//methods for clock stuff

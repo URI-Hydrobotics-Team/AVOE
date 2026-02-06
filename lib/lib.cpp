@@ -95,3 +95,19 @@ void readLine(char *buffer, int len, FILE *fptr){
 }
 
 
+vector_t::vector_t(double X, double Y, double Z){
+
+	x = X;
+	y = Y;
+	z = Z;
+	
+}
+
+
+vector_t::vector_t(){
+
+	x = 0.0;
+	y = 0.0;
+	z = 0.0;
+	
+}

@@ -70,7 +70,29 @@ void vehicle_t::addSensor(sensor_t *sensor){
 	std::cout << "sensor " << sensor->getModel() << " added\n"; 
 
 }
+void vehicle_t::addMotor(motor_t *motor){
 
+	if (motor_count == 0){
+		motor_table = new motor_t*[1];
+		motor_table[0] = motor;
+		motor_count++;	
+	}else{
+		motor_t **temp = new motor_t*[motor_count + 1];
+		for (size_t i = 0; i < motor_count; i++){
+			temp[i] = motor_table[i];
+		}
+		temp[motor_count] = motor;
+		motor_count++;
+
+		delete[] motor_table;
+		motor_table = temp;
+	
+
+	}
+
+	std::cout << "motor " << motor->getModel() << " added\n"; 
+
+}
 
 void vehicle_t::print(){
 	//print vehicle information for debugging purposes
@@ -83,6 +105,10 @@ void vehicle_t::print(){
 	std::cout << "\t" << sensor_count << " sensor(s):\n";
 	for (size_t i = 0; i < sensor_count; i++){
 		sensor_table[i]->print();
+	}
+	std::cout << "\t" << motor_count << " motor(s):\n";
+	for (size_t i = 0; i < motor_count; i++){
+		motor_table[i]->print();
 	}
 }
 

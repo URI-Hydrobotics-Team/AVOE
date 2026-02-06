@@ -24,7 +24,9 @@ struct vector_t{
 	//vector for 3d space
 	double x;
 	double y;
-	double z;	
+	double z;
+	vector_t();
+	vector_t(double X, double Y, double Z);	
 };
 
 struct vector4_t{

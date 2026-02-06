@@ -20,7 +20,7 @@ Includes all other header files and provides important functions for general veh
 
 
 ## Motors and Sensors
-There are two classes `sensor_t` and `motor_t`, each of these classes contain properties and values for sensor and motor drivers. They directly interface with these drivers through the `sensors.h` and `motors.h` header files. Ideally, sensors and motors are described in the Vehicle Description file and functions are written to translate these hardware specific drivers into universal `sensor_t` and `motor_t` objects automatically by avoe-tool. The `sensor_t` and `motor_t` objects then interface with the "skeleton", currently not formalized, which contains hard coded functions for driving the robot.
+There are two classes `sensor_t` and `motor_t`, each of these classes contain properties and values for sensors and motors. They directly interface with the drivers through the `vehicle_setup.h` header file (formally `sensors.h` and `motors.h`). Ideally, sensors and motors are described in the Vehicle Description file and functions are written to translate these hardware specific drivers into universal `sensor_t` and `motor_t` objects automatically by avoe-tool. The `sensor_t` and `motor_t` objects then interface with other compontents such as the controller or the networking stack.
 <br>
 Sensor and Motor specific "middleware" exists in the `general-*` directories, however this middleware will be moved to the plugins directory.
 
