@@ -65,10 +65,10 @@ class avoe_comm_transmitter{
 		void set_sensor(sensor_t *sensor);
 		void set_motor(motor_t *motor);
 
-		// send info to other device
+		// asynchronous transmit
 		void tx();
 
-		// utilize tx to continously sending data in a while loop
+		// continous transmit based on clock
 		void refresh();
 
 		//methods for clock stuff
@@ -83,12 +83,17 @@ class avoe_comm_reciever{
 		char type[32];
 		char *data_message;
 		size_t data_message_len;
+		rx_socket *socket;
+		avoe_clock_t clock;
 
+		unsigned int rx_period; //in ms
 	public:
 		
 		avoe_comm_reciever(const char *type, const char *channel, int port_in);
 		void set_message(char *mptr, size_t len);
-		void refresh();
+		void refresh(); // continous transmit based on clock
+
+
 		//methods for clock stuff
 };
 

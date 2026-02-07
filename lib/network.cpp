@@ -82,11 +82,14 @@ void tx_socket::init(const char *host, int port){
 
 }
 void tx_socket::transmit(const char *bufferIn){
-	initStr(tx_buffer, 256); 
+	
+	initStr(tx_buffer, tx_buffer_len); 
 	strncpy(tx_buffer, bufferIn, tx_buffer_len);
+	
 	if (sendto(fd, tx_buffer, tx_buffer_len, 0, (struct sockaddr *)&remote_addr, slen) == -1){
 		std::cout << "error sendto\n";
 	}
+	
 
 }
 

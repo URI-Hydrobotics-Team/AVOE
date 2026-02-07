@@ -95,13 +95,13 @@ void avoe_comm_transmitter::set_timer(unsigned int period){
 }
 
 void avoe_comm_transmitter::tx() {
-	char *temp_str, *data_n;
 	size_t temp_size;
-
+	char *temp_str, *data_n;
 	// mode check
 	switch(mode){
 		//mode 0: send generic string data
 		case 0:
+
 			// allocate new char array
 			temp_str = new char[data_message_len + 64]; //+ 64 for header stuff
 			initStr(temp_str, data_message_len + 64);
@@ -116,11 +116,13 @@ void avoe_comm_transmitter::tx() {
 			std::cout << "MODE 0 TRANSMIT: " << temp_str << '\n';
 
 			socket->transmit(temp_str);
+			
 			delete[] temp_str;
 			break;
 
 		//mode 1: send sensor data fields
 		case 1:
+
 			temp_str = new char[data_sensor_message_len + 64]; //+ 64 for header stuff
 			initStr(temp_str, data_message_len + 64);
 			appendStr(temp_str, "$AVOE:", 0);
@@ -153,6 +155,7 @@ void avoe_comm_transmitter::tx() {
 			std::cout << "MODE 1 TRANSMIT: " << temp_str << '\n';
 
 			socket->transmit(temp_str);
+
 			delete[] data_n;
 			delete[] temp_str;
 			break;
@@ -161,3 +164,58 @@ void avoe_comm_transmitter::tx() {
 			break;
 	}
 }
+
+
+
+avoe_comm_reciever::avoe_comm_reciever(const char *type_in, const char *channel, int port_in){
+	// copy the type, channel, ip into class variable
+	strncpy(type, type_in, 32);
+	strncpy(channel_name, channel, 32);
+
+	// port on other device to send info to
+	port = port_in;
+	rx_period = 0; //default timer value;	
+
+
+	data_message = nullptr;	
+	socket = nullptr;
+
+		
+
+}
+
+
+void avoe_comm_reciever::set_message(char *mptr, size_t len){
+
+	strncpy(data_message, mptr, len);
+	data_message_len = len;
+	socket = new rx_socket(len);
+	socket->init(port);	
+
+}
+
+void avoe_comm_reciever::refresh(){
+	//refresh based on timer
+	if (rx_period == 0){
+		return; //timer is off
+	}
+
+	if (clock.getElaspedTimeMS() >= rx_period){
+		if (socket != nullptr){
+			//rx
+			strncpy(data_message, socket->rec(0), data_message_len);
+					
+		}		
+
+		clock.reset();
+	}
+}
+
+
+
+
+
+
+
+
+

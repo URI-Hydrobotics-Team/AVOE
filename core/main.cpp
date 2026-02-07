@@ -46,13 +46,13 @@ void test(){
 	tardigrade_setup_motors(); //run the setup function in the vehicle_setup.h file
 
 	//transmit sensor data over network
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "192.168.1.129");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "127.0.0.1");	
 	tx_device1.set_sensor(&imu); //set source to imu
 	tx_device1.set_timer(100); //set 500ms transmit interval
 	//transmit char array over network
 	char message[] = "look here look listen";
-	avoe_comm_transmitter tx_device2("message", "test_message", 8200, "192.168.1.129");	
-	tx_device2.set_message(message, 32); //set source to imu
+	avoe_comm_transmitter tx_device2("message", "test_message", 8200, "127.0.0.1");	
+	tx_device2.set_message(message, 32); //set source to message
 	tx_device2.set_timer(200); //set 200ms transmit interval
 
 
