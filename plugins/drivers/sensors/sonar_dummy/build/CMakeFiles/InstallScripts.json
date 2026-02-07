@@ -1,0 +1,13 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/device/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/hal/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/message/cmake_install.cmake",
+		"/home/Andrew/Documents/hydrobotics/AVOEMK2/AVOE/plugins/drivers/sensors/sonar_dummy/build/_deps/ping-cppstred-build/src/boostless/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
