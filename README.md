@@ -32,3 +32,29 @@ Create a open source ROS alternative that is fast, minimal, highly modular, and 
 Check out the READMEs
 ## Quick start
 At the moment, AVOE is in heavy development, but you can test some stuff. Check out the test() function in `core/main.cpp` for a simple reference. This section will expand as more development occurs.
+
+
+
+## Building the Core Program
+### With CMake
+`mkdir build`
+
+`cd build`
+
+`cmake ..`
+
+`make`
+
+>[!TIP]
+> you really only need to run the `cmake ..` once if you make changes to the code locally without moving any of the files you simply can just run 
+`make`.
+
+The executable should be titled `avoe` inside of the `build` folder that was created
+### With Bash
+`cd core`
+
+`./build.sh`
+#### for debug
+`./build.sh -d`
+
+The executable should be titled    `avoe` in the `core` folder
