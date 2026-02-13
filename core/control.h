@@ -7,7 +7,7 @@
 #include "mission.h"
 
 
-auv_mission_t active_mission;
+//auv_mission_t active_mission;
 
 
 
@@ -30,9 +30,6 @@ void setMissionSequence(auv_mission_t missions[], int len){
 
 
 }
-
-
-
 
 
 
