@@ -18,6 +18,8 @@ class log_t{
 		FILE *fptr;
 		time_t rawtime;
 		struct tm * timeinfo;
+		// writes the header the first time the thing gets runned
+		bool firstRun = true;
 
 	public:
 		char* makeFileName(const char *);

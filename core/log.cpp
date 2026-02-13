@@ -34,24 +34,39 @@ void log_t::init(){
 		printf("%s",mkdirtoken);
 		int newfdr = system(mkdirtoken);
 	}
-	appendStr(working_file, new_time_str, strlen(working_file));
-	appendStr(working_file, ".txt", strlen(working_file));
 
-	// make a file
-	fptr = fopen(working_file, "w");
-	// write header
-	fputs("AVOE LOG FILE: ", fptr);
-	fputs(new_time_str, fptr);
-	fputs("\n", fptr);
-	std::cout << "header written for \"" << working_file << "\"\n";
-	fclose(fptr);
+
 }
-
 
 void log_t::log(const char *data){
 	// write timestamp and log input 
-	fptr = fopen(working_file, "a");
 
+/**
+ * I moved this here instead of the init function 
+ * it writes the header file here it should only once;
+ */
+	if (firstRun == true)
+	{	char new_time_str[32]; 
+		asctime_r(timeinfo, new_time_str);
+		fptr = fopen(working_file,"w+");
+		appendStr(working_file, new_time_str, strlen(working_file));
+		appendStr(working_file, ".txt", strlen(working_file));
+		// make a file
+		fptr = fopen(working_file, "w+");
+		if (fptr==NULL)
+		{
+			perror("ERROR OPENING FILE");
+		}
+		fputs("AVOE LOG FILE: ", fptr);
+		fputs(new_time_str, fptr);
+		fputs("\n", fptr);
+		std::cout << "header written for \"" << working_file << "\"\n";
+		firstRun = false;
+		fclose(fptr);
+	}
+	
+
+	fptr = fopen(working_file, "a");
 	entries++;
 	//get time
 	time(&rawtime);

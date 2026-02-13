@@ -1,0 +1,2 @@
+/usr/bin/ar qc libplugins.a "CMakeFiles/plugins.dir/middleware/general-sensor/imu.cpp.o" "CMakeFiles/plugins.dir/drivers/sensors/imu-dummy/driver.cpp.o"
+/usr/bin/ranlib libplugins.a
