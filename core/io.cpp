@@ -105,7 +105,7 @@ void avoe_comm_transmitter::tx() {
 			// allocate new char array
 			temp_str = new char[data_message_len + 64]; //+ 64 for header stuff
 			initStr(temp_str, data_message_len + 64);
-			appendStr(temp_str, "$AVOE:", 0);
+			appendStr(temp_str, "$AVOEG:", 0); //'G' indicates generic message
 			appendStr(temp_str, channel_name, strlen(temp_str));
 			appendStr(temp_str, ":", strlen(temp_str));
 			appendStr(temp_str, type, strlen(temp_str));
@@ -125,7 +125,7 @@ void avoe_comm_transmitter::tx() {
 
 			temp_str = new char[data_sensor_message_len + 64]; //+ 64 for header stuff
 			initStr(temp_str, data_message_len + 64);
-			appendStr(temp_str, "$AVOE:", 0);
+			appendStr(temp_str, "$AVOES:", 0); //'S' indicates sensor
 			appendStr(temp_str, channel_name, strlen(temp_str));
 			appendStr(temp_str, ":", strlen(temp_str));
 			appendStr(temp_str, type, strlen(temp_str));
@@ -176,7 +176,6 @@ avoe_comm_reciever::avoe_comm_reciever(const char *type_in, const char *channel,
 	port = port_in;
 	rx_period = 0; //default timer value;	
 
-
 	data_message = nullptr;	
 	socket = nullptr;
 
@@ -187,11 +186,12 @@ avoe_comm_reciever::avoe_comm_reciever(const char *type_in, const char *channel,
 
 void avoe_comm_reciever::set_message(char *mptr, size_t len){
 
-	strncpy(data_message, mptr, len);
+	data_message = mptr;
 	data_message_len = len;
 	socket = new rx_socket(len);
-	socket->init(port);	
-
+	socket->init(port);
+	
+	
 }
 
 void avoe_comm_reciever::refresh(){
@@ -211,8 +211,15 @@ void avoe_comm_reciever::refresh(){
 	}
 }
 
+void avoe_comm_reciever::set_timer(unsigned int period){
+	rx_period = period;
+}
 
+void avoe_comm_reciever::rx(){
 
+	strncpy(data_message, socket->rec(0), data_message_len);
+
+}
 
 
 

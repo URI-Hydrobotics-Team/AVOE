@@ -68,10 +68,9 @@ class avoe_comm_transmitter{
 		// asynchronous transmit
 		void tx();
 
-		// continous transmit based on clock
+		// continous transmit based on clock period
 		void refresh();
 
-		//methods for clock stuff
 
 };
 
@@ -91,10 +90,9 @@ class avoe_comm_reciever{
 		
 		avoe_comm_reciever(const char *type, const char *channel, int port_in);
 		void set_message(char *mptr, size_t len);
-		void refresh(); // continous transmit based on clock
-
-
-		//methods for clock stuff
+		void refresh(); // continous recieve based on clock period
+		void rx();
+		void set_timer(unsigned int period); 
 };
 
 

@@ -24,7 +24,7 @@ class tardigrade_basic_controller_t{
 	private:
 		char name[32]; //name and version string (unimportant)
 		vehicle_t *vehcile;
-		float[3][6] thrust_table={
+		float thrust_table[3][6] = {
 		0.0, 0.0, 1.0, 	//SH
 		0.0, 0.0, 1.0, 	//BSH
 		0.0, 0.0, 1.0, 	//BPH
@@ -39,7 +39,7 @@ class tardigrade_basic_controller_t{
 
 		tardigrade_basic_controller_t(const char *n, vehicle_t *vehicle_in);
 		~tardigrade_basic_controller_t();
-		void send_vector(vector_t thrust_vector, vector_t thrust_point, vector_t pivot_point);
+		void send_vector(vector_t thrust_vector); //we assume pivot and orgin are about the center of the robot
 
 
 };

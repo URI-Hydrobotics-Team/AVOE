@@ -11,6 +11,7 @@
 #include "../../lib/lib.h"
 #include "../../lib/globals.h"
 #include "../../lib/network.h"
+#include "../../core/io.h"
 #include "../../lib/controller.h"
 #include "../../lib/keyboard.h"
 #include "../../lib/vt100.h"
@@ -20,8 +21,7 @@
 
 //controller
 
-//sockets
-tx_socket frontend_to_core;
+
 
 controller_t raw_controller; //raw device
 controller_generic_raw sixaxis; //virtual raw device
@@ -76,9 +76,6 @@ std::cout << "--- INPUT STAUS ---\n";
 
 void setup(){
 
-	/* setup and initilizae all connections */
-
-	frontend_to_core.init(CORE_IP, CORE_PORT_TX); //initalize socket to core
 	
 	//controller
 	raw_controller.setDevice("/dev/input/js0");
@@ -100,17 +97,35 @@ void raw(){
 
 
 void test(){
+
+	char message[32] = "look here look listen";
+	char rx_message[128];
+
+	//networking setup
+	avoe_comm_transmitter frontend_to_core("message", "general", CORE_PORT_TX, CORE_IP);
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8200);
+
+	/* setup and initilizae all connections */	
+	frontend_to_core.set_message(message, 32);
+	frontend_to_core.set_timer(1000);	
+	core_to_frontend.set_message(rx_message, 128);
+
+
 	std::cout << "AVOE Frontend CLI Test Mode\n";
 	setup();
 	avoe_clock_t test_timer;
 	test_timer.reset();
-
 	while(1){
+		frontend_to_core.refresh();
+		core_to_frontend.rx();
 		//std::cout << test_timer.getElaspedTimeMS() << '\n'; 
 		if (test_timer.getElaspedTimeMS() > 1000){
-			std::cout << "send message\n";
+			std::cout << "test\n";
+			std::cout << "Message from core: " << rx_message << '\n';
+			std::cout << "Message to core: " << message << '\n';
+			
+	
 			//do something every second
-			frontend_to_core.transmit("a message from avoe-frontend-cli");
 			sixaxis.print();
 			
 			printController(&deckbox_input);
@@ -122,7 +137,7 @@ void test(){
 
 
 		raw_controller.poll(&sixaxis);
-		usleep(1000);
+		//usleep(1000);
 		convertToSixaxis(&deckbox_input, sixaxis);
 
 
