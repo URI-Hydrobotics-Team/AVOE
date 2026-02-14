@@ -1,7 +1,7 @@
 #pragma once
 #include <pigpio.h>
-#include "../../lib/RPi_BNO055/RPi_Sensor.h"
-#include "../../lib/RPi_BNO055/RPi_BNO055.h"
+#include "../../../../external/RPi_BNO055/RPi_Sensor.h"
+#include "../../../../external/RPi_BNO055/RPi_BNO055.h"
 #include <vector>
 #include <iostream>
 
@@ -11,7 +11,7 @@
 class BNO055{
   private:
     // The IMU object
-    Adafruit_BNO055 IMU;
+    Adafruit_BNO055* IMU;
 
     // Vectors for the different data
     imu::Vector<3> Euler_Orientation, Angular_Velocity, Acceleration_Vector, Magnetic_Field_Strength, 
@@ -23,7 +23,7 @@ class BNO055{
     int8_t temperature;
   public:
     // Constructor
-    //BNO055();
+    ~BNO055();
     void init();
     void cold_init();
 

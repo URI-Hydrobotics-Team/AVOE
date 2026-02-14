@@ -18,15 +18,17 @@
 #include "motor.h"
 #include "vehicle.h"
 
-
+// include drivers and middleware
 #include "../plugins/drivers/sensors/imu-dummy/driver.h"
 #include "../plugins/middleware/general-sensor/imu.h"
 
+#include "../plugins/drivers/sensors/bnO055/driver.h"
 
 
 
 /* raw drivers */
 Dummy_BNO055 dummy_imu;
+BNO055 real_imu;
 
 
 
@@ -42,26 +44,43 @@ motor_t thruster_SS(1);
 
 /* AVOE sensors */
 vehicle_t tardigrade("Tardigrade", "2", "AUV");
-sensor_t imu(8); 	
-sensor_t pressure(4);
-sensor_t leak(1);
+sensor_t tardigrade_imu(8); 	
+sensor_t tardigrade_pressure(4);
+sensor_t tardigrade_leak(1);
 
-void tardigrade_setup_sensors(){
+void tardigrade_setup_sensors_physical(){
 
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
 	/* AVOE init */
-	imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU", dummyPosition);
-	pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
-	leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
+	tardigrade_imu.init("BNO055", "Adafruit", "I2C", "IMU", dummyPosition);
+	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
+	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
 	
-	tardigrade.addSensor(&imu);	
-	tardigrade.addSensor(&pressure);
-	tardigrade.addSensor(&leak);
-	
-	/* raw driver init */	
+	tardigrade.addSensor(&tardigrade_imu);	
+	tardigrade.addSensor(&tardigrade_pressure);
+	tardigrade.addSensor(&tardigrade_leak);
+		/* raw driver init */	
 	srand(time(NULL));
+	real_imu.cold_init();
+	std::cout << "Phsyical Sensors Setup\n";
 
+}
+void tardigrade_setup_sensors_virtual(){
+
+
+	vector_t dummyPosition(0.0, 0.0, 0.0);
+	/* AVOE init */
+	tardigrade_imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU", dummyPosition);
+	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
+	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
+	
+	tardigrade.addSensor(&tardigrade_imu);	
+	tardigrade.addSensor(&tardigrade_pressure);
+	tardigrade.addSensor(&tardigrade_leak);
+		/* raw driver init */	
+	srand(time(NULL));
+	
 
 }
 
@@ -78,14 +97,45 @@ void tardigrade_setup_motors(){
 }
 
 
+void tardigrade_update_sensors_physical(){
 
-void tardigrade_update_sensors(){
+	/* real imu */
+	imu::Vector<3> aoe = real_imu.get_Euler_Orientation();
+	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x(), aoe.y(), aoe.z());
+	//probably no right
+	imu::Vector<3> v = real_imu.get_Acceleration_Vector();
+	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x(), v.y(), v.z());
+
+
+	imu::Quaternion aoq = real_imu.get_Quaterion_Orientation();
+	sensor_set_imu_ABSOLUTE_ORIENTAION_QUATERNION(&tardigrade_imu, aoq.x(), aoq.y(), aoq.z());
+
+	imu::Vector<3> av = real_imu.get_Angular_Velocity();
+	sensor_set_imu_ANGULAR_VELOCITY(&tardigrade_imu, av.x(), av.y(), av.z());
+
+	imu::Vector<3> g = real_imu.get_Gravity_Vector();
+	sensor_set_imu_GRAVITY(&tardigrade_imu, g.x(), g.y(), g.z());
+
+	imu::Vector<3> la = real_imu.get_Linear_Acceleration();
+	sensor_set_imu_LINEAR_ACCELERATION(&tardigrade_imu, la.x(), la.y(), la.z());
+
+	imu::Vector<3> mfs = real_imu.get_Magnetic_Field_Strength();
+	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x(), mfs.y(), mfs.z());
+
+	double temp = real_imu.get_temperature();
+	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+};
+
+
+void tardigrade_update_sensors_dummy(){
+
 
 	/* dummy imu */
 	//get temp
 	double temp = dummy_imu.get_temperature();
-	sensor_set_imu_TEMPERATURE(&imu, temp);
-
+	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+	
 
 }
 

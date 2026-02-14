@@ -3,7 +3,7 @@
 #include <cstring>
 
 
-int avoe_clock_t::getElaspedTimeMS(){
+unsigned long avoe_clock_t::getElaspedTimeMS(){
 	clock_t t = clock() - timer;
 	//return (t * 100000 / CLOCKS_PER_SEC);
 

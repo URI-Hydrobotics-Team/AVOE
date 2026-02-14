@@ -22,7 +22,7 @@ class avoe_clock_t{
 
 	public:
 
-		int getElaspedTimeMS();
+		unsigned long getElaspedTimeMS();
 		void reset();
 		char* getTimeStr();
 };

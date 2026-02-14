@@ -6,3 +6,4 @@ lib/cmake_install.cmake
 lib/Makefile
 plugins/cmake_install.cmake
 plugins/Makefile
+external/
