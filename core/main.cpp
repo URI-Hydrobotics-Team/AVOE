@@ -32,9 +32,11 @@
 */
 
 /* test function */
-void test_physical(){
 
-	/* This is a reference setup / configuration */
+
+void test_physical(){
+/*
+	//This is a reference setup / configuration
 
 	avoe_clock_t tel_timer; //telemetry timer
 	log_t test_log; // setup a logger
@@ -74,6 +76,8 @@ void test_physical(){
 
 		
 	}
+
+*/
 }
 
 void test_virtual(){

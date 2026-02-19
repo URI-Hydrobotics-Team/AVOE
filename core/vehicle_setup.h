@@ -18,17 +18,20 @@
 #include "motor.h"
 #include "vehicle.h"
 
-// include drivers and middleware
+// include dummy drivers and middleware
 #include "../plugins/drivers/sensors/imu-dummy/driver.h"
 #include "../plugins/middleware/general-sensor/imu.h"
 
-#include "../plugins/drivers/sensors/bnO055/driver.h"
+//include real drivers
+//#include "../plugins/drivers/sensors/bnO055/driver.h"
 
 
 
 /* raw drivers */
+//virtual (dummy)
 Dummy_BNO055 dummy_imu;
-BNO055 real_imu;
+//real
+//BNO055 real_imu;
 
 
 
@@ -48,11 +51,13 @@ sensor_t tardigrade_imu(8);
 sensor_t tardigrade_pressure(4);
 sensor_t tardigrade_leak(1);
 
+
+/*
 void tardigrade_setup_sensors_physical(){
 
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
-	/* AVOE init */
+ 	//AVOE init
 	tardigrade_imu.init("BNO055", "Adafruit", "I2C", "IMU", dummyPosition);
 	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
 	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
@@ -60,12 +65,15 @@ void tardigrade_setup_sensors_physical(){
 	tardigrade.addSensor(&tardigrade_imu);	
 	tardigrade.addSensor(&tardigrade_pressure);
 	tardigrade.addSensor(&tardigrade_leak);
-		/* raw driver init */	
+	//raw driver init	
 	srand(time(NULL));
 	real_imu.cold_init();
 	std::cout << "Phsyical Sensors Setup\n";
 
 }
+*/
+
+
 void tardigrade_setup_sensors_virtual(){
 
 
@@ -96,13 +104,13 @@ void tardigrade_setup_motors(){
 
 }
 
-
+/*
 void tardigrade_update_sensors_physical(){
 
-	/* real imu */
+	// real imu
 	imu::Vector<3> aoe = real_imu.get_Euler_Orientation();
 	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x(), aoe.y(), aoe.z());
-	//probably no right
+
 	imu::Vector<3> v = real_imu.get_Acceleration_Vector();
 	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x(), v.y(), v.z());
 
@@ -126,7 +134,7 @@ void tardigrade_update_sensors_physical(){
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
 
 };
-
+*/
 
 void tardigrade_update_sensors_dummy(){
 
