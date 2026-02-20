@@ -106,7 +106,7 @@ void test_virtual(){
 	while (1){ //the loop
 	
 		tardigrade_update_sensors_dummy();
-		//tx_device1.refresh();
+		tx_device1.refresh();
 		tx_device2.refresh();
 		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){

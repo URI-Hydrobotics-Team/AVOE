@@ -69,7 +69,7 @@ void avoe_comm_transmitter::set_message(char *mptr, size_t len){
 void avoe_comm_transmitter::set_sensor(sensor_t *sensor){
 	mode = 1;
 	data_sensor = sensor;
-	data_sensor_message_len = 128 * (data_sensor->getFieldCount() + 1); // + 1 just so we have room a header
+	data_sensor_message_len = 128 * (data_sensor->getFieldCount() + 1); // + 1 just so we have room for a header
 	if (socket == nullptr){
 		socket = new tx_socket(data_sensor_message_len + 64);
 		socket->init(dest_ip, port);

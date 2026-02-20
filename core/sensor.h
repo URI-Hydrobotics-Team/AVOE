@@ -24,13 +24,13 @@ class sensor_t{
 		/* positioning */
 
 		vector_t offset; //position offset from center of vehicle in mm
-
+		vector_t facing; //direction the sensor is pointed torwads if applicable
 
 	public:
 
 		sensor_t(size_t fields);
 		~sensor_t();
-		void init(const char *m, const char *v, const char *p, const char *t, vector_t off);
+		void init(const char *m, const char *v, const char *p, const char *t, vector_t off, vector_t face);
 		char *getModel();
 		char *getVendor();
 		char *getProtocol();

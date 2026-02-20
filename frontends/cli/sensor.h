@@ -1,9 +1,12 @@
-#include "sensor.h"
+#include "../../core/sensor.h"
 /*
 
 	AVOE frontend sensor handling functions
 	once implemented for cli, this should be moved to /frontends/lib/
 */
 
+#ifndef AVOE_IO_SENSOR_H
+#define AVOE_IO_SENSOR_H
+int map_sensor_string(sensor_t *sensors, const char *message, size_t message_len); //return 1 on success, return -1 on fail
 
-void map_sensor_string(const char *message, sensor_t **sensors, size_t sensor_count);
+#endif
