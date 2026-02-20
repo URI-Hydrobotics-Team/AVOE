@@ -13,6 +13,7 @@ public:
 
     // Convert values from [-1.0, 1.0] range to PWM range [1100, 1900]
     static std::vector<int> convertToPWM(const std::vector<float>& input_values);
+    static int convertToPWM(float &input_values);
 
     // Format PWM values as a string like "PWM,1500,1500,1500,1500,1500,1500"
     static std::string encodeToCommand(const std::vector<int>& pwm_values);
