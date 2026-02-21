@@ -113,7 +113,7 @@ void avoe_comm_transmitter::tx() {
 			appendStr(temp_str, data_message, strlen(temp_str));
 			appendStr(temp_str, "$", strlen(temp_str));
 
-			std::cout << "MODE 0 TRANSMIT: " << temp_str << '\n';
+			//std::cout << "MODE 0 TRANSMIT: " << temp_str << '\n';
 
 			socket->transmit(temp_str);
 			
@@ -152,7 +152,7 @@ void avoe_comm_transmitter::tx() {
 			appendStr(temp_str, data_n, strlen(temp_str)); //append sensor_t data to  temp_str
 			appendStr(temp_str, "$", strlen(temp_str));
 
-			std::cout << "MODE 1 TRANSMIT: " << temp_str << '\n';
+			//std::cout << "MODE 1 TRANSMIT: " << temp_str << '\n';
 
 			socket->transmit(temp_str);
 

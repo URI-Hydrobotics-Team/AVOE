@@ -121,7 +121,7 @@ char* rx_socket::rec(int print){
 
 
 
-	recvlen = recvfrom(fd,rx_buffer, 256, 0, (struct sockaddr *)&remote_addr, &addrlen);
+	recvlen = recvfrom(fd,rx_buffer, rx_buffer_len, 0, (struct sockaddr *)&remote_addr, &addrlen);
 
 	if (recvlen > 0) {
 		/* 

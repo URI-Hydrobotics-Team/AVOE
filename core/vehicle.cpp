@@ -117,3 +117,21 @@ void vehicle_t::print(){
 	}
 }
 
+
+
+sensor_t** vehicle_t::getSensorTable(){
+	return sensor_table;
+}
+
+motor_t** vehicle_t::getMotorTable(){
+	return motor_table;
+}
+
+
+size_t vehicle_t::getSensorCount(){
+	return sensor_count;
+}
+
+size_t vehicle_t::getMotorCount(){
+	return motor_count;
+}

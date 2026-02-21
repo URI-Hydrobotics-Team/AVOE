@@ -31,6 +31,7 @@ class sensor_t{
 		sensor_t(size_t fields);
 		~sensor_t();
 		void init(const char *m, const char *v, const char *p, const char *t, vector_t off, vector_t face);
+		void local_update(const char *t, const char* model);
 		char *getModel();
 		char *getVendor();
 		char *getProtocol();

@@ -79,9 +79,9 @@ void tardigrade_setup_sensors_virtual(){
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
 	/* AVOE init */
-	tardigrade_imu.init("BNO055 dummy", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
-	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
-	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
+	tardigrade_imu.init("BNO055_dummy", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
+	tardigrade_pressure.init("Bar_30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
+	tardigrade_leak.init("SOS_Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
 	
 	tardigrade.addSensor(&tardigrade_imu);	
 	tardigrade.addSensor(&tardigrade_pressure);
@@ -143,6 +143,30 @@ void tardigrade_update_sensors_dummy(){
 	//get temp
 	double temp = dummy_imu.get_temperature();
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+	vector_t aoe = dummy_imu.get_Euler_Orientation();
+	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x, aoe.y, aoe.z);
+
+	vector_t v = dummy_imu.get_Acceleration_Vector();
+	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x, v.y, v.z);
+
+
+	vector4_t aoq = dummy_imu.get_Quaterion_Orientation();
+	sensor_set_imu_ABSOLUTE_ORIENTAION_QUATERNION(&tardigrade_imu, aoq.x, aoq.y, aoq.z);
+
+	vector_t av = dummy_imu.get_Angular_Velocity();
+	sensor_set_imu_ANGULAR_VELOCITY(&tardigrade_imu, av.x, av.y, av.z);
+
+	vector_t g = dummy_imu.get_Gravity_Vector();
+	sensor_set_imu_GRAVITY(&tardigrade_imu, g.x, g.y, g.z);
+
+	vector_t la = dummy_imu.get_Linear_Acceleration();
+	sensor_set_imu_LINEAR_ACCELERATION(&tardigrade_imu, la.x, la.y, la.z);
+
+	vector_t mfs = dummy_imu.get_Magnetic_Field_Strength();
+	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x, mfs.y, mfs.z);
+
+
 	
 
 }
