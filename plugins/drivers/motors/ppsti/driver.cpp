@@ -4,6 +4,15 @@
 #include <libserialport.h>
 #include <algorithm>
 
+
+/// @brief Maps values from -1.0f to +1.0f
+/// @param input_value takes 1 value instead of the vector ranging from -1.0f to +1.0f
+/// @return value ranging from 1100-1900
+int avoe_ppsti::convertToPWM(float &input_value)
+{
+    input_value = std::max(-1.0f, std::min(1.0f, input_value));
+    return static_cast<int>(((input_value + 1.0f) / 2.0f) * (PWM_MAX - PWM_MIN) + PWM_MIN);
+}
 // Convert values from [-1.0, 1.0] range to PWM range [1100, 1900]
 std::vector<int> avoe_ppsti::convertToPWM(const std::vector<float>& input_values) {
     std::vector<int> pwm_values;
