@@ -17,7 +17,11 @@
 #include "../../lib/vt100.h"
 #include "../../lib/clock.h"
 #include "../../plugins/gamepad_maps/sixaxis.h"
+#include "setup.h"
+#include "sensor.h"
 /* system setup */
+
+
 
 //controller
 
@@ -81,6 +85,7 @@ void setup(){
 	raw_controller.setDevice("/dev/input/js0");
 	raw_controller.init();
 	
+	tardigrade_setup_sensors_virtual();
 	std::cout << "[DEBUG] Setup Done\n";
 
 }
@@ -99,46 +104,59 @@ void raw(){
 void test(){
 
 	char message[32] = "look here look listen";
-	char rx_message[128];
+	char rx_message[1024]; //big buffer
 
 	//networking setup
 	avoe_comm_transmitter frontend_to_core("message", "general", CORE_PORT_TX, CORE_IP);
-	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8200);
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8101);
 
 	/* setup and initilizae all connections */	
 	frontend_to_core.set_message(message, 32);
 	frontend_to_core.set_timer(1000);	
-	core_to_frontend.set_message(rx_message, 128);
+	core_to_frontend.set_message(rx_message, 1024);
 
 
 	std::cout << "AVOE Frontend CLI Test Mode\n";
 	setup();
-	avoe_clock_t test_timer;
-	test_timer.reset();
+	avoe_clock_t ui_timer;
+	avoe_clock_t network_timer;
+	
+	network_timer.reset();
+	ui_timer.reset();
 	while(1){
-		frontend_to_core.refresh();
-		core_to_frontend.rx();
+		//frontend_to_core.refresh();
+	
+		if (network_timer.getElaspedTimeMS() > 10){
+			core_to_frontend.rx();
+			network_timer.reset();
+		}
+
 		//std::cout << test_timer.getElaspedTimeMS() << '\n'; 
-		if (test_timer.getElaspedTimeMS() > 1000){
-			std::cout << "test\n";
+		if (ui_timer.getElaspedTimeMS() > 1000){
+			map_sensor_string(&tardigrade_imu, rx_message, 1024);
+			map_sensor_string(&tardigrade_pressure, rx_message, 1024);
+			map_sensor_string(&tardigrade_leak, rx_message, 1024);
 			std::cout << "Message from core: " << rx_message << '\n';
-			std::cout << "Message to core: " << message << '\n';
-			
+			//std::cout << "Message to core: " << message << '\n';
+			tardigrade_imu.print();
+			tardigrade_pressure.print();
+			tardigrade_leak.print();
+				
 	
 			//do something every second
-			sixaxis.print();
+			//sixaxis.print();
 			
-			printController(&deckbox_input);
+			//printController(&deckbox_input);
 
 			vtClear();
-			test_timer.reset();
+			ui_timer.reset();
 		}
 
 
 
-		raw_controller.poll(&sixaxis);
-		//usleep(1000);
-		convertToSixaxis(&deckbox_input, sixaxis);
+		//raw_controller.poll(&sixaxis);
+		//usleep(10);
+		//convertToSixaxis(&deckbox_input, sixaxis);
 
 
 

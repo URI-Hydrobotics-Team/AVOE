@@ -7,7 +7,7 @@
 int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len){
 
 
-	std::cout << "operating on: " << message << '\n';
+	//std::cout << "operating on: " << message << '\n';
 
 	char temp_str[32];
 	size_t temp_index = 0;
@@ -39,7 +39,7 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	initStr(type, 32);
 
 
-	initStr(field_count, 4);
+	initStr(field_count_str, 4);
 
 	initStr(channel_name, 32);
 	initStr(channel_type, 32);
@@ -82,7 +82,7 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	initStr(temp_str, 32);
 	temp_index = 0;
 
-	for (index = channel_name_len; index < message_len; index++){
+	for (index < message_len; index++;){
 
 		if (message[index] == ':'){
 			break;
@@ -116,7 +116,6 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	initStr(temp_str, 32);
 	temp_index = 0;
 
-
 	for (index < message_len; index++;){
 
 		if (message[index] == ' '){
@@ -133,7 +132,7 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	strncpy(model, temp_str, temp_index);
 	initStr(temp_str, 32);
 	temp_index = 0;
-
+	
 	for (index < message_len; index++;){
 
 		if (message[index] == ' '){
@@ -151,14 +150,48 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	initStr(temp_str, 32);
 	temp_index = 0;
 
-
+	/*
 	std::cout << "DETECTED CHANNEL: " << channel_name << '\n';
 	std::cout << "DETECTED CHANNEL TYPE: " << channel_type << '\n';
 	std::cout << "DETECTED TYPE: " << type << '\n';
 	std::cout << "DETECTED MODEL: " << model << '\n';
 	std::cout << "DETECTED FIELDS: " << field_count_str << '\n';
+	*/
+	field_count = atoi(field_count_str);
 
-	field_count = atoi(field_count_str); 
+	// match
+
+
+	//std::cout << sensor->getModel() << ' ' << sensor->getType() << '\n';
+
+	if (strncmp(sensor->getType(), type, 32) == 0 && strncmp(sensor->getModel(), model, 32) == 0){
+		std::cout << "sensor_t match for \n";
+	}else{
+		return -1;
+	} 
+
+
+	char temp_field_str[128];
+	initStr(temp_field_str, 128);
+
+	
+	for (size_t i = 0; i < field_count; i++){
+		for (index < message_len; index++;){
+
+			if (message[index] == ' '){
+				break;
+			}
+
+			temp_field_str[temp_index] = message[index];
+			temp_index++;
+		}
+		sensor->write(temp_field_str, i, temp_index);
+		temp_index = 0;
+		initStr(temp_field_str, 128);
+
+	}
+
+
 	
 	// now we will now compare these values to sensor and update values accordingly
 

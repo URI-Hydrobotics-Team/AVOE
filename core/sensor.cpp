@@ -83,7 +83,10 @@ int sensor_t::getState(){
 
 
 void sensor_t::write(const char *input, size_t field, size_t n){
+
+	//std::cout << "init for field " << field << '\n';
 	initStr(data[field], 128);
+	//std::cout << "strncpy\n";
 	strncpy(data[field], input, n);
 	//NOTE n should be 128 or less
 }
@@ -128,6 +131,14 @@ void sensor_t::print(){
 
 size_t sensor_t::getFieldCount(){
 	return field_count;
+}
+
+
+void sensor_t::local_update(const char *t, const char* m){
+
+	strncpy(type, t, 32);
+	strncpy(model, m, 32);
+
 }
 
 

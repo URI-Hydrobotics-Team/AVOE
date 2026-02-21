@@ -25,7 +25,7 @@
 
 /* 
 	MAIN.CPP
-	Essentially, this is where you setup your vehicle. Assuming you have already defined your vehicle's devices in sensors.h and motors.h, you can now
+	Essentially, this is where you setup your vehicle. Assuming you have already defined your vehicle's devices in vehicle_setup.h, you can now
 	write a function to that sets up all of your devices and other components (loggers, timers, controllers, network channels, etc.). Now you can do stuff
 	(by calling another functions or by doing everything in here, say in a while(1) loop).
 
@@ -95,11 +95,22 @@ void test_virtual(){
 	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "127.0.0.1");	
 	tx_device1.set_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.set_timer(100); //set 500ms transmit interval
+	avoe_comm_transmitter tx_device2("sensor", "imu_message", 8101, "127.0.0.1");	
+	tx_device2.set_sensor(&tardigrade_pressure); //set source to pressure
+	tx_device2.set_timer(100); //set 500ms transmit interval
+	avoe_comm_transmitter tx_device3("sensor", "imu_message", 8101, "127.0.0.1");	
+	tx_device3.set_sensor(&tardigrade_leak); //set source to leak
+	tx_device3.set_timer(100); //set 500ms transmit interval
+	
+
+
+	
+
 	//transmit char array over network
 	char message[] = "look here look listen";
-	avoe_comm_transmitter tx_device2("message", "test_message", 8200, "127.0.0.1");	
-	tx_device2.set_message(message, 32); //set source to message
-	tx_device2.set_timer(200); //set 200ms transmit interval
+	avoe_comm_transmitter tx_device4("message", "test_message", 8200, "127.0.0.1");	
+	tx_device4.set_message(message, 32); //set source to message
+	tx_device4.set_timer(200); //set 200ms transmit interval
 
 	std::cout << "setup complete\n";
 
@@ -107,7 +118,9 @@ void test_virtual(){
 	
 		tardigrade_update_sensors_dummy();
 		tx_device1.refresh();
-		tx_device2.refresh();
+		//tx_device2.refresh();
+		//tx_device3.refresh();
+		//tx_device4.refresh();
 		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			//update, print and log every one second
