@@ -41,6 +41,7 @@ class vehicle_t{
 		char *getName();
 		char *getVersion();
 		char *getType();
+		motor_t *getMotor(size_t field);
 		void update(int m);
 		void addSensor(sensor_t *sensor);
 		void addMotor(motor_t *motor);

@@ -5,7 +5,7 @@
 #define AVOE_HELPER_PRES_H
 
 #include "../../lib/lib.h"
-#include "../sensor.h"
+#include "../../../core/sensor.h"
 
 //Getting
 float sensor_get_pres_get_altitude(sensor_t *obj);

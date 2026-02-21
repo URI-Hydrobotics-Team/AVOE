@@ -9,6 +9,7 @@ vehicle_t::vehicle_t (const char *n, const char *v, const char *t){
 	sensor_count = 0;
 	motor_count = 0;
 	sensor_table = nullptr;
+	motor_table = nullptr;
 	name = new char[32];
 	version = new char[16];
 	type = new char[16];
@@ -38,6 +39,10 @@ char *vehicle_t::getVersion(){
 
 char *vehicle_t::getType(){
 	return type;
+}
+
+motor_t *vehicle_t::getMotor(size_t field){
+	return motor_table[field];
 }
 
 void vehicle_t::update(int m){
