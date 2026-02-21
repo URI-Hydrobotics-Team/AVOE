@@ -27,6 +27,7 @@ class tardigrade_basic_controller_t{
 			{1, -0.5, 0.0}, //SS
 			{1, 0.5, 0.0}	//PS
 		};
+		motor_t** motorTable;
 	public:
 
 		tardigrade_basic_controller_t(const char *n, vehicle_t *vehicle_in);
