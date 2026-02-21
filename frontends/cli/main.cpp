@@ -19,26 +19,6 @@
 #include "../../plugins/gamepad_maps/sixaxis.h"
 #include "setup.h"
 #include "sensor.h"
-/* system setup */
-
-
-
-//controller
-
-
-
-controller_t raw_controller; //raw device
-controller_generic_raw sixaxis; //virtual raw device
-controller_generic_profile deckbox_input; //virtual "refined" device
-// clocks
-
-
-
-
-
-/* network helper functions */
-
-
 
 
 
@@ -78,20 +58,6 @@ std::cout << "--- INPUT STAUS ---\n";
 }
 
 
-void setup(){
-
-	
-	//controller
-	raw_controller.setDevice("/dev/input/js0");
-	raw_controller.init();
-	
-	tardigrade_setup_sensors_virtual();
-	std::cout << "[DEBUG] Setup Done\n";
-
-}
-
-
-
 void raw(){
 
 
@@ -101,32 +67,51 @@ void raw(){
 }
 
 
-void test(){
+void test(const char *vector_in){
 
-	char message[32] = "look here look listen";
+	//setup controller
+	controller_t raw_controller; //raw device
+	controller_generic_raw sixaxis; //virtual raw device
+	controller_generic_profile deckbox_input; //virtual "refined" device
+
+	raw_controller.setDevice("/dev/input/js0");
+	raw_controller.init();
+
+	tardigrade_setup_sensors_virtual();
+	std::cout << "[DEBUG] Setup Done\n";
+
+
+	keyboard_t kb;	
+	kb.init();
+
+	char vector_str[64];
+	initStr(vector_str, 64);
+	strncpy(vector_str, vector_in, 64);
+
 	char rx_message[1024]; //big buffer
 
 	//networking setup
-	avoe_comm_transmitter frontend_to_core("message", "general", CORE_PORT_TX, CORE_IP);
+	avoe_comm_transmitter frontend_to_core("message", "vector", CORE_PORT_TX, CORE_IP);
 	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8101);
 
 	/* setup and initilizae all connections */	
-	frontend_to_core.set_message(message, 32);
-	frontend_to_core.set_timer(1000);	
+	frontend_to_core.set_message(vector_str, 64);
+	frontend_to_core.set_timer(10);	
 	core_to_frontend.set_message(rx_message, 1024);
 
 
 	std::cout << "AVOE Frontend CLI Test Mode\n";
-	setup();
 	avoe_clock_t ui_timer;
 	avoe_clock_t network_timer;
 	
 	network_timer.reset();
 	ui_timer.reset();
+
+	char ch = 0;
 	while(1){
 		//frontend_to_core.refresh();
-	
 		if (network_timer.getElaspedTimeMS() > 10){
+			frontend_to_core.tx();
 			core_to_frontend.rx();
 			network_timer.reset();
 		}
@@ -136,8 +121,10 @@ void test(){
 			map_sensor_string(&tardigrade_imu, rx_message, 1024);
 			map_sensor_string(&tardigrade_pressure, rx_message, 1024);
 			map_sensor_string(&tardigrade_leak, rx_message, 1024);
-			std::cout << "Message from core: " << rx_message << '\n';
+			//std::cout << "Message from core: " << rx_message << '\n';
 			//std::cout << "Message to core: " << message << '\n';
+
+			std::cout << "--AVOE deckbox-cli--\n";
 			tardigrade_imu.print();
 			tardigrade_pressure.print();
 			tardigrade_leak.print();
@@ -147,7 +134,6 @@ void test(){
 			//sixaxis.print();
 			
 			//printController(&deckbox_input);
-
 			vtClear();
 			ui_timer.reset();
 		}
@@ -207,7 +193,7 @@ int main(int argc, char *argv[]){
 
 	if (strncmp(argv[1], "test", 16) == 0){
 
-		test();
+		test(argv[2]);
 		return 0;
 	
 

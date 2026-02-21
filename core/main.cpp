@@ -85,6 +85,8 @@ void test_virtual(){
 	/* This is a reference setup / configuration */
 
 	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
 	log_t test_log; // setup a logger
 	test_log.init(); // initilize the logger
 
@@ -102,27 +104,47 @@ void test_virtual(){
 	tx_device3.set_sensor(&tardigrade_leak); //set source to leak
 	tx_device3.set_timer(100); //set 500ms transmit interval
 	
-
-
+	char vector_str[64];
+	avoe_comm_reciever rx_device1("message", "vector", 8110);
+	rx_device1.set_timer(10);
+	rx_device1.set_message(vector_str, 64);
 	
-
+	
+	
 	//transmit char array over network
 	char message[] = "look here look listen";
 	avoe_comm_transmitter tx_device4("message", "test_message", 8200, "127.0.0.1");	
 	tx_device4.set_message(message, 32); //set source to message
 	tx_device4.set_timer(200); //set 200ms transmit interval
 
+
+
+
 	std::cout << "setup complete\n";
 
+	sensor_timer.reset();
+	network_timer.reset();
 	while (1){ //the loop
-	
-		tardigrade_update_sensors_dummy();
+
+
+		if (sensor_timer.getElaspedTimeMS() > 100){
+			tardigrade_update_sensors_dummy();
+			sensor_timer.reset();
+		}
+
 		tx_device1.refresh();
+		rx_device1.refresh();
+
+		if (network_timer.getElaspedTimeMS() > 10){
+			network_timer.reset();
+		}
+	
 		//tx_device2.refresh();
 		//tx_device3.refresh();
 		//tx_device4.refresh();
 		//basic 1 second telemetry loop
 		if (tel_timer.getElaspedTimeMS() > 1000){
+			std::cout << "vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor

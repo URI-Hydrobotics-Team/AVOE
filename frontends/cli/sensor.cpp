@@ -165,7 +165,7 @@ int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len)
 	//std::cout << sensor->getModel() << ' ' << sensor->getType() << '\n';
 
 	if (strncmp(sensor->getType(), type, 32) == 0 && strncmp(sensor->getModel(), model, 32) == 0){
-		std::cout << "sensor_t match for \n";
+		//std::cout << "sensor_t match for \n";
 	}else{
 		return -1;
 	} 
