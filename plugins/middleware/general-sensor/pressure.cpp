@@ -4,7 +4,7 @@
 #include <iostream>
 
 //Getting
-float sensort_get_pres_get_altitude(sensor_t *obj){
+float sensor_get_pres_get_altitude(sensor_t *obj){
     //Pulls data from Data area 0
     std::string str = obj->read(0);
     return std::stof(str);
