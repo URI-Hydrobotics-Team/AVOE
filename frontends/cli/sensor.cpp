@@ -4,15 +4,49 @@
 
 
 
-int map_sensor_string(sensor_t *sensors, const char *message, size_t message_len){
+int map_sensor_string(sensor_t *sensor, const char *message, size_t message_len){
+
+
+	std::cout << "operating on: " << message << '\n';
 
 	char temp_str[32];
-	
+	size_t temp_index = 0;
+	size_t index = 0;
+
+
 	char channel_name[32];
 	char channel_type[32];
 
-	size_t temp_index = 0;
+	size_t channel_name_len;
+	size_t channel_type_len;
 
+
+
+	size_t field_count;
+	char field_count_str[4];
+
+	char model[32]; 
+	char vendor[32];
+	char label[32];
+	char protocol[16];
+	char type[32];
+
+
+	initStr(model, 32);
+	initStr(vendor, 32);
+	initStr(label, 32);
+	initStr(protocol, 32);
+	initStr(type, 32);
+
+
+	initStr(field_count, 4);
+
+	initStr(channel_name, 32);
+	initStr(channel_type, 32);
+
+	
+	
+	
 	/* basic checks */
 	if (message[0] != '$'){
 		return -1;
@@ -25,36 +59,110 @@ int map_sensor_string(sensor_t *sensors, const char *message, size_t message_len
 
 
 	initStr(temp_str, 32);
-	for (size_t i = 6; i < message_len; i++){
 
-		if (message[i] == ':'){
+
+
+	for (index = 7; index < message_len; index++){
+
+		if (message[index] == ':'){
 			break;
 		}
 
-		temp_str[temp_index] = message[i];
-
+		temp_str[temp_index] = message[index];
 
 		temp_index++;
+
 	}
 
 
-	std::cout << "DETECTED CHANNEL: " << temp_str << '\n';
+
+
+	channel_name_len = temp_index;
+	strncpy(channel_name, temp_str, channel_name_len);
 	initStr(temp_str, 32);
-	for (size_t i = 6; i < message_len; i++){
+	temp_index = 0;
 
-		if (message[i] == ':'){
+	for (index = channel_name_len; index < message_len; index++){
+
+		if (message[index] == ':'){
 			break;
 		}
 
-		temp_str[temp_index] = message[i];
+		temp_str[temp_index] = message[index];
 
 
 		temp_index++;
 	}
 
-	std::cout << "DETECTED TYPE: " << temp_str << '\n';
+	channel_type_len = temp_index;
+	strncpy(channel_type, temp_str, channel_type_len);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+	for (index < message_len; index++;){
+
+		if (message[index] == ' '){
+			break;
+		}
+
+		temp_str[temp_index] = message[index];
 
 
+		temp_index++;
+	}
 
+	
+	strncpy(type, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+
+	for (index < message_len; index++;){
+
+		if (message[index] == ' '){
+			break;
+		}
+
+		temp_str[temp_index] = message[index];
+
+
+		temp_index++;
+	}
+
+	
+	strncpy(model, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+	for (index < message_len; index++;){
+
+		if (message[index] == ' '){
+			break;
+		}
+
+		temp_str[temp_index] = message[index];
+
+
+		temp_index++;
+	}
+
+	
+	strncpy(field_count_str, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+
+	std::cout << "DETECTED CHANNEL: " << channel_name << '\n';
+	std::cout << "DETECTED CHANNEL TYPE: " << channel_type << '\n';
+	std::cout << "DETECTED TYPE: " << type << '\n';
+	std::cout << "DETECTED MODEL: " << model << '\n';
+	std::cout << "DETECTED FIELDS: " << field_count_str << '\n';
+
+	field_count = atoi(field_count_str); 
+	
+	// now we will now compare these values to sensor and update values accordingly
+
+
+	return 1;
 
 }

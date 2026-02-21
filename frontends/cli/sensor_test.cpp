@@ -5,7 +5,7 @@
 int main(){
 
 	
-	char test_message[] = "$AVOES:imu_message:sensor:IMU BNO055 dummy 8        -42.000000, 00000$";
+	char test_message[] = "$AVOES:imu_message:sensor:IMU BNO055_dummy 8        -42.000000, 00000$";
 	map_sensor_string(nullptr, test_message, 128);
 
 
