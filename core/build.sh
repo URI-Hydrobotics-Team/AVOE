@@ -4,7 +4,8 @@
 
 if [ "$1" == "virtual" ]; then
 	echo "Building Virtual AVOE Target"
-	g++ -o avoe main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ../plugins/middleware/general-sensor/pressure.cpp ../plugins/drivers/sensors/pressure-sensor-dummy/driver.cpp ../plugins/middleware/general-sensor/leak.cpp ../plugins/drivers/sensors/leak-sensor-dummy/driver.cpp 
+	g++ -o avoe main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ../plugins/middleware/general-sensor/pressure.cpp ../plugins/drivers/sensors/pressure-sensor-dummy/driver.cpp ../plugins/middleware/general-sensor/leak.cpp ../plugins/drivers/sensors/leak-sensor-dummy/driver.cpp ../plugins/controllers/tardigrade_basic/controller.cpp
+
 
 elif [ "$1" == "real" ]; then
 	echo "Building Real AVOE Target"

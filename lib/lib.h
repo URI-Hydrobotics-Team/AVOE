@@ -39,5 +39,7 @@ struct vector4_t{
 
 
 
+vector_t comma_str_to_vector_t(const char *str, size_t n); //input string must be in format "0.0,0.0,0.0," with trailing comma
+
 
 #endif

@@ -2,7 +2,17 @@
 #include <string>
 
 
-tardigrade_basic_controller_t::tardigrade_basic_controller_t(const char *n, vehicle_t *vehicle_in){
+
+tardigrade_basic_controller_t::tardigrade_basic_controller_t(){
+	name = nullptr;
+	vehicle = nullptr;
+	motorTable = nullptr;
+}
+
+
+
+
+void tardigrade_basic_controller_t::init(const char *n, vehicle_t *vehicle_in){
     name = new char[NAME_LEN]; //default is 32
     strncpy(name, n, NAME_LEN);
     vehicle = vehicle_in;

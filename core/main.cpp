@@ -103,7 +103,11 @@ void test_virtual(){
 
 	tx_device1.set_timer(100); //set 500ms transmit interval
 
+
+	char vector_str_decoded[64];
 	char vector_str[64];
+	initStr(vector_str, 64);
+	vector_t translational_vector;
 	avoe_comm_reciever rx_device1("message", "vector", 8110);
 	rx_device1.set_timer(10);
 	rx_device1.set_message(vector_str, 64);
@@ -127,6 +131,13 @@ void test_virtual(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > 100){
 			tardigrade_update_sensors_dummy();
+			// send vectors to controller
+
+			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
+			translational_vector = comma_str_to_vector_t(vector_str_decoded, 64);
+			//std::cout << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
+			controller.send_vector(translational_vector);
+		
 			sensor_timer.reset();
 		}
 		

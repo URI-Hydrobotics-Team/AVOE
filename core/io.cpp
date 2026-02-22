@@ -286,7 +286,54 @@ void avoe_comm_reciever::rx(){
 }
 
 
+int avoe_comm_reciever_decode_message(char *destination, const char *message, size_t n){
 
+	// example:
+	// $AVOEG:vector:message:1,1,1$
+
+
+//std::cout << "operating on: " << message << '\n';
+
+	size_t seperator_count = 0;
+	size_t temp_index = 0;
+	size_t index = 0;
+
+
+	if (message[0] != '$'){
+		return -1;
+	}
+
+	if (message[5] != 'G'){
+		//check header for type (G = general message)
+		return -1; 
+	}
+
+
+	initStr(destination, n);
+
+
+	for (index = 7; index < n; index++){
+
+		if (message[index] == ':'){
+			seperator_count++;
+			continue;
+		}
+
+		if (message[index] == '$'){
+			//done;
+			break;
+		}
+
+
+		if (seperator_count == 2){
+			destination[temp_index] = message[index];
+			temp_index++;
+		}
+
+	}
+
+	return 1;
+}
 
 
 

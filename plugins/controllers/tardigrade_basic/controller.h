@@ -32,7 +32,8 @@ class tardigrade_basic_controller_t{
 		motor_t** motorTable;
 	public:
 
-		tardigrade_basic_controller_t(const char *n, vehicle_t *vehicle_in);
+		tardigrade_basic_controller_t();
+		void init(const char *n, vehicle_t *vehicle_in);
 		~tardigrade_basic_controller_t();
 		void send_vector(vector_t thrust_vector); //we assume pivot and orgin are about the center of the robot
 };

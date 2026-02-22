@@ -31,27 +31,29 @@
 #include "../plugins/drivers/sensors/leak-sensor-dummy/driver.h"
 
 
+// INCLUDE OTHER PLUGINS
+#include "../plugins/controllers/tardigrade_basic/controller.h"
 
-
-
-//include real drivers
+// INCLUDE REAL DRIVERS
 //#include "../plugins/drivers/sensors/bnO055/driver.h"
 //#include "../plugins/drivers/driver/motors/ppsti/driver.h"
 
 
 
-/* raw drivers */
-//virtual (dummy)
+// DEVICE SETUP
+// virtual drivers
 Dummy_BNO055 dummy_imu;
 pressure_driver dummy_pressure;
 leak_sensor dummy_leak;
 
-//real
+// real drivers
 //BNO055 real_imu;
 
+// controllers
+tardigrade_basic_controller_t controller;
 
 
-/* AVOE motors */
+// AVOE MOTORS
 //bph, bsh, sh, y, ps, ss
 
 motor_t thruster_BPH(1);
@@ -61,7 +63,7 @@ motor_t thruster_Y(1);
 motor_t thruster_PS(1);
 motor_t thruster_SS(1);
 
-/* AVOE sensors */
+// AVOE SENSORS
 vehicle_t tardigrade("Tardigrade", "2", "AUV");
 sensor_t tardigrade_imu(8); 	
 sensor_t tardigrade_pressure(4);
@@ -139,6 +141,7 @@ void tardigrade_setup_virtual(){
 	tardigrade.addMotor(&thruster_SS);
 	tardigrade.addMotor(&thruster_PS);
 
+	controller.init("tardigrade_contoller", &tardigrade);
 }
 
 
@@ -218,6 +221,7 @@ void tardigrade_update_sensors_dummy(){
 
 
 }
+
 
 
 

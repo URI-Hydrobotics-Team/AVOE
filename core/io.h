@@ -100,4 +100,9 @@ class avoe_comm_reciever{
 };
 
 
+
+int avoe_comm_reciever_decode_message(char *destination, const char *message, size_t n);
+
+
+
 #endif
