@@ -123,7 +123,7 @@ void test_virtual(){
 	sensor_timer.reset();
 	network_timer.reset();
 
-	std::cout << "AVOE SETUP COMPLETE\n"; // DONE
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
 
 	while (1){ 
 		//the loop
@@ -155,7 +155,7 @@ void test_virtual(){
 		// DISPLAY OUTPUT AND LOGGING
 
 		if (tel_timer.getElaspedTimeMS() > 1000){
-			std::cout << "vector_str from frontend: " << vector_str << '\n';
+			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
@@ -195,6 +195,7 @@ void printHelp(){
 
 int main(int argc, char *argv[]){
 
+	std::cout << "[MAIN] AVOE STARTING UP\n";
 	/* DEFAULT ARGUMENTS */
 	if (argv[1] == NULL){
 		std::cout << "Must specify at least one argument. Try \"./avoe help\".\n";

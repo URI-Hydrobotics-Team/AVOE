@@ -85,7 +85,7 @@ void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
 
 
 	}
-	std::cout << "sensor " << sensor->getModel() << " added to " << channel_name << '\n'; 
+	std::cout << "[IO] sensor " << sensor->getModel() << " added to " << channel_name << '\n'; 
 
 	
 	/*
@@ -177,7 +177,7 @@ void avoe_comm_transmitter::tx() {
 			}
 
 
-			std::cout << "TXing " << sensor_table[sensor_index]->getModel() << '\n';
+			std::cout << "[IO] TXing " << sensor_table[sensor_index]->getModel() << '\n';
 
 			// setup socket
 			data_sensor_message_len = 128 * (sensor_table[sensor_index]->getFieldCount() + 1); // + 1 just so we have room for a header

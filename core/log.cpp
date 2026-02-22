@@ -55,12 +55,12 @@ void log_t::log(const char *data){
 		fptr = fopen(working_file, "w+");
 		if (fptr==NULL)
 		{
-			perror("ERROR OPENING FILE");
+			perror("[LOG] ERROR OPENING FILE");
 		}
 		fputs("AVOE LOG FILE: ", fptr);
 		fputs(new_time_str, fptr);
 		fputs("\n", fptr);
-		std::cout << "header written for \"" << working_file << "\"\n";
+		std::cout << "[LOG] header written for \"" << working_file << "\"\n";
 		firstRun = false;
 		fclose(fptr);
 	}

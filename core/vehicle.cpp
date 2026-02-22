@@ -72,7 +72,7 @@ void vehicle_t::addSensor(sensor_t *sensor){
 
 	}
 
-	std::cout << "sensor " << sensor->getModel() << " added\n"; 
+	std::cout << "[VEHICLE] sensor " << sensor->getModel() << " added\n"; 
 
 }
 void vehicle_t::addMotor(motor_t *motor){
@@ -95,7 +95,7 @@ void vehicle_t::addMotor(motor_t *motor){
 
 	}
 
-	std::cout << "motor " << motor->getModel() << " added\n"; 
+	std::cout << "[VEHICLE] motor " << motor->getModel() << " added\n"; 
 
 }
 

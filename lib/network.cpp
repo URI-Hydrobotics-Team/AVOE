@@ -41,9 +41,9 @@ void tx_socket::init(const char *host, int port){
 	strncpy(server, host, 32);
 	/* socket used to broadcast to others */
 	if ((fd=socket(AF_INET, SOCK_DGRAM, 0)) == - 1){
-		std::cout << "Failed to create TX socket\n";
+		std::cout << "[NETWORK] Failed to create TX socket\n";
 	}else{
-		std::cout << "Created TX socket\n";
+		std::cout << "[NETWORK] Created TX socket\n";
 	}
 
 
@@ -65,9 +65,9 @@ void tx_socket::init(const char *host, int port){
 
 
 	if (bind(fd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
-		std::cout << "Failed to bind TX socket\n";
+		std::cout << "[NETWORK] Failed to bind TX socket\n";
 	}else{
-		std::cout << "Bound TX socket\n";
+		std::cout << "[NETWORK] Bound TX socket\n";
 	}       
 
 
@@ -75,7 +75,7 @@ void tx_socket::init(const char *host, int port){
 	remote_addr.sin_family = AF_INET;
 	remote_addr.sin_port = htons(port);
 	if (inet_aton(server, &remote_addr.sin_addr) == 0) {
-		std::cout << "inet_aton() failed\n";
+		std::cout << "[NETWORK] inet_aton() failed\n";
 		exit(1);
 	}
 
@@ -87,7 +87,7 @@ void tx_socket::transmit(const char *bufferIn){
 	strncpy(tx_buffer, bufferIn, tx_buffer_len);
 	
 	if (sendto(fd, tx_buffer, tx_buffer_len, 0, (struct sockaddr *)&remote_addr, slen) == -1){
-		std::cout << "error sendto\n";
+		std::cout << "[NETWORK] error sendto\n";
 	}
 	
 
@@ -130,8 +130,8 @@ char* rx_socket::rec(int print){
 		 */
 		rx_buffer[recvlen] = 0;
 		if (print == 1){
-			printf("received %d bytes\n", recvlen);
-			printf("received message: \"%s\"\n",rx_buffer);
+			printf("[NETWORK] received %d bytes\n", recvlen);
+			printf("[NETWORK] received message: \"%s\"\n",rx_buffer);
 		}
 		shutdown(fd, 2);
 		usleep(SOCKET_SLEEP); //sleep for 100ms or so
@@ -166,7 +166,7 @@ void rx_socket::init(int port){
 	/* Initialize a socket */
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (fd < 0){
-		std::cout << "Failed to create RX socket\n";
+		std::cout << "[NETWORK] Failed to create RX socket\n";
 	}
 	//set fd to non blocking
 	int flags = fcntl(fd, F_GETFL, 0);
@@ -196,9 +196,9 @@ void rx_socket::init(int port){
 
 	if (bind(fd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
 		//std::cout << "bind to " << host ":" << port << "failed\n";
-		std::cout << "Failed to bind RX socket\n";
+		std::cout << "[NETWORK] Failed to bind RX socket\n";
 	}else{
-		std::cout << "Bound RX socket\n";
+		std::cout << "[NETWORK] Bound RX socket\n";
 	}
 
 }
