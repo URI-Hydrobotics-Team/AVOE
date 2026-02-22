@@ -18,7 +18,8 @@ class avoe_clock_t{
 
 	private:
 
-		clock_t timer;
+		struct timespec timer;
+		clock_t traditional_timer;
 
 	public:
 

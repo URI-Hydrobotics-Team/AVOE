@@ -107,6 +107,7 @@ void test(const char *vector_in){
 
 	char ch = 0;
 	while(1){
+		usleep(1000);
 		//frontend_to_core.refresh();
 		if (network_timer.getElaspedTimeMS() > 10){
 			frontend_to_core.tx();

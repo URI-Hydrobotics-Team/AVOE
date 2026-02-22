@@ -131,6 +131,8 @@ void test_virtual(){
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
 
 	while (1){ 
+
+		usleep(1000);
 		//the loop
 
 		// UPDATE YOUR SENSORS
