@@ -18,9 +18,21 @@
 #include "motor.h"
 #include "vehicle.h"
 
-// include dummy drivers and middleware
-#include "../plugins/drivers/sensors/imu-dummy/driver.h"
+// INCLUDE MIDDLEWARE
+
 #include "../plugins/middleware/general-sensor/imu.h"
+#include "../plugins/middleware/general-sensor/leak.h"
+#include "../plugins/middleware/general-sensor/pressure.h"
+
+
+// INCLUDE DUMMY DRIVERS
+#include "../plugins/drivers/sensors/imu-dummy/driver.h"
+#include "../plugins/drivers/sensors/pressure-sensor-dummy/driver.h"
+#include "../plugins/drivers/sensors/leak-sensor-dummy/driver.h"
+
+
+
+
 
 //include real drivers
 //#include "../plugins/drivers/sensors/bnO055/driver.h"
@@ -31,6 +43,8 @@
 /* raw drivers */
 //virtual (dummy)
 Dummy_BNO055 dummy_imu;
+pressure_driver dummy_pressure;
+leak_sensor dummy_leak;
 
 //real
 //BNO055 real_imu;
@@ -165,8 +179,7 @@ void tardigrade_update_sensors_physical(){
 void tardigrade_update_sensors_dummy(){
 
 
-	/* dummy imu */
-	//get temp
+	// IMU
 	double temp = dummy_imu.get_temperature();
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
 
@@ -192,7 +205,17 @@ void tardigrade_update_sensors_dummy(){
 	vector_t mfs = dummy_imu.get_Magnetic_Field_Strength();
 	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x, mfs.y, mfs.z);
 
+	//PRESSURE
+
+
+	sensor_set_pres_set_altitude(&tardigrade_pressure, dummy_pressure.getAltitude());
+	sensor_set_pres_set_depth(&tardigrade_pressure, dummy_pressure.getDepth());
+	sensor_set_pres_set_pressure(&tardigrade_pressure, dummy_pressure.getPressure());
+	sensor_set_pres_set_temperature(&tardigrade_pressure, dummy_pressure.getTemperature());
 	
+	//LEAK
+	setLEAK_STATUS(&tardigrade_leak, dummy_leak.probe());
+
 
 }
 

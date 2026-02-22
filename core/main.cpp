@@ -98,7 +98,8 @@ void test_virtual(){
 	// NETWORK SETUP
 	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "127.0.0.1");	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
-
+	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
 
 	tx_device1.set_timer(100); //set 500ms transmit interval
 

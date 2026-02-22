@@ -86,7 +86,7 @@ void test(const char *vector_in){
 	initStr(vector_str, 64);
 	strncpy(vector_str, vector_in, 64);
 
-	char rx_message[1024]; //big buffer
+	char rx_message[2048]; //big buffer
 
 	//networking setup
 	avoe_comm_transmitter frontend_to_core("message", "vector", CORE_PORT_TX, CORE_IP);
@@ -95,7 +95,7 @@ void test(const char *vector_in){
 	/* setup and initilizae all connections */	
 	frontend_to_core.set_message(vector_str, 64);
 	frontend_to_core.set_timer(10);	
-	core_to_frontend.set_message(rx_message, 1024);
+	core_to_frontend.set_message(rx_message, 2048);
 
 
 	std::cout << "AVOE Frontend CLI Test Mode\n";
@@ -116,9 +116,9 @@ void test(const char *vector_in){
 
 		//std::cout << test_timer.getElaspedTimeMS() << '\n'; 
 		if (ui_timer.getElaspedTimeMS() > 1000){
-			map_sensor_string(&tardigrade_imu, rx_message, 1024);
-			map_sensor_string(&tardigrade_pressure, rx_message, 1024);
-			map_sensor_string(&tardigrade_leak, rx_message, 1024);
+			map_sensor_string(&tardigrade_imu, rx_message, 2048);
+			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
+			map_sensor_string(&tardigrade_leak, rx_message, 2048);
 			//std::cout << "Message from core: " << rx_message << '\n';
 			//std::cout << "Message to core: " << message << '\n';
 
