@@ -87,20 +87,6 @@ void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
 	}
 	std::cout << "[IO] sensor " << sensor->getModel() << " added to " << channel_name << '\n'; 
 
-	
-	/*
-	data_sensor_message_len = 128 * (data_sensor->getFieldCount() + 1); // + 1 just so we have room for a header
-	if (socket == nullptr){
-		socket = new tx_socket(data_sensor_message_len + 64);
-		socket->init(dest_ip, port);
-	}else{
-		delete socket;
-		socket = new tx_socket(data_sensor_message_len + 64);
-		socket->init(dest_ip, port);
-	}
-
-	*/
-
 
 }
 
@@ -126,18 +112,7 @@ void avoe_comm_transmitter::add_motor(motor_t *motor) {
 
 	}
 
-/*
-	// old code
-	data_motor = motor;
-
-	data_motor_message_len = 128 * (data_motor->getFieldCount() + 1);
-
-	if (socket == nullptr){
-		socket = new tx_socket(data_motor_message_len + 64);
-		socket->init(dest_ip, port);
-	}
-
-*/
+	std::cout << "[IO] motor " << motor->getModel() << " added to " << channel_name << '\n'; 
 }
 
 void avoe_comm_transmitter::set_timer(unsigned int period){

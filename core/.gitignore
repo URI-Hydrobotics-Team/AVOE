@@ -1,5 +1,6 @@
 *.tmp
 *.swp
+core*
 avoe
 log-temp/
 plugins/drivers/sensors/sonar_dummy/build

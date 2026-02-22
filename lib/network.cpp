@@ -30,7 +30,8 @@ tx_socket::tx_socket(){
 }
 
 
-tx_socket::~tx_socket(){	
+tx_socket::~tx_socket(){
+	close(fd);
 	delete[] tx_buffer;	
 }
 
@@ -111,7 +112,8 @@ rx_socket::rx_socket(){
 }
 
 
-rx_socket::~rx_socket(){	
+rx_socket::~rx_socket(){
+	close(fd);
 	delete[] rx_buffer;	
 }
 

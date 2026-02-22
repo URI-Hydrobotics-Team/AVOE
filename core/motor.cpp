@@ -43,7 +43,7 @@ void motor_t::init(const char *l, const char *m, const char *v, const char *p, c
 	strncpy(label, l, 32);
 	strncpy(model, m, 32);
 	strncpy(vendor, v, 32);
-	strncpy(protocol, p, 32);
+	strncpy(protocol, p, 16);
 	strncpy(type, t, 32);
 	
 	position = pos;

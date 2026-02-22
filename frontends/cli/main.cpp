@@ -109,14 +109,14 @@ void test(const char *vector_in){
 	while(1){
 		usleep(1000);
 		//frontend_to_core.refresh();
-		if (network_timer.getElaspedTimeMS() > 10){
+		if (network_timer.getElaspedTimeMS() > 50){
 			frontend_to_core.tx();
 			core_to_frontend.rx();
 			network_timer.reset();
 		}
 
 		//std::cout << test_timer.getElaspedTimeMS() << '\n'; 
-		if (ui_timer.getElaspedTimeMS() > 1000){
+		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
 			map_sensor_string(&tardigrade_imu, rx_message, 2048);
 			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
 			map_sensor_string(&tardigrade_leak, rx_message, 2048);
@@ -132,16 +132,15 @@ void test(const char *vector_in){
 			//do something every second
 			//sixaxis.print();
 			
-			//printController(&deckbox_input);
+			printController(&deckbox_input);
 			vtClear();
 			ui_timer.reset();
 		}
 
 
 
-		//raw_controller.poll(&sixaxis);
-		//usleep(10);
-		//convertToSixaxis(&deckbox_input, sixaxis);
+		raw_controller.poll(&sixaxis);
+		convertToSixaxis(&deckbox_input, sixaxis);
 
 
 
