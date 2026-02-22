@@ -43,8 +43,7 @@ void test_physical(){
 	test_log.init(); // initilize the logger
 
 	//tardigrade_setup_sensors_virtual(); //run the setup function in the vehicle_setup.h file
-	tardigrade_setup_sensors_physical(); //run the setup function in the vehicle_setup.h file
-	tardigrade_setup_motors(); //run the setup function in the vehicle_setup.h file
+	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
 
 	//transmit sensor data over network
 	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "127.0.0.1");	
@@ -81,68 +80,68 @@ void test_physical(){
 }
 
 void test_virtual(){
-
 	/* This is a reference setup / configuration */
+	
 
+	// TIMERS
 	avoe_clock_t tel_timer; //telemetry timer
 	avoe_clock_t network_timer; //telemetry timer
 	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
 	log_t test_log; // setup a logger
 	test_log.init(); // initilize the logger
 
-	tardigrade_setup_sensors_virtual(); //run the setup function in the vehicle_setup.h file
-	tardigrade_setup_motors(); //run the setup function in the vehicle_setup.h file
+	// SENSOR SETUP CALLS
+	tardigrade_setup_virtual(); //run the setup function in the vehicle_setup.h file
 
-	//transmit sensor data over network
+	// NETWORK SETUP
 	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "127.0.0.1");	
-	tx_device1.set_sensor(&tardigrade_imu); //set source to imu
+	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
+
+
 	tx_device1.set_timer(100); //set 500ms transmit interval
-	avoe_comm_transmitter tx_device2("sensor", "imu_message", 8101, "127.0.0.1");	
-	tx_device2.set_sensor(&tardigrade_pressure); //set source to pressure
-	tx_device2.set_timer(100); //set 500ms transmit interval
-	avoe_comm_transmitter tx_device3("sensor", "imu_message", 8101, "127.0.0.1");	
-	tx_device3.set_sensor(&tardigrade_leak); //set source to leak
-	tx_device3.set_timer(100); //set 500ms transmit interval
-	
+
 	char vector_str[64];
 	avoe_comm_reciever rx_device1("message", "vector", 8110);
 	rx_device1.set_timer(10);
 	rx_device1.set_message(vector_str, 64);
 	
 	
-	
-	//transmit char array over network
 	char message[] = "look here look listen";
 	avoe_comm_transmitter tx_device4("message", "test_message", 8200, "127.0.0.1");	
 	tx_device4.set_message(message, 32); //set source to message
 	tx_device4.set_timer(200); //set 200ms transmit interval
 
-
-
-
-	std::cout << "setup complete\n";
-
+	// RESET TIMERS
+	tel_timer.reset(); 
 	sensor_timer.reset();
 	network_timer.reset();
-	while (1){ //the loop
 
+	std::cout << "AVOE SETUP COMPLETE\n"; // DONE
 
+	while (1){ 
+		//the loop
+
+		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > 100){
 			tardigrade_update_sensors_dummy();
 			sensor_timer.reset();
 		}
-
+		
+		// NETWORK REFRESH
 		tx_device1.refresh();
 		rx_device1.refresh();
 
 		if (network_timer.getElaspedTimeMS() > 10){
+			//manual network functions may be placed in here
+			
 			network_timer.reset();
 		}
 	
-		//tx_device2.refresh();
-		//tx_device3.refresh();
-		//tx_device4.refresh();
-		//basic 1 second telemetry loop
+
+		// DISPLAY OUTPUT AND LOGGING
+
 		if (tel_timer.getElaspedTimeMS() > 1000){
 			std::cout << "vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second

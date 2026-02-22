@@ -15,8 +15,8 @@ avoe_comm_transmitter::avoe_comm_transmitter(const char *type_in, const char *ch
 
 
 	//null ptrs
-	data_sensor = nullptr;
-	data_motor = nullptr;
+	motor_table = nullptr;
+	sensor_table = nullptr;
 	data_message = nullptr;	
 	socket = nullptr;
 
@@ -41,10 +41,7 @@ void avoe_comm_transmitter::refresh(){
 	}
 
 	if (clock.getElaspedTimeMS() >= tx_period){
-		if (socket != nullptr){
-			tx();
-		}		
-
+		tx();
 		clock.reset();
 	}
 }
@@ -66,20 +63,71 @@ void avoe_comm_transmitter::set_message(char *mptr, size_t len){
 
 }
 
-void avoe_comm_transmitter::set_sensor(sensor_t *sensor){
+void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
+
 	mode = 1;
-	data_sensor = sensor;
+
+	if (sensor_count == 0){
+		sensor_table = new sensor_t*[1];
+		sensor_table[0] = sensor;
+		sensor_count++;	
+	}else{
+		sensor_t **temp = new sensor_t*[sensor_count + 1];
+		for (size_t i = 0; i < sensor_count; i++){
+			temp[i] = sensor_table[i];
+		}
+		temp[sensor_count] = sensor;
+		sensor_count++;
+
+		delete[] sensor_table;
+		sensor_table = temp;
+	
+
+
+	}
+	std::cout << "sensor " << sensor->getModel() << " added to " << channel_name << '\n'; 
+
+	
+	/*
 	data_sensor_message_len = 128 * (data_sensor->getFieldCount() + 1); // + 1 just so we have room for a header
 	if (socket == nullptr){
 		socket = new tx_socket(data_sensor_message_len + 64);
 		socket->init(dest_ip, port);
+	}else{
+		delete socket;
+		socket = new tx_socket(data_sensor_message_len + 64);
+		socket->init(dest_ip, port);
 	}
+
+	*/
 
 
 }
 
-void avoe_comm_transmitter::set_motor(motor_t *motor) {
+void avoe_comm_transmitter::add_motor(motor_t *motor) {
+
 	mode = 2;
+
+	if (motor_count == 0){
+		motor_table = new motor_t*[1];
+		motor_table[0] = motor;
+		motor_count++;	
+	}else{
+		motor_t **temp = new motor_t*[motor_count + 1];
+		for (size_t i = 0; i < motor_count; i++){
+			temp[i] = motor_table[i];
+		}
+		temp[motor_count] = motor;
+		motor_count++;
+
+		delete[] motor_table;
+		motor_table = temp;
+	
+
+	}
+
+/*
+	// old code
 	data_motor = motor;
 
 	data_motor_message_len = 128 * (data_motor->getFieldCount() + 1);
@@ -88,6 +136,8 @@ void avoe_comm_transmitter::set_motor(motor_t *motor) {
 		socket = new tx_socket(data_motor_message_len + 64);
 		socket->init(dest_ip, port);
 	}
+
+*/
 }
 
 void avoe_comm_transmitter::set_timer(unsigned int period){
@@ -122,6 +172,18 @@ void avoe_comm_transmitter::tx() {
 
 		//mode 1: send sensor data fields
 		case 1:
+			if (sensor_index == sensor_count){
+				sensor_index = 0;
+			}
+
+
+			std::cout << "TXing " << sensor_table[sensor_index]->getModel() << '\n';
+
+			// setup socket
+			data_sensor_message_len = 128 * (sensor_table[sensor_index]->getFieldCount() + 1); // + 1 just so we have room for a header
+			socket = new tx_socket(data_sensor_message_len + 64);
+			socket->init(dest_ip, port);
+		
 
 			temp_str = new char[data_sensor_message_len + 64]; //+ 64 for header stuff
 			initStr(temp_str, data_message_len + 64);
@@ -132,19 +194,19 @@ void avoe_comm_transmitter::tx() {
 			appendStr(temp_str, ":", strlen(temp_str));
 
 			// format sensor_t data
-			temp_size = 64 + data_sensor->getFieldCount() * 128;
+			temp_size = 64 + sensor_table[sensor_index]->getFieldCount() * 128;
 			data_n = new char[temp_size]; 
 			initStr(data_n, temp_size);
 
-			appendStr(data_n, data_sensor->getType(), 0);
+			appendStr(data_n, sensor_table[sensor_index]->getType(), 0);
 			appendStr(data_n, " ", strlen(data_n));
-			appendStr(data_n, data_sensor->getModel(), strlen(data_n));
+			appendStr(data_n, sensor_table[sensor_index]->getModel(), strlen(data_n));
 			appendStr(data_n, " ", strlen(data_n));
 
-			appendStr(data_n, std::to_string(data_sensor->getFieldCount()).c_str(), strlen(data_n));	
+			appendStr(data_n, std::to_string(sensor_table[sensor_index]->getFieldCount()).c_str(), strlen(data_n));	
 			appendStr(data_n, " ", strlen(data_n));
-			for (size_t i = 0; i < data_sensor->getFieldCount(); i++){
-				appendStr(data_n, data_sensor->read(i), strlen(data_n));
+			for (size_t i = 0; i < sensor_table[sensor_index]->getFieldCount(); i++){
+				appendStr(data_n, sensor_table[sensor_index]->read(i), strlen(data_n));
 				appendStr(data_n, " ", strlen(data_n));
 			}
 
@@ -156,6 +218,8 @@ void avoe_comm_transmitter::tx() {
 
 			socket->transmit(temp_str);
 
+			sensor_index++; //rotate sensor
+			delete socket;
 			delete[] data_n;
 			delete[] temp_str;
 			break;

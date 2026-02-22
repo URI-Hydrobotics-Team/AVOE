@@ -24,12 +24,14 @@
 
 //include real drivers
 //#include "../plugins/drivers/sensors/bnO055/driver.h"
+//#include "../plugins/drivers/driver/motors/ppsti/driver.h"
 
 
 
 /* raw drivers */
 //virtual (dummy)
 Dummy_BNO055 dummy_imu;
+
 //real
 //BNO055 real_imu;
 
@@ -53,7 +55,7 @@ sensor_t tardigrade_leak(1);
 
 
 /*
-void tardigrade_setup_sensors_physical(){
+void tardigrade_setup__physical(){
 
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
@@ -68,41 +70,65 @@ void tardigrade_setup_sensors_physical(){
 	//raw driver init	
 	srand(time(NULL));
 	real_imu.cold_init();
+
 	std::cout << "Phsyical Sensors Setup\n";
+
+	vector_t BPH_pos(0.0, 0.0, 0.0);
+	vector_t BPH_dir(1.0, 1.0, 1.0);
+	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	thruster_BSH.init("BSH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SH.init("SH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_Y.init("Y", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_PS.init("PS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	tardigrade.addMotor(&thruster_BPH);
 
 }
 */
 
 
-void tardigrade_setup_sensors_virtual(){
+void tardigrade_setup_virtual(){
 
+	srand(time(NULL)); // random seed
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
-	/* AVOE init */
+
+
+	// INIT SENSORS
 	tardigrade_imu.init("BNO055_dummy", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
 	tardigrade_pressure.init("Bar_30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
 	tardigrade_leak.init("SOS_Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
 	
+	// ADD SENSORS TO TARDIGRADE
 	tardigrade.addSensor(&tardigrade_imu);	
 	tardigrade.addSensor(&tardigrade_pressure);
 	tardigrade.addSensor(&tardigrade_leak);
-		/* raw driver init */	
-	srand(time(NULL));
 	
-
-}
-
-void tardigrade_setup_motors(){
-
+	// INIT MOTORS
 	vector_t BPH_pos(0.0, 0.0, 0.0);
 	vector_t BPH_dir(1.0, 1.0, 1.0);
 	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
-	
-	tardigrade.addMotor(&thruster_BPH);
-	//thruster_BPH.print();
+	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	thruster_BSH.init("BSH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SH.init("SH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_Y.init("Y", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_PS.init("PS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
 
+
+	// ADD THRUSTERS TO TARDIGRADE
+	// order matters depending on controller
+	tardigrade.addMotor(&thruster_SH);
+	tardigrade.addMotor(&thruster_BSH);
+	tardigrade.addMotor(&thruster_BPH);
+	tardigrade.addMotor(&thruster_Y);
+	tardigrade.addMotor(&thruster_SS);
+	tardigrade.addMotor(&thruster_PS);
 
 }
+
+
+
 
 /*
 void tardigrade_update_sensors_physical(){
@@ -165,7 +191,6 @@ void tardigrade_update_sensors_dummy(){
 
 	vector_t mfs = dummy_imu.get_Magnetic_Field_Strength();
 	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x, mfs.y, mfs.z);
-
 
 	
 

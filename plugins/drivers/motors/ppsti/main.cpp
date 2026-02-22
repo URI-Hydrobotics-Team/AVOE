@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib> // for std::stof
 #include "driver.h"
-/*
+
 int main(int argc, char* argv[]) {
     std::string serial_port = "/dev/ttyACM0";
 
@@ -83,10 +83,14 @@ int main(int argc, char* argv[]) {
 }
 
 
-*/
+
+
+/*
 int main()
 {
     float htest = 1.0, m_test = 0.5,l_test = 0.0;
     std::cout << avoe_ppsti::convertToPWM(htest) << " " << avoe_ppsti::convertToPWM(m_test) << " " << avoe_ppsti::convertToPWM(l_test);
     
 }
+
+*/

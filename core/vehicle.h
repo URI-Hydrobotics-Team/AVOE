@@ -43,6 +43,7 @@ class vehicle_t{
 		char *getType();
 		sensor_t** getSensorTable();
 		motor_t** getMotorTable();
+		motor_t* getMotor(size_t field);
 		size_t getSensorCount();
 		size_t getMotorCount();
 		void update(int m);

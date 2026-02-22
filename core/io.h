@@ -39,7 +39,8 @@ class avoe_comm_transmitter{
 			-1	undefined
 			0	generic string data
 			1	sensor
-			2	motor	
+			2	motor
+			3	mixed	
 		*/
 
 		//timing
@@ -51,10 +52,11 @@ class avoe_comm_transmitter{
 		size_t data_message_len;
 		char *data_message; //pointer to character array
 		
-		size_t data_sensor_message_len;
-		size_t data_motor_message_len;
-		sensor_t *data_sensor;
-		motor_t *data_motor;
+		size_t data_sensor_message_len, data_motor_message_len;
+		size_t sensor_count, motor_count, sensor_index, motor_index;
+		sensor_t **sensor_table;
+		motor_t **motor_table;
+		
 
 		tx_socket *socket;
 	public:
@@ -62,8 +64,10 @@ class avoe_comm_transmitter{
 
 		void set_timer(unsigned int period); 
 		void set_message(char *mptr, size_t len);
-		void set_sensor(sensor_t *sensor);
-		void set_motor(motor_t *motor);
+		void add_sensor(sensor_t *sensor);
+		void add_motor(motor_t *motor);
+
+		// add sensor function
 
 		// asynchronous transmit
 		void tx();

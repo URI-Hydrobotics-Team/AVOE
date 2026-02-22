@@ -13,6 +13,8 @@
 #include "../../../core/vehicle.h"
 #include "../../../lib/lib.h"
 
+#define NAME_LEN 32
+
 
 class tardigrade_basic_controller_t{
 

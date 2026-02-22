@@ -81,8 +81,6 @@ void test(const char *vector_in){
 	std::cout << "[DEBUG] Setup Done\n";
 
 
-	keyboard_t kb;	
-	kb.init();
 
 	char vector_str[64];
 	initStr(vector_str, 64);

@@ -1,3 +1,5 @@
+*.swp
+*.tmp
 build/
 .vscode
 lib/plugins/CmakeFiles/
