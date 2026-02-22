@@ -9,7 +9,7 @@ if [ "$1" == "virtual" ]; then
 
 elif [ "$1" == "real" ]; then
 	echo "Building Real AVOE Target"
-	g++ -o avoe main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ../plugins/drivers/sensors/bnO055/driver.cpp ../external/RPi_BNO055/RPi_BNO055.cpp -lpigpio 
+	g++ -o avoe -DTARGET_TARDIGRADE main.cpp mission.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ./plugins/middleware/general-sensor/pressure.cpp ../plugins/drivers/sensors/pressure-sensor-dummy/driver.cpp ../plugins/middleware/general-sensor/leak.cpp ../plugins/drivers/sensors/leak-sensor-dummy/driver.cpp ../plugins/controllers/tardigrade_basic/controller.cpp ../plugins/drivers/sensors/bnO055/driver.cpp ../external/RPi_BNO055/RPi_BNO055.cpp -lpigpio 
 else
 	echo "You must specifiy a build type ./build <type>"
 	echo "Types: 'virtual', 'real'"

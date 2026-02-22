@@ -35,7 +35,10 @@
 
 
 void test_physical(){
-/*
+
+#ifdef TARGET_TARDIGRADE
+
+
 	//This is a reference setup / configuration
 
 	avoe_clock_t tel_timer; //telemetry timer
@@ -76,7 +79,9 @@ void test_physical(){
 		
 	}
 
-*/
+#endif
+
+
 }
 
 void test_virtual(){
@@ -101,7 +106,7 @@ void test_virtual(){
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
 
-	tx_device1.set_timer(100); //set 500ms transmit interval
+	tx_device1.set_timer(100); //set 100ms transmit interval
 
 
 	char vector_str_decoded[64];

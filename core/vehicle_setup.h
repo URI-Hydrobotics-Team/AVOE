@@ -34,10 +34,14 @@
 // INCLUDE OTHER PLUGINS
 #include "../plugins/controllers/tardigrade_basic/controller.h"
 
-// INCLUDE REAL DRIVERS
-//#include "../plugins/drivers/sensors/bnO055/driver.h"
-//#include "../plugins/drivers/driver/motors/ppsti/driver.h"
 
+// INCLUDE REAL DRIVERS
+#ifdef TARGET_TARDIGRADE
+
+#include "../plugins/drivers/sensors/bnO055/driver.h"
+#include "../plugins/drivers/driver/motors/ppsti/driver.h"
+
+#endif
 
 
 // DEVICE SETUP
@@ -46,8 +50,12 @@ Dummy_BNO055 dummy_imu;
 pressure_driver dummy_pressure;
 leak_sensor dummy_leak;
 
+
 // real drivers
-//BNO055 real_imu;
+#ifdef TARGET_TARDIGRADE
+BNO055 real_imu;
+#endif
+
 
 // controllers
 tardigrade_basic_controller_t controller;
@@ -69,9 +77,10 @@ sensor_t tardigrade_imu(8);
 sensor_t tardigrade_pressure(4);
 sensor_t tardigrade_leak(1);
 
+// REAL TARDIGRADE TARGET
 
-/*
-void tardigrade_setup__physical(){
+#ifdef TARGET_TARDIGRADE
+void tardigrade_setup_physical(){
 
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
@@ -100,8 +109,43 @@ void tardigrade_setup__physical(){
 	tardigrade.addMotor(&thruster_BPH);
 
 }
-*/
 
+
+
+void tardigrade_update_sensors_physical(){
+
+	// real imu
+	imu::Vector<3> aoe = real_imu.get_Euler_Orientation();
+	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x(), aoe.y(), aoe.z());
+
+	imu::Vector<3> v = real_imu.get_Acceleration_Vector();
+	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x(), v.y(), v.z());
+
+
+	imu::Quaternion aoq = real_imu.get_Quaterion_Orientation();
+	sensor_set_imu_ABSOLUTE_ORIENTAION_QUATERNION(&tardigrade_imu, aoq.x(), aoq.y(), aoq.z());
+
+	imu::Vector<3> av = real_imu.get_Angular_Velocity();
+	sensor_set_imu_ANGULAR_VELOCITY(&tardigrade_imu, av.x(), av.y(), av.z());
+
+	imu::Vector<3> g = real_imu.get_Gravity_Vector();
+	sensor_set_imu_GRAVITY(&tardigrade_imu, g.x(), g.y(), g.z());
+
+	imu::Vector<3> la = real_imu.get_Linear_Acceleration();
+	sensor_set_imu_LINEAR_ACCELERATION(&tardigrade_imu, la.x(), la.y(), la.z());
+
+	imu::Vector<3> mfs = real_imu.get_Magnetic_Field_Strength();
+	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x(), mfs.y(), mfs.z());
+
+	double temp = real_imu.get_temperature();
+	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+};
+
+#endif
+
+
+// VIRTUAL TARDIGRADE TARGET
 
 void tardigrade_setup_virtual(){
 
@@ -145,39 +189,6 @@ void tardigrade_setup_virtual(){
 }
 
 
-
-
-/*
-void tardigrade_update_sensors_physical(){
-
-	// real imu
-	imu::Vector<3> aoe = real_imu.get_Euler_Orientation();
-	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x(), aoe.y(), aoe.z());
-
-	imu::Vector<3> v = real_imu.get_Acceleration_Vector();
-	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x(), v.y(), v.z());
-
-
-	imu::Quaternion aoq = real_imu.get_Quaterion_Orientation();
-	sensor_set_imu_ABSOLUTE_ORIENTAION_QUATERNION(&tardigrade_imu, aoq.x(), aoq.y(), aoq.z());
-
-	imu::Vector<3> av = real_imu.get_Angular_Velocity();
-	sensor_set_imu_ANGULAR_VELOCITY(&tardigrade_imu, av.x(), av.y(), av.z());
-
-	imu::Vector<3> g = real_imu.get_Gravity_Vector();
-	sensor_set_imu_GRAVITY(&tardigrade_imu, g.x(), g.y(), g.z());
-
-	imu::Vector<3> la = real_imu.get_Linear_Acceleration();
-	sensor_set_imu_LINEAR_ACCELERATION(&tardigrade_imu, la.x(), la.y(), la.z());
-
-	imu::Vector<3> mfs = real_imu.get_Magnetic_Field_Strength();
-	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x(), mfs.y(), mfs.z());
-
-	double temp = real_imu.get_temperature();
-	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
-
-};
-*/
 
 void tardigrade_update_sensors_dummy(){
 
