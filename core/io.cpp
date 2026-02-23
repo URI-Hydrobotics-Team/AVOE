@@ -161,7 +161,7 @@ void avoe_comm_transmitter::tx() {
 		
 
 			temp_str = new char[data_sensor_message_len + 64]; //+ 64 for header stuff
-			initStr(temp_str, data_message_len + 64);
+			initStr(temp_str, data_sensor_message_len + 64);
 			appendStr(temp_str, "$AVOES:", 0); //'S' indicates sensor
 			appendStr(temp_str, channel_name, strlen(temp_str));
 			appendStr(temp_str, ":", strlen(temp_str));
@@ -180,6 +180,7 @@ void avoe_comm_transmitter::tx() {
 
 			appendStr(data_n, std::to_string(sensor_table[sensor_index]->getFieldCount()).c_str(), strlen(data_n));	
 			appendStr(data_n, " ", strlen(data_n));
+
 			for (size_t i = 0; i < sensor_table[sensor_index]->getFieldCount(); i++){
 				appendStr(data_n, sensor_table[sensor_index]->read(i), strlen(data_n));
 				appendStr(data_n, " ", strlen(data_n));

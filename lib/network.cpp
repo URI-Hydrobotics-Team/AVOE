@@ -130,7 +130,8 @@ char* rx_socket::rec(int print){
 		   define how the message is handled 
 		   we would like to have a "message box" in the interface where raw message data is put
 		 */
-		rx_buffer[recvlen] = 0;
+		// Changed: recvlen - 1 to remove off by one error
+		rx_buffer[recvlen - 1] = 0;
 		if (print == 1){
 			printf("[NETWORK] received %d bytes\n", recvlen);
 			printf("[NETWORK] received message: \"%s\"\n",rx_buffer);

@@ -130,8 +130,16 @@ void test_virtual(){
 
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
 
-	while (1){ 
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	tardigrade_update_sensors_dummy();
 
+	int count = 0;
+	while (1){
 		usleep(1000);
 		//the loop
 

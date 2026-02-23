@@ -127,7 +127,8 @@ vector_t comma_str_to_vector_t(const char *str, size_t n){
 	double y;
 	double z;
 
-	char temp_str[32];
+	// Allocate n size memory to prevent stack buffer overflow
+	char temp_str[n];
 	size_t temp_index = 0;
 	short comma_count = 0;
 	
@@ -142,9 +143,7 @@ vector_t comma_str_to_vector_t(const char *str, size_t n){
 
 	}
 
-
 	for (size_t i = 0; i < n; i++){
-
 
 		if(str[i] == ','){
 
@@ -174,8 +173,6 @@ vector_t comma_str_to_vector_t(const char *str, size_t n){
 
 		temp_str[temp_index] = str[i];
 		temp_index++;
-
-		
 
 	}
 
