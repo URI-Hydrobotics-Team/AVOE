@@ -1,4 +1,4 @@
-#define UI_REFRESH 500 // ui update interval in ms
+#define UI_REFRESH 200 // ui update interval in ms
 #define TRANSMIT_INTERVAL 50
 
 /* CONTROLLER */

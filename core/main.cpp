@@ -150,6 +150,7 @@ void test_virtual(){
 
 			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
 			translational_vector = comma_str_to_vector_t(vector_str_decoded, 64);
+			//std::cout << vector_str_decoded << '\n';
 			//std::cout << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
 			controller.send_vector(translational_vector);
 		
