@@ -38,7 +38,7 @@
 // INCLUDE REAL DRIVERS
 #ifdef TARGET_TARDIGRADE
 #include "../plugins/drivers/sensors/bnO055/driver.h"
-#include "../plugins/drivers/driver/motors/ppsti/driver.h"
+#include "../plugins/drivers/motors/ppsti/driver.h"
 #include "../plugins/middleware/general-motor/ppsti_middleware/motor_mw.h" //andrew's middleware for ppsti
 #endif
 
@@ -86,9 +86,9 @@ void tardigrade_setup_physical(){
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
  	//AVOE init
-	tardigrade_imu.init("BNO055", "Adafruit", "I2C", "IMU", dummyPosition);
-	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition);
-	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition);
+	tardigrade_imu.init("BNO055", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
+	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
+	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
 	
 	tardigrade.addSensor(&tardigrade_imu);	
 	tardigrade.addSensor(&tardigrade_pressure);
@@ -107,7 +107,6 @@ void tardigrade_setup_physical(){
 	thruster_Y.init("Y", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
 	thruster_PS.init("PS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
 	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	tardigrade.addMotor(&thruster_BPH);
 
 	// ADD THRUSTERS TO TARDIGRADE
 	// order matters depending on controller
@@ -123,7 +122,7 @@ void tardigrade_setup_physical(){
 	// INIT THRUSTERS (this should be better)
 
 	std::vector<int> zero_vector = {1500,1500,1500,1500,1500,1500};
-	avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(zero_vector),"/dev/acm0");	
+	avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(zero_vector),"/dev/ttyACM0");	
 }
 
 
@@ -157,7 +156,7 @@ void tardigrade_update_sensors_physical(){
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
 
 	// UPDATE THRUSTERS
-	set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+	//set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 
 };

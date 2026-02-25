@@ -53,7 +53,7 @@ void test_physical(){
 	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "10.40.0.1");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "10.42.0.1");	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
@@ -97,7 +97,7 @@ void test_physical(){
 			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
 			translational_vector = comma_str_to_vector_t(vector_str_decoded, 64);
 			//std::cout << vector_str_decoded << '\n';
-			//std::cout << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
+			//std::cout << "TRANSLATIONAL VECTOR: " << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
 			controller.send_vector(translational_vector);
 		
 			sensor_timer.reset();
@@ -117,6 +117,8 @@ void test_physical(){
 		// DISPLAY OUTPUT AND LOGGING
 
 		if (tel_timer.getElaspedTimeMS() > 1000){
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+
 			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
@@ -151,7 +153,7 @@ void test_virtual(){
 	tardigrade_setup_virtual(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "127.0.0.1");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "10.42.0.1");	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu

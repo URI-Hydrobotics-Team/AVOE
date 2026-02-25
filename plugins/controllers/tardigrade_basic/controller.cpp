@@ -28,7 +28,7 @@ void tardigrade_basic_controller_t::send_vector(vector_t thrust_vector){ //we as
     double z = thrust_vector.z;
 
 
-    for(size_t i = 0; i < 6; ++i){
+    for(size_t i = 0; i < 6; i++){
         //Sets motor values after calculating the x,y,z total
         double total = (x * thrust_table[i][0]) + (y * thrust_table[i][1]) + (z * thrust_table[i][2]);
         /*Gets motor from vehicle objects motor table and writes the intended value to it 

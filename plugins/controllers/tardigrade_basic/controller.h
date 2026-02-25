@@ -23,11 +23,11 @@ class tardigrade_basic_controller_t{
 		vehicle_t *vehicle; //Pull Motors from Vehicle object
 		float thrust_table[6][3] = {
 			{0.0, 0.0, 1.0},	//SH
-			{0.0, 0.0, 1.0},	//BSH
-			{0.0, 0.0, 1.0}, 	//BPH
-			{0.0, 1, 0.0}, 	//Y
-			{1, -0.5, 0.0}, //SS
-			{1, 0.5, 0.0}	//PS
+			{0.0, 0.0, 0.5},	//BSH
+			{0.0, 0.0, 0.5}, 	//BPH
+			{0.0, 0.6, 0.0}, 	//Y
+			{1, 0.4, 0.0}, //SS
+			{1, -0.4, 0.0}	//PS
 		};
 		motor_t** motorTable;
 	public:

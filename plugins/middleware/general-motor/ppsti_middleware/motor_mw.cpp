@@ -2,9 +2,7 @@
 // bph bsh sh y ps ss
 #include "motor_mw.h"
 #include <iostream>
-#include "../../../plugins/drivers/motors/ppsti/driver.h"
 #include <cmath>
-#include "../../../core/motor.h"
 /*
 void set_TDG_Thurst(motor_t bph, motor_t bsh,motor_t sh,motor_t y,motor_t ps,motor_t ss)
 {
@@ -46,5 +44,5 @@ void set_ppsti_data(motor_t *bph,motor_t* bsh,motor_t* sh,
     moterz.push_back(pwm_y);
     moterz.push_back(pwm_ps);
     moterz.push_back(pwm_ss);
-    avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(moterz),"/dev/acm0");
+    avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(moterz),PICO_SERIAL_PORT);
 }

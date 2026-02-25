@@ -134,7 +134,7 @@ vector_t comma_str_to_vector_t(const char *str, size_t n){
 	
 	initStr(temp_str, 32);
 
-	if (!charIsInt(str[0])){
+	if (!charIsInt(str[0]) && (str[0] != '-')){
 
 		vector_t ret_val(0.0, 0.0, 0.0);
 		return ret_val;
