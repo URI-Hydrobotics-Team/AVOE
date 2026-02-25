@@ -19,9 +19,7 @@ void log_t::init(){
 	//remove \n from new_time_str
 	size_t temp_len = strlen(new_time_str);
 	new_time_str[temp_len - 1] = 0;
-	
-	
-	
+		
 	initStr(working_file, 64);
 	strncpy(working_file, LOG_DIR, 64);
 	
@@ -48,6 +46,7 @@ void log_t::log(const char *data){
 	if (firstRun == true)
 	{	char new_time_str[32]; 
 		asctime_r(timeinfo, new_time_str);
+		new_time_str[strlen(new_time_str) - 1] = '\0';
 		fptr = fopen(working_file,"w+");
 		appendStr(working_file, new_time_str, strlen(working_file));
 		appendStr(working_file, ".txt", strlen(working_file));
