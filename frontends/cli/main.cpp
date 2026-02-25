@@ -66,9 +66,93 @@ void raw(){
 
 }
 
+void tardigrade_manual_control(controller_generic_profile *input, vector_t *vector, float scale){
+		bool no_input = true;
+		vector->x = 0; vector->y = 0; vector->z = 0;
 
-void test(const char *vector_in){
+		if (input->dp_up){
+			vector->x += scale;
+			no_input = false;
+		} 
+		if (input->dp_down){
+			vector->x -= scale;
+			no_input = false;
+		} 	
 
+		if (input->dp_left){
+			vector->y -= scale;
+			no_input = false;
+		} 
+		if (input->dp_right){
+			vector->y += scale;
+			no_input = false;
+		} 
+		if (input->lt){
+			vector->z += scale;
+			no_input = false;
+		} 
+		if (input->rt){
+			vector->z -= scale;
+			no_input = false;
+		} 
+		if (no_input){
+
+			vector->x = 0; vector->y = 0; vector->z = 0;
+		}
+
+}
+void tardigrade_raw(){
+
+
+
+	tardigrade_setup_sensors_virtual();
+	std::cout << "[DEBUG] Setup Done\n";
+
+
+
+	char rx_message[2048]; //big buffer
+
+	//networking setup
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8101);
+
+	core_to_frontend.set_message(rx_message, 2048);
+
+
+	std::cout << "AVOE Frontend CLI Test Mode\n";
+	avoe_clock_t ui_timer;
+	avoe_clock_t network_timer;
+	
+	network_timer.reset();
+	ui_timer.reset();
+	while(1){
+		usleep(1000);
+		//frontend_to_core.refresh();
+		if (network_timer.getElaspedTimeMS() > 50){
+			core_to_frontend.rx();
+			network_timer.reset();
+		}
+
+		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
+			map_sensor_string(&tardigrade_imu, rx_message, 2048);
+			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
+			map_sensor_string(&tardigrade_leak, rx_message, 2048);
+
+			std::cout << "--AVOE deckbox-cli--\n";
+			tardigrade_imu.print();
+			tardigrade_pressure.print();
+			tardigrade_leak.print();
+				
+			vtClear();
+			ui_timer.reset();
+		}
+	}
+
+}
+
+
+//void tardigrade(const char *vector_in){
+
+void tardigrade(){
 	//setup controller
 	controller_t raw_controller; //raw device
 	controller_generic_raw sixaxis; //virtual raw device
@@ -81,10 +165,16 @@ void test(const char *vector_in){
 	std::cout << "[DEBUG] Setup Done\n";
 
 
+	//vector stuff
+
+	vector_t tm_vector; //translational movement vector
+	tm_vector.x = 0; tm_vector.y = 0; tm_vector.z = 0;
+
+	float movement_scale = 0.5;
 
 	char vector_str[64];
-	initStr(vector_str, 64);
-	strncpy(vector_str, vector_in, 64);
+	//initStr(vector_str, 64);
+	//strncpy(vector_str, vector_in, 64);
 
 	char rx_message[2048]; //big buffer
 
@@ -104,45 +194,51 @@ void test(const char *vector_in){
 	
 	network_timer.reset();
 	ui_timer.reset();
-
-	char ch = 0;
 	while(1){
 		usleep(1000);
-		//frontend_to_core.refresh();
 		if (network_timer.getElaspedTimeMS() > 50){
 			frontend_to_core.tx();
 			core_to_frontend.rx();
 			network_timer.reset();
 		}
 
-		//std::cout << test_timer.getElaspedTimeMS() << '\n'; 
+		// convert controller input into movement vector
+
+		tardigrade_manual_control(&deckbox_input, &tm_vector, movement_scale);
+
+		initStr(vector_str, 64);
+		appendStr(vector_str, (std::to_string(tm_vector.x)).c_str(), 0);
+		appendStr(vector_str, ",", strlen(vector_str));
+		appendStr(vector_str, (std::to_string(tm_vector.y)).c_str(), strlen(vector_str));
+		appendStr(vector_str, ",", strlen(vector_str));
+		appendStr(vector_str, (std::to_string(tm_vector.z)).c_str(), strlen(vector_str));
+		appendStr(vector_str, ",", strlen(vector_str));
+
 		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
 			map_sensor_string(&tardigrade_imu, rx_message, 2048);
 			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
 			map_sensor_string(&tardigrade_leak, rx_message, 2048);
-			//std::cout << "Message from core: " << rx_message << '\n';
-			//std::cout << "Message to core: " << message << '\n';
 
 			std::cout << "--AVOE deckbox-cli--\n";
 			tardigrade_imu.print();
 			tardigrade_pressure.print();
 			tardigrade_leak.print();
 				
-	
-			//do something every second
+
 			//sixaxis.print();
 			
-			printController(&deckbox_input);
+			//printController(&deckbox_input);
+
+
+			std::cout << "TRANSLATIONAL MOVEMENT VECTOR: " << tm_vector.x << ' ' << tm_vector.y << ' ' << tm_vector.z << '\n';			
+			std::cout << "TRANSLATIONAL MOVEMENT VECTOR STRING: " << vector_str << '\n';			
 			vtClear();
 			ui_timer.reset();
 		}
 
 
-
 		raw_controller.poll(&sixaxis);
 		convertToSixaxis(&deckbox_input, sixaxis);
-
-
 
 	}
 
@@ -159,8 +255,8 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	std::cout << "\traw\t(displays all telemtry in a crude output)\n";
-	std::cout << "\ttest\t(run the test() function and quit)\n"; 
+	std::cout << "\ttardigrade_raw\t(displays tardigrade_telemetry only)\n";
+	std::cout << "\ttardigrade\t(tardigrade with full manual control)\n"; 
 
 
 }
@@ -187,11 +283,18 @@ int main(int argc, char *argv[]){
 	
 
 	}
+	if (strncmp(argv[1], "tardigrade_raw", 16) == 0){
 
+		tardigrade_raw();
+		return 0;
+	
 
-	if (strncmp(argv[1], "test", 16) == 0){
+	}
 
-		test(argv[2]);
+	if (strncmp(argv[1], "tardigrade", 16) == 0){
+		
+		tardigrade();
+		//tardigrade(argv[2]);
 		return 0;
 	
 
