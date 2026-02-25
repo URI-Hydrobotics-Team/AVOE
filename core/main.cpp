@@ -110,8 +110,8 @@ void test_virtual(){
 
 
 	char vector_str_decoded[64];
-	char vector_str[64];
-	initStr(vector_str, 64);
+	char vector_str[64+1];
+	initStr(vector_str, 64+1);
 	vector_t translational_vector;
 	avoe_comm_reciever rx_device1("message", "vector", 8110);
 	rx_device1.set_timer(10);
@@ -129,7 +129,6 @@ void test_virtual(){
 	network_timer.reset();
 
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
-
 	/*
 	need to initialize sensors first before use
 	A buffer overflow and seg fault could happen
