@@ -12,6 +12,8 @@ avoe_comm_transmitter::avoe_comm_transmitter(const char *type_in, const char *ch
 	// port on other device to send info to
 	port = port_in;
 	tx_period = 0; //default timer value;	
+	sensor_count = 0;
+	sensor_index = 0;
 
 
 	//null ptrs
@@ -31,7 +33,6 @@ avoe_comm_transmitter::avoe_comm_transmitter(const char *type_in, const char *ch
 	if (strcmp(type, "motor") == 0){
 		mode = 2;
 	}	
-
 }
 
 void avoe_comm_transmitter::refresh(){
