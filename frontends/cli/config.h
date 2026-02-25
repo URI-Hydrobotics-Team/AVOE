@@ -3,8 +3,8 @@
 
 /* CONTROLLER */
 #define CONTROLLER_TIMEOUT 10000
-#define DEFAULT_CONTROLLER "/dev/input/js0"
-
+//#define DEFAULT_CONTROLLER "/dev/input/js0"
+#define DEFAULT_CONTROLLER "/dev/input/js1"
 
 
 /* networking */

@@ -1,6 +1,7 @@
 //#include "./core/motor.h"
 // bph bsh sh y ps ss
-#include<iostream>
+#include "motor_mw.h"
+#include <iostream>
 #include "../../../plugins/drivers/motors/ppsti/driver.h"
 #include <cmath>
 #include "../../../core/motor.h"

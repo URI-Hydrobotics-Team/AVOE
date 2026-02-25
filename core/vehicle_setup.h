@@ -37,10 +37,9 @@
 
 // INCLUDE REAL DRIVERS
 #ifdef TARGET_TARDIGRADE
-
 #include "../plugins/drivers/sensors/bnO055/driver.h"
 #include "../plugins/drivers/driver/motors/ppsti/driver.h"
-
+#include "../plugins/middleware/general-motor/ppsti_middleware/motor_mw.h" //andrew's middleware for ppsti
 #endif
 
 
@@ -54,6 +53,8 @@ leak_sensor dummy_leak;
 // real drivers
 #ifdef TARGET_TARDIGRADE
 BNO055 real_imu;
+
+
 #endif
 
 
@@ -108,13 +109,28 @@ void tardigrade_setup_physical(){
 	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
 	tardigrade.addMotor(&thruster_BPH);
 
+	// ADD THRUSTERS TO TARDIGRADE
+	// order matters depending on controller
+	tardigrade.addMotor(&thruster_SH);
+	tardigrade.addMotor(&thruster_BSH);
+	tardigrade.addMotor(&thruster_BPH);
+	tardigrade.addMotor(&thruster_Y);
+	tardigrade.addMotor(&thruster_SS);
+	tardigrade.addMotor(&thruster_PS);
+
+	controller.init("tardigrade_contoller", &tardigrade);
+
+	// INIT THRUSTERS (this should be better)
+
+	std::vector<int> zero_vector = {1500,1500,1500,1500,1500,1500};
+	avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(zero_vector),"/dev/acm0");	
 }
 
 
 
 void tardigrade_update_sensors_physical(){
 
-	// real imu
+	// IMU
 	imu::Vector<3> aoe = real_imu.get_Euler_Orientation();
 	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x(), aoe.y(), aoe.z());
 
@@ -139,6 +155,10 @@ void tardigrade_update_sensors_physical(){
 
 	double temp = real_imu.get_temperature();
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+	// UPDATE THRUSTERS
+	set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+
 
 };
 
