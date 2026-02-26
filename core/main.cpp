@@ -53,7 +53,7 @@ void test_physical(){
 	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8100, "10.42.0.1");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "10.42.0.1");	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
@@ -82,7 +82,7 @@ void test_physical(){
 	when sensor_timer.getElaspedTimeMS() <= 100
 	due to appendstr access allocated but uninitialized values
 	*/
-	tardigrade_update_sensors_dummy();
+	tardigrade_update_sensors_physical();
 	
 	int count = 0;
 	while (1){
@@ -92,6 +92,7 @@ void test_physical(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > 100){
 			tardigrade_update_sensors_physical();
+
 			// send vectors to controller
 
 			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
@@ -170,10 +171,12 @@ void test_virtual(){
 	rx_device1.set_message(vector_str, 64);
 	
 	
+	/*
 	char message[] = "look here look listen";
 	avoe_comm_transmitter tx_device4("message", "test_message", 8200, "127.0.0.1");	
 	tx_device4.set_message(message, 32); //set source to message
 	tx_device4.set_timer(200); //set 200ms transmit interval
+	*/
 
 	// RESET TIMERS
 	tel_timer.reset(); 

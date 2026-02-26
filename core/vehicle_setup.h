@@ -37,6 +37,7 @@
 
 // INCLUDE REAL DRIVERS
 #ifdef TARGET_TARDIGRADE
+#include "../plugins/drivers/sensors/bar30m/driver.h"
 #include "../plugins/drivers/sensors/bnO055/driver.h"
 #include "../plugins/drivers/motors/ppsti/driver.h"
 #include "../plugins/middleware/general-motor/ppsti_middleware/motor_mw.h" //andrew's middleware for ppsti
@@ -53,8 +54,7 @@ leak_sensor dummy_leak;
 // real drivers
 #ifdef TARGET_TARDIGRADE
 BNO055 real_imu;
-
-
+MS5837 real_pressure;
 #endif
 
 
@@ -86,9 +86,9 @@ void tardigrade_setup_physical(){
 
 	vector_t dummyPosition(0.0, 0.0, 0.0);
  	//AVOE init
-	tardigrade_imu.init("BNO055", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
-	tardigrade_pressure.init("Bar 30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
-	tardigrade_leak.init("SOS Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
+	tardigrade_imu.init("BNO055_dummy", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
+	tardigrade_pressure.init("Bar_30m", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
+	tardigrade_leak.init("SOS_Leak", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
 	
 	tardigrade.addSensor(&tardigrade_imu);	
 	tardigrade.addSensor(&tardigrade_pressure);
@@ -96,7 +96,7 @@ void tardigrade_setup_physical(){
 	//raw driver init	
 	srand(time(NULL));
 	real_imu.cold_init();
-
+	real_pressure.fullInit();
 	std::cout << "Phsyical Sensors Setup\n";
 
 	vector_t BPH_pos(0.0, 0.0, 0.0);
@@ -154,6 +154,16 @@ void tardigrade_update_sensors_physical(){
 
 	double temp = real_imu.get_temperature();
 	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+	real_pressure.read();
+	
+
+	sensor_set_pres_set_altitude(&tardigrade_pressure, real_pressure.getAltitude());
+	sensor_set_pres_set_depth(&tardigrade_pressure, real_pressure.getDepth());
+	sensor_set_pres_set_pressure(&tardigrade_pressure, real_pressure.getPressure());
+	sensor_set_pres_set_temperature(&tardigrade_pressure, real_pressure.getTemperature());
+
+
 
 	// UPDATE THRUSTERS
 	//set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
