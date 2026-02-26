@@ -117,7 +117,7 @@ void test_physical(){
 
 		// DISPLAY OUTPUT AND LOGGING
 
-		if (tel_timer.getElaspedTimeMS() > 1000){
+		if (tel_timer.getElaspedTimeMS() > 500){
 			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
