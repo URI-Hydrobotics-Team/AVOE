@@ -73,9 +73,11 @@ std::string avoe_ppsti::sendAndReceive(const std::string& data, const std::strin
     std::cout << "Data sent to Pico: " << command_with_newline;
 
     // Read response
+
+    std::string result;
+	/*
     char response[256];
     int bytes_read = sp_blocking_read(port, response, sizeof(response) - 1, 1000);
-    std::string result;
     if (bytes_read > 0) {
         response[bytes_read] = '\0';
         result = std::string(response);
@@ -84,7 +86,8 @@ std::string avoe_ppsti::sendAndReceive(const std::string& data, const std::strin
         std::cerr << "Error: Failed to read response from Pico!" << std::endl;
         result = "ERROR_READ_FAIL";
     }
-
+	*/
     sp_close(port);
+	result = "L";
     return result;
 }

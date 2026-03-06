@@ -32,6 +32,9 @@ void BNO055::cold_init(){
 
     // Set the IMU to use the external crystal for more accurate result
     IMU->setExtCrystalUse(false);
+
+	//IMU_calibration();
+
 }
 
 void BNO055::init(){
