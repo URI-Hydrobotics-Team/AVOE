@@ -28,7 +28,7 @@ void BNO055::cold_init(){
     }
     // Wait some time to let the IMU to begin
     //usleep(1000000);
-    gpioSleep(PI_TIME_RELATIVE, 0, 1000);
+    gpioSleep(PI_TIME_RELATIVE, 0, 500000);
 
     // Set the IMU to use the external crystal for more accurate result
     IMU->setExtCrystalUse(false);
