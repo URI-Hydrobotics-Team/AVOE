@@ -34,7 +34,7 @@
 /* test function */
 
 
-void test_physical(){
+void tardigrade_physical(){
 
 #ifdef TARGET_TARDIGRADE
 
@@ -53,7 +53,7 @@ void test_physical(){
 	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "10.42.0.1");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
@@ -65,7 +65,7 @@ void test_physical(){
 	char vector_str[64+1];
 	initStr(vector_str, 64+1);
 	vector_t translational_vector;
-	avoe_comm_reciever rx_device1("message", "vector", 8110);
+	avoe_comm_reciever rx_device1("message", "vector", PORT_DECKBOX_INPUT);
 	rx_device1.set_timer(10);
 	rx_device1.set_message(vector_str, 64);
 	
@@ -90,7 +90,7 @@ void test_physical(){
 		//the loop
 
 		// UPDATE YOUR SENSORS
-		if (sensor_timer.getElaspedTimeMS() > 100){
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
 
 			// send vectors to controller
@@ -108,16 +108,16 @@ void test_physical(){
 		tx_device1.refresh();
 		rx_device1.refresh();
 
-		if (network_timer.getElaspedTimeMS() > 10){
+		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
 			
 			network_timer.reset();
 		}
 	
 
-		// DISPLAY OUTPUT AND LOGGING
+		// DISPLAY OUT AND SEND THRUSTERS
 
-		if (tel_timer.getElaspedTimeMS() > 500){
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
@@ -137,7 +137,7 @@ void test_physical(){
 
 }
 
-void test_virtual(){
+void tardigrade_virtual(){
 	/* This is a reference setup / configuration */
 	
 
@@ -154,7 +154,7 @@ void test_virtual(){
 	tardigrade_setup_virtual(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", 8101, "10.42.0.1");	
+	avoe_comm_transmitter tx_device1("sensor", "imu_message", PORT_DECKBOX_TELEMETRY, "127.0.0.1");	
 	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
 	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
 	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
@@ -166,7 +166,7 @@ void test_virtual(){
 	char vector_str[64+1];
 	initStr(vector_str, 64+1);
 	vector_t translational_vector;
-	avoe_comm_reciever rx_device1("message", "vector", 8110);
+	avoe_comm_reciever rx_device1("message", "vector", PORT_DECKBOX_INPUT);
 	rx_device1.set_timer(10);
 	rx_device1.set_message(vector_str, 64);
 	
@@ -198,7 +198,7 @@ void test_virtual(){
 		//the loop
 
 		// UPDATE YOUR SENSORS
-		if (sensor_timer.getElaspedTimeMS() > 100){
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_dummy();
 			// send vectors to controller
 
@@ -215,7 +215,7 @@ void test_virtual(){
 		tx_device1.refresh();
 		rx_device1.refresh();
 
-		if (network_timer.getElaspedTimeMS() > 10){
+		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
 			
 			network_timer.reset();
@@ -224,7 +224,7 @@ void test_virtual(){
 
 		// DISPLAY OUTPUT AND LOGGING
 
-		if (tel_timer.getElaspedTimeMS() > 1000){
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
@@ -232,15 +232,6 @@ void test_virtual(){
 			tardigrade_imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
 		}
-	}
-}
-
-
-/* This could be your main loop for deployment*/
-void run(){
-	while (1){
-		//"we call this the loop -LTG"
-		
 	}
 }
 
@@ -258,8 +249,8 @@ void printHelp(){
 	std::cout << "\trun\t(run)\n";
 	std::cout << "\tverbose\t(run, but displays more debugging information)\n";
 	std::cout << "\tlog\t(run with verbose and log to a file)\n";
-	std::cout << "\ttest_virtual\t(run the test_virtual() function and quit)\n"; 
-	std::cout << "\ttest_physical\t(run the test_physical() function and quit)\n"; 
+	std::cout << "\ttardigrade_virtual\t(run the tardigrade_virtual() function and quit)\n"; 
+	std::cout << "\ttardigrade_physical\t(run the tardigrade_physical() function and quit)\n"; 
 }
 
 
@@ -279,14 +270,16 @@ int main(int argc, char *argv[]){
 
 	/* Define arguments for custom configurations here */
 
-	if (strncmp(argv[1], "test_virtual", 16) == 0){
-		test_virtual(); //points to a test config
+	if (strncmp(argv[1], "tardigrade_virtual", 32) == 0){
+		tardigrade_virtual(); //points to a test config
 		return 0;
 	}
-	if (strncmp(argv[1], "test_physical", 16) == 0){
-		test_physical(); //points to a test config
+	if (strncmp(argv[1], "tardigrade_physical", 32) == 0){
+		tardigrade_physical(); //points to a test config
 		return 0;
 	}
+	std::cout << "Invalid Argument. Try \"avoe help\"\n";
+
 	return 0;
 
 }

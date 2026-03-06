@@ -1,6 +1,6 @@
-#include "PID_controller.h"
+#include "pid.h"
 
-PID_controller::PID_controller(double p, double i, double d, double t, double lmin, double lmax, double lmini, double lmaxi, double time){
+avoe_pid_controller::avoe_pid_controller(double p, double i, double d, double t, double lmin, double lmax, double lmini, double lmaxi, double time){
     Kp = p;
     Ki = i;
     Kd = d;
@@ -12,7 +12,7 @@ PID_controller::PID_controller(double p, double i, double d, double t, double lm
     // windup = false;
 }
 
-PID_controller::PID_controller(double p, double i, double d, double t, double lmin, double lmax, double time){
+avoe_pid_controller::avoe_pid_controller(double p, double i, double d, double t, double lmin, double lmax, double time){
     Kp = p;
     Ki = i;
     Kd = d;
@@ -24,14 +24,14 @@ PID_controller::PID_controller(double p, double i, double d, double t, double lm
     windup = false;
 }
 
-void PID_controller::init(){
+void avoe_pid_controller::init(){
     integrator = 0;
     prevError = 0;
     diff = 0;
     prevMeasurement = 0;
 }
 
-void PID_controller::reset(){
+void avoe_pid_controller::reset(){
     integrator = 0;
     diff = 0;
     windup = false;
@@ -39,19 +39,19 @@ void PID_controller::reset(){
     prevMeasurement = 0;
 }
 
-double PID_controller::getOutput(){
+double avoe_pid_controller::getOutput(){
     return out;
 }
 
-double PID_controller::getIntegral(){
+double avoe_pid_controller::getIntegral(){
     return integrator;
 }
 
-double PID_controller::getDerivative(){
+double avoe_pid_controller::getDerivative(){
     return diff;
 }
 
-bool PID_controller::isWindUp(double error, double prev_output, double after_output){
+bool avoe_pid_controller::isWindUp(double error, double prev_output, double after_output){
     if ((prev_output != after_output) && ((error < 0 && prev_output < 0) or (error > 0 && prev_output > 0))){
         return true;
     }
@@ -59,19 +59,19 @@ bool PID_controller::isWindUp(double error, double prev_output, double after_out
     return false;
 }
 
-void PID_controller::setKp(double new_kp){
+void avoe_pid_controller::setKp(double new_kp){
     Kp = new_kp;
 }
 
-void PID_controller::setKi(double new_ki){
+void avoe_pid_controller::setKi(double new_ki){
     Ki = new_ki;
 }
 
-void PID_controller::setKd(double new_kd){
+void avoe_pid_controller::setKd(double new_kd){
     Kd = new_kd;
 }
 
-double PID_controller::update(double setpoint, double measurement){
+double avoe_pid_controller::update(double setpoint, double measurement){
     /* error signal */
     double error = setpoint - measurement;
 

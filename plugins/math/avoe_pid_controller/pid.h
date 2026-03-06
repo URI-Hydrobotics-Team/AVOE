@@ -4,7 +4,7 @@
 
 */
 
-class PID_controller{
+class avoe_pid_controller{
 
 	private:
 		double Kp, Ki, Kd;
@@ -18,8 +18,8 @@ class PID_controller{
 
 	public:
 		//initialization
-		PID_controller(double p, double i, double d, double t, double lmin, double lmax, double lmini, double lmaxi, double time);
-		PID_controller(double p, double i, double d, double t, double lmin, double lmax, double time);
+		avoe_pid_controller(double p, double i, double d, double t, double lmin, double lmax, double lmini, double lmaxi, double time);
+		avoe_pid_controller(double p, double i, double d, double t, double lmin, double lmax, double time);
 
 		void init();
 

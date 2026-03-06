@@ -113,7 +113,7 @@ void tardigrade_raw(){
 	char rx_message[2048]; //big buffer
 
 	//networking setup
-	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8101);
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY);
 
 	core_to_frontend.set_message(rx_message, 2048);
 
@@ -126,8 +126,7 @@ void tardigrade_raw(){
 	ui_timer.reset();
 	while(1){
 		usleep(1000);
-		//frontend_to_core.refresh();
-		if (network_timer.getElaspedTimeMS() > 50){
+		if (network_timer.getElaspedTimeMS() > NETWORK_REFRESH_INTERVAL){
 			core_to_frontend.rx();
 			network_timer.reset();
 		}
@@ -170,7 +169,7 @@ void tardigrade(){
 	vector_t tm_vector; //translational movement vector
 	tm_vector.x = 0; tm_vector.y = 0; tm_vector.z = 0;
 
-	float movement_scale = 0.5;
+	float movement_scale = 0.5; //default 0.5
 
 	char vector_str[64];
 	//initStr(vector_str, 64);
@@ -179,8 +178,8 @@ void tardigrade(){
 	char rx_message[2048]; //big buffer
 
 	//networking setup
-	avoe_comm_transmitter frontend_to_core("message", "vector", CORE_PORT_TX, CORE_IP);
-	avoe_comm_reciever core_to_frontend("sensor", "sensors", 8101);
+	avoe_comm_transmitter frontend_to_core("message", "vector", PORT_CORE_INPUT, IP_CORE);
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY);
 
 	/* setup and initilizae all connections */	
 	frontend_to_core.set_message(vector_str, 64);
@@ -196,7 +195,7 @@ void tardigrade(){
 	ui_timer.reset();
 	while(1){
 		usleep(1000);
-		if (network_timer.getElaspedTimeMS() > 50){
+		if (network_timer.getElaspedTimeMS() > NETWORK_REFRESH_INTERVAL){
 			frontend_to_core.tx();
 			core_to_frontend.rx();
 			network_timer.reset();

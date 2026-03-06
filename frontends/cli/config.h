@@ -1,5 +1,5 @@
 #define UI_REFRESH 200 // ui update interval in ms
-#define TRANSMIT_INTERVAL 50
+#define NETWORK_REFRESH_INTERVAL 50
 
 /* CONTROLLER */
 #define CONTROLLER_TIMEOUT 10000
@@ -12,6 +12,7 @@
 #define SOCKET_TIMEOUT 10000
 
 
-//#define CORE_IP "10.42.0.190"
-#define CORE_PORT_TX 8110
-#define CORE_IP "127.0.0.1"
+//#define IP_CORE "10.42.0.190"
+#define PORT_CORE_INPUT 8101
+#define PORT_CORE_TELEMETRY 8110
+#define IP_CORE "127.0.0.1"
