@@ -8,23 +8,19 @@
 
 #ifndef MISSION_H
 #define MISSION_H
-
 #include "vehicle.h"
 #include "config.h"
+#include "../lib/lib.h"
 class auv_mission_t{
 
 	private:
 
 		// variables to hold: current pose, current position, target pose, target position
 
-		double curr_pose_r, curr_pose_p, curr_pose_y;
-		double target_pose_r, target_pose_p, target_pose_y;
-		double curr_x, curr_y, curr_z;
-		double target_x, target_y, target_z;
-		
+		vector_t current_posi, target_posi, current_pose, target_pose;
 
 		bool is_active = true; //set to false when target position and target pose are reached
-		int hold_pose_duration; //length to hold pose duration in seconds
+		unsigned int hold_pose_duration; //length to hold target pose and position duration in seconds
 
 		vehicle_t *vehicle;
 
@@ -32,9 +28,9 @@ class auv_mission_t{
 	
 	
 		//initialization and control loop functions;
-		void init(vehicle_t *v, vector_t curr_pose, vector_t curr_posi, vector_t target_pose, vector_t target_posi);
-		void update();
-		void stop();
+		void init(vector_t cposi, vector_t tposi, vector_t cpose, vector_t tpose);
+		void update(vector_t cposi, vector_t cpose);
+		void abort();
 };
 
 #endif

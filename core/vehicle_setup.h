@@ -262,9 +262,3 @@ void tardigrade_update_sensors_dummy(){
 
 }
 
-
-
-
-
-
-

@@ -1,43 +1,27 @@
 #include "mission.h"
 
-void auv_mission_t::init(vehicle_t *v, vector_t curr_pose, vector_t curr_posi, vector_t target_pose, vector_t target_posi){
-	vehicle = v;			
-
-	curr_pose_r = curr_pose.x;
-	curr_pose_p = curr_pose.y;
-	curr_pose_y = curr_pose.z;
-
-	target_pose_r = target_pose.x;
-	target_pose_p = target_pose.y;
-	target_pose_y = target_pose.z;
-
-	curr_x = curr_posi.x;
-	curr_y = curr_posi.y;
-	curr_z = curr_posi.z;
-
-	target_x = target_posi.x;
-	target_y = target_posi.y;
-	target_z = target_posi.z;
-
+void auv_mission_t::init(vector_t cposi, vector_t tposi, vector_t cpose, vector_t tpose){
+	
+	current_posi = cposi;
+	current_pose = cpose;
+	target_posi = tposi;
+	target_pose = tpose;
 
 }
 
 
 
 
-void auv_mission_t::update(){
+void auv_mission_t::update(vector_t cposi, vector_t cpose){
 	if (is_active){
-		//check sensors
-		//make adjustments
-
+		current_posi = cposi;
+		current_pose = cpose;
 
 	}
 
-
-
 }
 
-void auv_mission_t::stop(){
+void auv_mission_t::abort(){
 	is_active = false;
 }
 
