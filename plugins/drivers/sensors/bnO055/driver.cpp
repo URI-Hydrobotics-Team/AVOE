@@ -60,10 +60,9 @@ void BNO055::init(){
 
 
 
-
-
 void BNO055::IMU_calibration(){
     uint8_t system, gyro, accel, magnetic;
+	system = 0; gyro = 0; accel = 0; magnetic = 0;
 
     while(!IMU->isFullyCalibrated()){
         IMU->getCalibration(&system, &gyro, &accel, &magnetic);

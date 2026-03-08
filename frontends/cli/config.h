@@ -12,7 +12,7 @@
 #define SOCKET_TIMEOUT 10000
 
 
-//#define IP_CORE "10.42.0.190"
+#define IP_CORE "10.42.0.69"
 #define PORT_CORE_INPUT 8101
 #define PORT_CORE_TELEMETRY 8110
-#define IP_CORE "127.0.0.1"
+//#define IP_CORE "127.0.0.1"
