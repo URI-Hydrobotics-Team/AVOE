@@ -60,11 +60,13 @@ Originally AVOE was planned to have a program called `auto-tool` that would pars
 
 ### Building AVOE using build script
 `cd core`
+
 `./build.sh <target>`
 
 The executable should be titled `avoe` in the `core` folder
 #### Building AVOE's reference CLI frontend (formerly deckbox-cli)
 `cd frontends/cli`
+
 `./build.sh deckbox`
 
 
