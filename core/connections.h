@@ -1,4 +1,0 @@
-/*
-	network socket configuration
-
-*/

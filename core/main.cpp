@@ -16,7 +16,6 @@
 #include "../lib/globals.h"
 #include "config.h"
 #include "log.h"
-#include "control.h"
 #include "io.h"
 
 /* target specific*/
