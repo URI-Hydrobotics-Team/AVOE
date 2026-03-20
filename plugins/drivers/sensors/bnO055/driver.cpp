@@ -1,4 +1,5 @@
 #include "driver.h"
+#include <string>
 #include <unistd.h>
 //BNO055::BNO055(){ 
 
@@ -13,9 +14,8 @@ void BNO055::cold_init(){
 	
 
     //IMU = Adafruit_BNO055();
-    //gpioInitialise();
 
-    if (gpioInitialise() <0){
+    if (gpioInitialise() < 0){
 		std::cout <<"Initialisation error of the GPIO \n Closing program..."<< std::endl;
      }
 	
@@ -24,7 +24,7 @@ void BNO055::cold_init(){
 
     // Start up the IMU and check if it is set up correctly
     if(!IMU->begin()){
-        std::cout << "Something is wrong when setting up the IMU\n";
+        std::cout << "Something went wrong when setting up the IMU\n";
     }
     // Wait some time to let the IMU to begin
     //usleep(1000000);
@@ -47,7 +47,7 @@ void BNO055::init(){
 
     // Start up the IMU and check if it is set up correctly
     if(!IMU->begin()){
-        std::cout << "Something is wrong when setting up the IMU\n";
+        std::cout << "Something went wrong when setting up the IMU\n";
     }
     // Wait some time to let the IMU to begin
     //usleep(1000000);
@@ -63,11 +63,10 @@ void BNO055::init(){
 void BNO055::IMU_calibration(){
     uint8_t system, gyro, accel, magnetic;
 	system = 0; gyro = 0; accel = 0; magnetic = 0;
-
     while(!IMU->isFullyCalibrated()){
         IMU->getCalibration(&system, &gyro, &accel, &magnetic);
-        std::cout << "System calibration: " << system << " Gyroscope calibration: " << gyro << " Accelerometer calibration: "<< accel <<
-        " Magnetometer: " << magnetic << "\n";
+        std::cout << "CALIBRATION System: " << std::to_string(system) << " Gyroscope: " << std::to_string(gyro) << " Accelerometer: "<< std::to_string(accel) <<
+        " Magnetometer: " << std::to_string(magnetic) << "\n";
     }
 }
 

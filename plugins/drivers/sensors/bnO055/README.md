@@ -15,9 +15,7 @@ The BNO055 collects these measurments, processes them, and makes them avaliable 
 ## Usage
 
 ## Compilation and Installation
-Some modifications need to be made to the RPi_BNO055 library
 
 ## Dependencies
-- [**RPi_BNO055 library by CVino**](https://github.com/CVino/RPi_BNO055)
 - pigpio
 - standard C/C++ libraries

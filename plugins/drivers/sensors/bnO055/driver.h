@@ -1,7 +1,9 @@
 #pragma once
 #include <pigpio.h>
-#include "../../../../external/RPi_BNO055/RPi_Sensor.h"
-#include "../../../../external/RPi_BNO055/RPi_BNO055.h"
+//#include "../../../../external/RPi_BNO055/RPi_Sensor.h"
+//#include "../../../../external/RPi_BNO055/RPi_BNO055.h"
+#include "../adafruit_bno055/driver.h"
+#include "../adafruit_bno055/adafruit_sensor.h"
 #include <vector>
 #include <iostream>
 
