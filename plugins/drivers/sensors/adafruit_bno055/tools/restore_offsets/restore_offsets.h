@@ -23,7 +23,6 @@ void display_calibration_status(Adafruit_BNO055 *imu);
 void display_sensor_offsets(const adafruit_bno055_offsets_t *calibData);
 void write_calibration_data(FILE *fptr, adafruit_bno055_offsets_t *calibData);
 void load_calibration_data(FILE *fptr, adafruit_bno055_offsets_t *calibData);
-void restore_calibration_data(Adafruit_BNO055 *imu, adafruit_bno055_offsets_t *calibData);
 
 
 
