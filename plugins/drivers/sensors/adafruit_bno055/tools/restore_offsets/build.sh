@@ -1,1 +1,1 @@
-g++ -o restore_offsets_tool main.c restore_offsets.c -lpigpio
+g++ -o restore_offsets_tool main.cpp restore_offsets.c -lpigpio
