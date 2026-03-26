@@ -6,14 +6,14 @@
 void display_sensor_status(Adafruit_BNO055 *imu){
 
 	uint8_t system_status, self_test_results, system_error;
-    	system_status = self_test_results = system_error = 0;
+	system_status = self_test_results = system_error = 0;
 	imu->getSystemStatus(&system_status, &self_test_results, &system_error);
 
 	printf("SYSTEM STATUS\n");
 	printf("\tsystem_status: %x\n", system_status);
 	printf("\tself_test: %x\n", self_test);
 	printf("\tsystem_error %x\n", system_error);
-	
+
 	//usleep(500*1000);	
 }
 
@@ -22,8 +22,8 @@ void display_calibration_status(Adafruit_BNO055 *imu){
 
 
 
-uint8_t system, gyro, accel, mag;
-    system = gyro = accel = mag = 0;
+	uint8_t system, gyro, accel, mag;
+	system = gyro = accel = mag = 0;
 
 
 	imu->getCalibration(&system, &gyro, &accel, &mag);
@@ -60,14 +60,28 @@ void write_calibration_data(FILE *fptr, adafruit_bno055_offsets_t *calibData){
 
 	// we assume fptr has been setup for writing binary data
 
-	int write_status = fwrite(calibData, sizeof(calibData), 1 fptr);
+	int write_status = fwrite(calibData, sizeof(adafruit_bno055_offsets_t), 1 fptr);
 
-	if(write_status != 3){
+	if(write_status == 0){
 		printf("Write Erorr\n");
 	}
 
 	fclose(fptr);
+	printf("Wrote calibration data\n");
+
 	return;
 
 }
 
+void load_calibration_data(FILE *fptr, adafruit_bno055_offsets_t *calibData){
+
+
+	int read_status = fread(calibData, sizeof(adafruit_bno055_offsets_t), 1, fptr);
+	if (read_status == 0){
+		printf("Read Erorr\n");
+	}
+	fclose(fptr);
+
+	return;
+
+}

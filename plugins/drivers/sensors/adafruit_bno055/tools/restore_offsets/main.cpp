@@ -6,7 +6,7 @@
 int main(int argc, char** argv){
 
 	//SETUP
-	
+
 	Adafruit_BNO055 imu = Adafruit_BNO055(55, 0x28);
 	if (gpioInitialise() < 0){
 		printf("Initialisation error of the GPIO \n");
@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 	IMU->setExtCrystalUse(false);
 
 	long bnoID;
-    	bool foundCalib = false;
+	bool foundCalib = false;
 
 	adafruit_bno055_offsets_t calibrationData;
 
@@ -36,6 +36,8 @@ int main(int argc, char** argv){
 	// ARGUMENT PARSING
 
 	char filename[128];
+	FILE *fptr;
+
 
 	if (argc == 1){
 		printf("Must Specficy and Argument\n");	
@@ -50,32 +52,67 @@ int main(int argc, char** argv){
 
 	//CALIBRATE AND SAVE ROUTINE
 	if (strncmp(argv[1], "save", 16) == 0){
+		printf("CALIBRATE AND SAVE\n");
 		strncpy(filename, argv[2], 128);
-		
+		fptr = fopen(filename, "wb");
+		if (!file) {
+			printf("Error Opening File %s\n", filename);
+			return 0;
+		}
 
+		while (!imu.isFullyCalibrated()){
+			display_calibration_status(&imu);
+			usleep(50*1000); //delay 50s
+		}
+
+		printf("Calibration complete\n");
+		
+		imu.getSensorOffsets(calibrationData);
+		display_sensor_offsets(&calibrationData);
+
+		printf("Saving to %s\n", filename);
+
+
+		write_calibration_data(fptr, &calibrationData);
+
+		return 0;
 	}
 
 	//RESTORE CALIBRATION ROUTINE
 	if (strncmp(argv[1], "restore", 16) == 0){
+		printf("RESTORE CALIBRATION DATA\n");
 		strncpy(filename, argv[2], 128);
-		
 
+		fptr = fopen(filename, "rb");
+		if (!file) {
+			printf("Error Opening File %s\n", filename);
+			return 0;
+		}
+		load_calibration_data(fptr, &calibration_data);
+		display_sensor_offsets(&calibrationData);
+	
+		imu.setSensorOffsets(calibrationData);
+		printf("Restored Calibration Data\n");
+
+		return 0;
 	}
 
 	//VIEW CALIBRATION DATA
 	if (strncmp(argv[1], "view", 16) == 0){
+		printf("VIEW CALIBRATION DATA\n");
 		strncpy(filename, argv[2], 128);
+
+		fptr = fopen(filename, "rb");
+		if (!file) {
+			printf("Error Opening File %s\n", filename);
+			return 0;
+		}
+		load_calibration_data(fptr, &calibration_data);
+		display_sensor_offsets(&calibrationData);
 		
+		return 0;
 
 	}
-
-
-
-
-
-
-
-
 
 
 	return 0;
