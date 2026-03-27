@@ -33,6 +33,7 @@
 
 // INCLUDE OTHER PLUGINS
 #include "../plugins/controllers/tardigrade_basic/controller.h"
+//#include "../plugins/drivers/sensors/adafruit_bno055/tools/restore_offsets/restore_offsets.h" //restore_offsets for imu
 
 
 // INCLUDE REAL DRIVERS
@@ -95,7 +96,7 @@ void tardigrade_setup_physical(){
 	tardigrade.addSensor(&tardigrade_leak);
 	//raw driver init	
 	srand(time(NULL));
-	real_imu.cold_init();
+	real_imu.cold_init(IMU_OFFSETS_FILENAME);
 	real_pressure.fullInit();
 	std::cout << "Phsyical Sensors Setup\n";
 
@@ -123,6 +124,11 @@ void tardigrade_setup_physical(){
 
 	std::vector<int> zero_vector = {1500,1500,1500,1500,1500,1500};
 	avoe_ppsti::sendAndReceive (avoe_ppsti::encodeToCommand(zero_vector),"/dev/ttyACM0");	
+
+	
+
+
+
 }
 
 

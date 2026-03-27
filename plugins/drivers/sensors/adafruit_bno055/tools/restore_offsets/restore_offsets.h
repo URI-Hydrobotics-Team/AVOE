@@ -7,6 +7,7 @@
 #include "../../driver.h" //include adafruit driver 
 #include "../../utility/imumaths.h"
 #include <cstdlib>
+#include <cstdio>
 
 #ifndef CALIBRATION_RESTORE_H
 #define CALIBRATION_RESTORE_H

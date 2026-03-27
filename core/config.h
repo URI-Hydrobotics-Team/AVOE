@@ -8,6 +8,9 @@
 #define CONFIG_H
 
 
+/* misc */
+#define IMU_OFFSETS_FILENAME "offsets.bin"
+//#define IMU_OFFSETS_FILENAME "NULL" //no calibration
 /* general */
 #define LOG_DIR "log-temp"
 #define DISPLAY_OUTPUT_INTERVAL 500

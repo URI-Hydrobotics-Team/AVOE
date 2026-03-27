@@ -1,7 +1,7 @@
 #include "restore_offsets.h"
 #include <cstdio>
 #include <cstring>
-
+#include <unistd.h>
 
 int main(int argc, char** argv){
 
@@ -14,7 +14,7 @@ int main(int argc, char** argv){
 	}
 
 	// Initialize the I2C communication
-	imu->_HandleBNO = i2cOpen(imu->_i2cChannel, BNO055_addr, 0);
+	imu._HandleBNO = i2cOpen(imu._i2cChannel, 0x28, 0);
 	if (!imu.begin()){
 		printf("error setting up imu\n");
 		return 0;
@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 	gpioSleep(PI_TIME_RELATIVE, 0, 500000);
 
 	// Set the IMU to use the external crystal for more accurate result
-	IMU->setExtCrystalUse(false);
+	imu.setExtCrystalUse(false);
 
 	long bnoID;
 	bool foundCalib = false;
@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 
 	if (strncmp(argv[1], "disp", 32) == 0){
 
-
+		return 0;
 	}
 
 	//CALIBRATE AND SAVE ROUTINE
@@ -55,7 +55,7 @@ int main(int argc, char** argv){
 		printf("CALIBRATE AND SAVE\n");
 		strncpy(filename, argv[2], 128);
 		fptr = fopen(filename, "wb");
-		if (!file) {
+		if (!fptr) {
 			printf("Error Opening File %s\n", filename);
 			return 0;
 		}
@@ -84,11 +84,11 @@ int main(int argc, char** argv){
 		strncpy(filename, argv[2], 128);
 
 		fptr = fopen(filename, "rb");
-		if (!file) {
+		if (!fptr) {
 			printf("Error Opening File %s\n", filename);
 			return 0;
 		}
-		load_calibration_data(fptr, &calibration_data);
+		load_calibration_data(fptr, &calibrationData);
 		display_sensor_offsets(&calibrationData);
 	
 		imu.setSensorOffsets(calibrationData);
@@ -97,17 +97,43 @@ int main(int argc, char** argv){
 		return 0;
 	}
 
+	if (strncmp(argv[1], "restore_status", 16) == 0){
+		printf("RESTORE CALIBRATION DATA AND VIEW STATUS\n");
+		strncpy(filename, argv[2], 128);
+
+		fptr = fopen(filename, "rb");
+		if (!fptr) {
+			printf("Error Opening File %s\n", filename);
+			return 0;
+		}
+		load_calibration_data(fptr, &calibrationData);
+		display_sensor_offsets(&calibrationData);
+	
+		imu.setSensorOffsets(calibrationData);
+		printf("Restored Calibration Data\n");
+		if(imu.isFullyCalibrated()){
+			printf("isFullyCalibrated = TRUE\n");
+		}else{
+			printf("isFullyCalibrated = FALSE\n");
+		}
+		display_calibration_status(&imu);
+
+		return 0;
+	}
+
+
+
 	//VIEW CALIBRATION DATA
 	if (strncmp(argv[1], "view", 16) == 0){
 		printf("VIEW CALIBRATION DATA\n");
 		strncpy(filename, argv[2], 128);
 
 		fptr = fopen(filename, "rb");
-		if (!file) {
+		if (!fptr) {
 			printf("Error Opening File %s\n", filename);
 			return 0;
 		}
-		load_calibration_data(fptr, &calibration_data);
+		load_calibration_data(fptr, &calibrationData);
 		display_sensor_offsets(&calibrationData);
 		
 		return 0;

@@ -11,7 +11,7 @@ void display_sensor_status(Adafruit_BNO055 *imu){
 
 	printf("SYSTEM STATUS\n");
 	printf("\tsystem_status: %x\n", system_status);
-	printf("\tself_test: %x\n", self_test);
+	printf("\tself_test: %x\n", self_test_results);
 	printf("\tsystem_error %x\n", system_error);
 
 	//usleep(500*1000);	
@@ -60,7 +60,7 @@ void write_calibration_data(FILE *fptr, adafruit_bno055_offsets_t *calibData){
 
 	// we assume fptr has been setup for writing binary data
 
-	int write_status = fwrite(calibData, sizeof(adafruit_bno055_offsets_t), 1 fptr);
+	int write_status = fwrite(calibData, sizeof(adafruit_bno055_offsets_t), 1, fptr);
 
 	if(write_status == 0){
 		printf("Write Erorr\n");

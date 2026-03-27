@@ -1,4 +1,5 @@
 #include "driver.h"
+#include <cstdio>
 #include <string>
 #include <unistd.h>
 //BNO055::BNO055(){ 
@@ -8,11 +9,11 @@ BNO055::~BNO055(){
 	delete IMU;
 }
 
-void BNO055::cold_init(){ 
+void BNO055::cold_init(const char *offsets_filename){ 
     // Set up the IMU 
     IMU = new Adafruit_BNO055(55, BNO055_addr);
-	
-
+	adafruit_bno055_offsets_t calibrationData;	
+	FILE *fptr;
     //IMU = Adafruit_BNO055();
 
     if (gpioInitialise() < 0){
@@ -27,14 +28,32 @@ void BNO055::cold_init(){
         std::cout << "Something went wrong when setting up the IMU\n";
     }
     // Wait some time to let the IMU to begin
-    //usleep(1000000);
-    gpioSleep(PI_TIME_RELATIVE, 0, 500000);
+    gpioSleep(PI_TIME_RELATIVE, 0, 1000*100);
 
     // Set the IMU to use the external crystal for more accurate result
     IMU->setExtCrystalUse(false);
+	//attemp to restore offsets
+	if (offsets_filename != NULL){
+		IMU->setMode(OPERATION_MODE_CONFIG); //put IMU in config mode
+		printf("RESTORE CALIBRATION DATA\n");
 
+		fptr = fopen(offsets_filename, "rb");
+		if (!fptr) {
+			printf("Error Opening File %s\n", offsets_filename);
+			return;
+		}
+		load_calibration_data(fptr, &calibrationData);
+		display_sensor_offsets(&calibrationData);
+	
+		IMU->setSensorOffsets(calibrationData);
+		printf("Restored Calibration Data\n");
+	}
+
+
+	IMU->setMode(OPERATION_MODE_COMPASS); //put IMU in proper mode
+
+    	gpioSleep(PI_TIME_RELATIVE, 0, 1000*100);
 	//IMU_calibration();
-
 }
 
 void BNO055::init(){
