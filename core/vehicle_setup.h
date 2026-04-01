@@ -34,6 +34,7 @@
 // INCLUDE OTHER PLUGINS
 #include "../plugins/controllers/tardigrade_basic/controller.h"
 //#include "../plugins/drivers/sensors/adafruit_bno055/tools/restore_offsets/restore_offsets.h" //restore_offsets for imu
+#include "../plugins/controllers/tardigrade/controller.h"
 
 
 // INCLUDE REAL DRIVERS
@@ -61,7 +62,7 @@ MS5837 real_pressure;
 
 // controllers
 tardigrade_basic_controller_t controller;
-
+tardigrade_controller_t	controller_full;
 
 // AVOE MOTORS
 //bph, bsh, sh, y, ps, ss
@@ -119,7 +120,7 @@ void tardigrade_setup_physical(){
 	tardigrade.addMotor(&thruster_PS);
 
 	controller.init("tardigrade_contoller", &tardigrade);
-
+	controller_full.init("tardigrade_contoller_full", &tardigrade);
 	// INIT THRUSTERS (this should be better)
 
 	std::vector<int> zero_vector = {1500,1500,1500,1500,1500,1500};
@@ -220,7 +221,8 @@ void tardigrade_setup_virtual(){
 	tardigrade.addMotor(&thruster_SS);
 	tardigrade.addMotor(&thruster_PS);
 
-	controller.init("tardigrade_contoller", &tardigrade);
+	//controller.init("tardigrade_contoller", &tardigrade);
+	controller_full.init("tardigrade_contoller_full", &tardigrade);
 }
 
 

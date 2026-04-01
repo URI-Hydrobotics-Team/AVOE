@@ -17,6 +17,7 @@
 #include "../../lib/vt100.h"
 #include "../../lib/clock.h"
 #include "../../plugins/gamepad_maps/sixaxis.h"
+#include "../../plugins/gamepad_maps/f710.h"
 #include "setup.h"
 #include "sensor.h"
 
@@ -66,38 +67,86 @@ void raw(){
 
 }
 
-void tardigrade_manual_control(controller_generic_profile *input, vector_t *vector, float scale){
+void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_vector, vector_t *r_vector, float scale){
 		bool no_input = true;
-		vector->x = 0; vector->y = 0; vector->z = 0;
+		t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
+		r_vector->x = 0; r_vector->y = 0; r_vector->z = 0;
+		#ifdef SIXAXIS
 
+		// translational
 		if (input->dp_up){
-			vector->x += scale;
+			t_vector->x += scale;
 			no_input = false;
 		} 
 		if (input->dp_down){
-			vector->x -= scale;
+			t_vector->x -= scale;
 			no_input = false;
 		} 	
 
 		if (input->dp_left){
-			vector->y -= scale;
+			t_vector->y -= scale;
 			no_input = false;
 		} 
 		if (input->dp_right){
-			vector->y += scale;
+			t_vector->y += scale;
 			no_input = false;
 		} 
+		#endif
+
+		#ifdef F710
+		// translational
+		if (input->fc_2){
+			t_vector->x += scale;
+			no_input = false;
+		} 
+		if (input->fc_3){
+			t_vector->x -= scale;
+			no_input = false;
+		} 	
+
+		if (input->fc_1){
+			t_vector->y -= scale;
+			no_input = false;
+		} 
+		if (input->fc_4){
+			t_vector->y += scale;
+			no_input = false;
+		}
+		//rotational	
+		if (input->lt_a == 1){
+			r_vector->x += scale;
+			no_input = false;
+		}
+		if (input->rt_a == 1){
+			r_vector->x -= scale;
+			no_input = false;
+		}
+		if (input->sll_x == -1){
+			r_vector->y -= scale;
+			no_input = false;
+		}
+		if (input->sll_x == 1){
+			r_vector->y += scale;
+			no_input = false;
+		}
+
+		#endif 
+
+
+		// ascent and descent
 		if (input->lt){
-			vector->z += scale;
+			t_vector->z += scale;
 			no_input = false;
 		} 
 		if (input->rt){
-			vector->z -= scale;
+			t_vector->z -= scale;
 			no_input = false;
-		} 
+		}
+
+
 		if (no_input){
 
-			vector->x = 0; vector->y = 0; vector->z = 0;
+			t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
 		}
 
 }
@@ -155,6 +204,8 @@ void tardigrade(){
 	//setup controller
 	controller_t raw_controller; //raw device
 	controller_generic_raw sixaxis; //virtual raw device
+	controller_generic_raw f710; //virtual raw device
+
 	controller_generic_profile deckbox_input; //virtual "refined" device
 
 	raw_controller.setDevice(DEFAULT_CONTROLLER);
@@ -167,23 +218,34 @@ void tardigrade(){
 	//vector stuff
 
 	vector_t tm_vector; //translational movement vector
+	vector_t rt_vector; //rotational movement vector
 	tm_vector.x = 0; tm_vector.y = 0; tm_vector.z = 0;
+	rt_vector.x = 0; rt_vector.y = 0; rt_vector.z = 0;
 
 	float movement_scale = 0.5; //default 0.5
 
-	char vector_str[64];
+	char t_vector_str[64];
+	char r_vector_str[64];
 	//initStr(vector_str, 64);
 	//strncpy(vector_str, vector_in, 64);
 
 	char rx_message[2048]; //big buffer
 
 	//networking setup
+	//temp
+	avoe_comm_transmitter r_vector_tx("message", "vector", 8112, IP_CORE); //implement a multi vector messaging scheme
 	avoe_comm_transmitter frontend_to_core("message", "vector", PORT_CORE_INPUT, IP_CORE);
 	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY);
 
 	/* setup and initilizae all connections */	
-	frontend_to_core.set_message(vector_str, 64);
+	frontend_to_core.set_message(t_vector_str, 128);
 	frontend_to_core.set_timer(10);	
+
+	r_vector_tx.set_message(r_vector_str, 128);
+	r_vector_tx.set_timer(10);	
+
+
+
 	core_to_frontend.set_message(rx_message, 2048);
 
 
@@ -197,21 +259,35 @@ void tardigrade(){
 		usleep(1000);
 		if (network_timer.getElaspedTimeMS() > NETWORK_REFRESH_INTERVAL){
 			frontend_to_core.tx();
+			r_vector_tx.tx();
 			core_to_frontend.rx();
 			network_timer.reset();
 		}
 
 		// convert controller input into movement vector
 
-		tardigrade_manual_control(&deckbox_input, &tm_vector, movement_scale);
+		tardigrade_manual_control(&deckbox_input, &tm_vector, &rt_vector, movement_scale);
 
-		initStr(vector_str, 64);
-		appendStr(vector_str, (std::to_string(tm_vector.x)).c_str(), 0);
-		appendStr(vector_str, ",", strlen(vector_str));
-		appendStr(vector_str, (std::to_string(tm_vector.y)).c_str(), strlen(vector_str));
-		appendStr(vector_str, ",", strlen(vector_str));
-		appendStr(vector_str, (std::to_string(tm_vector.z)).c_str(), strlen(vector_str));
-		appendStr(vector_str, ",", strlen(vector_str));
+
+
+		initStr(t_vector_str, 64);
+		appendStr(t_vector_str, (std::to_string(tm_vector.x)).c_str(), 0);
+		appendStr(t_vector_str, ",", strlen(t_vector_str));
+		appendStr(t_vector_str, (std::to_string(tm_vector.y)).c_str(), strlen(t_vector_str));
+		appendStr(t_vector_str, ",", strlen(t_vector_str));
+		appendStr(t_vector_str, (std::to_string(tm_vector.z)).c_str(), strlen(t_vector_str));
+		appendStr(t_vector_str, ",", strlen(t_vector_str));
+
+		initStr(r_vector_str, 64);
+		appendStr(r_vector_str, (std::to_string(rt_vector.x)).c_str(), 0);
+		appendStr(r_vector_str, ",", strlen(r_vector_str));
+		appendStr(r_vector_str, (std::to_string(rt_vector.y)).c_str(), strlen(r_vector_str));
+		appendStr(r_vector_str, ",", strlen(r_vector_str));
+		appendStr(r_vector_str, (std::to_string(rt_vector.z)).c_str(), strlen(r_vector_str));
+		appendStr(r_vector_str, ",", strlen(r_vector_str));
+
+
+
 
 		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
 			map_sensor_string(&tardigrade_imu, rx_message, 2048);
@@ -223,21 +299,32 @@ void tardigrade(){
 			tardigrade_pressure.print();
 			tardigrade_leak.print();
 				
-
+	
 			//sixaxis.print();
-			
+			//f710.print();
+
+				
 			//printController(&deckbox_input);
 
 
 			std::cout << "TRANSLATIONAL MOVEMENT VECTOR: " << tm_vector.x << ' ' << tm_vector.y << ' ' << tm_vector.z << '\n';			
-			std::cout << "TRANSLATIONAL MOVEMENT VECTOR STRING: " << vector_str << '\n';			
+			std::cout << "ROTATIONAL MOVEMENT VECTOR: " << rt_vector.x << ' ' << rt_vector.y << ' ' << rt_vector.z << '\n';			
+			std::cout << "TRANSLATIONAL MOVEMENT VECTOR STRING: " << t_vector_str << '\n';			
+			std::cout << "ROTATIONAL MOVEMENT VECTOR STRING: " << r_vector_str << '\n';			
 			vtClear();
 			ui_timer.reset();
 		}
 
+		//convertToSixaxis(&deckbox_input, sixaxis);
+		#ifdef F710
+		raw_controller.poll(&f710);
+		convertToF710(&deckbox_input, f710);
+		#endif
 
+		#ifdef SIXAXIS
 		raw_controller.poll(&sixaxis);
-		convertToSixaxis(&deckbox_input, sixaxis);
+		convertToF710(&deckbox_input, sixaxis);
+		#endif
 
 	}
 

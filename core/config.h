@@ -24,7 +24,8 @@
 
 
 /* networking */
-#define IP_DECKBOX "172.20.218.138"
+#define IP_DECKBOX "127.0.0.1"
+//#define IP_DECKBOX "172.20.218.138"
 //#define IP_DECKBOX "10.42.0.1"
 #define PORT_DECKBOX_TELEMETRY 8110
 #define PORT_DECKBOX_INPUT 8101

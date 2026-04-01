@@ -60,15 +60,25 @@ void tardigrade_physical(){
 	tx_device1.set_timer(100); //set 100ms transmit interval
 
 
-	char vector_str_decoded[64];
-	char vector_str[64+1];
-	initStr(vector_str, 64+1);
-	vector_t translational_vector;
+	char t_vector_str[64];
+	char t_vector_str_decoded[64];
+	initStr(t_vector_str, 64);
+
+	char r_vector_str[64];
+	char r_vector_str_decoded[64];
+	initStr(r_vector_str, 64);
+
+
+	vector_t translational_vector, rotational_vector;	
 	avoe_comm_reciever rx_device1("message", "vector", PORT_DECKBOX_INPUT);
 	rx_device1.set_timer(10);
 	rx_device1.set_message(vector_str, 64);
 	
 
+	avoe_comm_reciever rx_device2("message", "vector", 8112);
+	rx_device2.set_timer(10);
+	rx_device2.set_message(r_vector_str, 64);
+	
 	// RESET TIMERS
 	tel_timer.reset(); 
 	sensor_timer.reset();
@@ -91,22 +101,25 @@ void tardigrade_physical(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
-
 			// send vectors to controller
 
-			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
-			translational_vector = comma_str_to_vector_t(vector_str_decoded, 64);
-			//std::cout << vector_str_decoded << '\n';
-			//std::cout << "TRANSLATIONAL VECTOR: " << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
-			controller.send_vector(translational_vector);
-		
+			avoe_comm_reciever_decode_message(t_vector_str_decoded, t_vector_str, 64); //latteral (lower half)
+			avoe_comm_reciever_decode_message(r_vector_str_decoded, r_vector_str, 64); //latteral (lower half)
+			
+			
+			translational_vector = comma_str_to_vector_t(t_vector_str_decoded, 64);
+			rotational_vector = comma_str_to_vector_t(r_vector_str_decoded, 64); //second half
+			
+			controller_full.send_translation_vector(translational_vector);
+			controller_full.send_lateral_vector(rotational_vector);
 			sensor_timer.reset();
+;
 		}
 		
 		// NETWORK REFRESH
 		tx_device1.refresh();
 		rx_device1.refresh();
-
+		rx_device2.refresh();
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
 			
@@ -119,9 +132,10 @@ void tardigrade_physical(){
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
-			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
+			std::cout << "[MAIN] t_vector_str from frontend: " << t_vector_str << '\n';
+			std::cout << "[MAIN] r_vector_str from frontend: " << r_vector_str << '\n';
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 			tardigrade_imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
@@ -161,13 +175,23 @@ void tardigrade_virtual(){
 	tx_device1.set_timer(100); //set 100ms transmit interval
 
 
-	char vector_str_decoded[64];
-	char vector_str[64+1];
-	initStr(vector_str, 64+1);
-	vector_t translational_vector;
+	char t_vector_str[64];
+	char t_vector_str_decoded[64];
+	initStr(t_vector_str, 64);
+
+	char r_vector_str[64];
+	char r_vector_str_decoded[64];
+	initStr(r_vector_str, 64);
+
+
+	vector_t translational_vector, rotational_vector;
 	avoe_comm_reciever rx_device1("message", "vector", PORT_DECKBOX_INPUT);
 	rx_device1.set_timer(10);
-	rx_device1.set_message(vector_str, 64);
+	rx_device1.set_message(t_vector_str, 64);
+
+	avoe_comm_reciever rx_device2("message", "vector", 8112);
+	rx_device2.set_timer(10);
+	rx_device2.set_message(r_vector_str, 64);
 	
 	
 	/*
@@ -192,6 +216,7 @@ void tardigrade_virtual(){
 	tardigrade_update_sensors_dummy();
 
 	int count = 0;
+
 	while (1){
 		usleep(1000);
 		//the loop
@@ -201,17 +226,22 @@ void tardigrade_virtual(){
 			tardigrade_update_sensors_dummy();
 			// send vectors to controller
 
-			avoe_comm_reciever_decode_message(vector_str_decoded, vector_str, 64);
-			translational_vector = comma_str_to_vector_t(vector_str_decoded, 64);
+			avoe_comm_reciever_decode_message(t_vector_str_decoded, t_vector_str, 64); //latteral (lower half)
+			avoe_comm_reciever_decode_message(r_vector_str_decoded, r_vector_str, 64); //latteral (lower half)
+			
+			
+			translational_vector = comma_str_to_vector_t(t_vector_str_decoded, 64);
+			rotational_vector = comma_str_to_vector_t(r_vector_str_decoded, 64); //second half
 			//std::cout << vector_str_decoded << '\n';
 			//std::cout << translational_vector.x << ' ' << translational_vector.y << ' ' << translational_vector.z << '\n';
-			controller.send_vector(translational_vector);
-		
+			controller_full.send_translation_vector(translational_vector);
+			controller_full.send_lateral_vector(rotational_vector);
 			sensor_timer.reset();
 		}
 		
 		// NETWORK REFRESH
 		tx_device1.refresh();
+		rx_device2.refresh();
 		rx_device1.refresh();
 
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
@@ -224,7 +254,8 @@ void tardigrade_virtual(){
 		// DISPLAY OUTPUT AND LOGGING
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			std::cout << "[MAIN] vector_str from frontend: " << vector_str << '\n';
+			std::cout << "[MAIN] t_vector_str from frontend: " << t_vector_str << '\n';
+			std::cout << "[MAIN] r_vector_str from frontend: " << r_vector_str << '\n';
 			//update, print and log every one second
 			tardigrade.print();
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor

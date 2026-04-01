@@ -1,6 +1,18 @@
 if [ "$1" == "deckbox" ]; then
 	echo "Building deckbox-cli"
-	g++ main.cpp -o avoe-frontend-cli ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+	#g++ main.cpp -o avoe-frontend-cli ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+
+
+	if [ "$2" == "sixaxis" ]; then
+		echo "SIXAXIS"
+		g++ main.cpp -o avoe-frontend-cli -DSIXAXIS ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+	elif [ "$2" == "f710" ]; then
+		echo "F710"
+		g++ main.cpp -o avoe-frontend-cli -DF710 ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+	else
+		echo "You must specify a controller type, pimp <sixaxis> or <f710>"
+	fi
+
 elif [ "$1" == "sensor-test" ]; then
 	echo "Building sensor test"
 	g++ -o sensor-test sensor_test.cpp sensor.cpp ../../core/sensor.cpp ../../lib/lib.cpp ../../core/log.cpp
