@@ -15,13 +15,17 @@ class auv_mission_t{
 
 	private:
 
-		// variables to hold: current pose, current position, target pose, target position
-
-		vector_t current_posi, target_posi, current_pose, target_pose;
+		//external trigger variable?
+		vector_t offset, pose1, pose2; //relative, not absolute
+		vector_t heading; 
 
 		bool is_active = true; //set to false when target position and target pose are reached
+		enum mode {
+			DEFINITE, 
+			INDEFINITE
+		};
 		unsigned int hold_pose_duration; //length to hold target pose and position duration in seconds
-
+		
 		vehicle_t *vehicle;
 
 	public:
