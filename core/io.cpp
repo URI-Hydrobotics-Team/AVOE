@@ -3,9 +3,8 @@
 #include "io.h"
 #include "../lib/lib.h"
 
-avoe_comm_transmitter::avoe_comm_transmitter(const char *type_in, const char *channel, int port_in, const char *ip){
+avoe_comm_transmitter::avoe_comm_transmitter(const char *channel, int port_in, const char *ip){
 	// copy the type, channel, ip into class variable
-	strncpy(type, type_in, 32);
 	strncpy(channel_name, channel, 32);
 	strncpy(dest_ip, ip, 32);
 
@@ -14,25 +13,16 @@ avoe_comm_transmitter::avoe_comm_transmitter(const char *type_in, const char *ch
 	tx_period = 0; //default timer value;	
 	sensor_count = 0;
 	sensor_index = 0;
-
-
+	data_message_len = 0;
+	
 	//null ptrs
 	motor_table = nullptr;
 	sensor_table = nullptr;
+	vector_table = nullptr;
 	data_message = nullptr;	
 	socket = nullptr;
 
-	//type parsing
-	mode = -1;
-	if (strcmp(type, "message") == 0){
-		mode = 0;
-	}
-	if (strcmp(type, "sensor") == 0){
-		mode = 1;
-	}
-	if (strcmp(type, "motor") == 0){
-		mode = 2;
-	}	
+	
 }
 
 void avoe_comm_transmitter::refresh(){
@@ -55,18 +45,44 @@ void avoe_comm_transmitter::set_message(char *mptr, size_t len){
 	data_message_len = len;
 	data_message = mptr;
 
+	/*
 	// check socket is initialize
 	if (socket == nullptr){
 		socket = new tx_socket(data_message_len + 64); // add 64 to take care of header
 		socket->init(dest_ip, port);
 	}
+	*/
+
+}
+
+
+void avoe_comm_transmitter::add_vector(vector_t *vector){
+
+	if (vector_count == 0){
+		vector_table = new vector_t*[1];
+		vector_table[0] = vector;
+		vector_count++;	
+	}else{
+		vector_t** temp = new vector_t*[vector_count + 1];
+		for (size_t i = 0; i < vector_count; i++){
+			temp[i] = vector_table[i];
+		}
+		temp[vector_count] = vector;
+		vector_count++;
+
+		delete[] vector_table;
+		vector_table = temp;
+	
+
+
+	}
+	std::cout << "[IO] vector added to " << channel_name << '\n'; 
 
 
 }
 
-void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
 
-	mode = 1;
+void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
 
 	if (sensor_count == 0){
 		sensor_table = new sensor_t*[1];
@@ -93,8 +109,6 @@ void avoe_comm_transmitter::add_sensor(sensor_t *sensor){
 
 void avoe_comm_transmitter::add_motor(motor_t *motor) {
 
-	mode = 2;
-
 	if (motor_count == 0){
 		motor_table = new motor_t*[1];
 		motor_table[0] = motor;
@@ -120,9 +134,94 @@ void avoe_comm_transmitter::set_timer(unsigned int period){
 	tx_period = period;
 }
 
+
+void avoe_comm_transmitter::update_index(){
+	
+	char sensor_count_str[4];
+	char motor_count_str[4];
+	char vector_count_str[4];
+	char data_message_len_str[16];
+
+	initStr(sensor_count_str, 4);
+	initStr(motor_count_str, 4);
+	initStr(vector_count_str, 4);
+	initStr(data_message_len_str, 16);
+
+	sprintf(sensor_count_str, "%d", sensor_count);
+	sprintf(motor_count_str, "%d", motor_count);
+	sprintf(vector_count_str, "%d", vector_count);
+	sprintf(data_message_len_str, "%d", data_message_len);
+
+	initStr(index, INDEX_SIZE);
+
+	appendStr(index, "S", 0);
+	appendStr(index, sensor_count_str, strlen(index));
+	appendStr(index, "M", strlen(index));
+	appendStr(index, motor_count_str, strlen(index));
+	appendStr(index, "V", strlen(index));
+	appendStr(index, vector_count_str, strlen(index));
+	appendStr(index, "C", strlen(index));
+	appendStr(index, data_message_len, strlen(index));
+
+}
+
+
 void avoe_comm_transmitter::tx() {
 	size_t temp_size;
+	char *header;
+
 	char *temp_str, *data_n;
+
+	// make header
+	temp_str = new char[128];
+	initStr(header, 128);
+	appendStr(header, "$AVOE:", 0); 
+	appendStr(header, channel_name, strlen(header));
+	appendStr(header, ":", strlen(header));
+	appendStr(header, index, strlen(header));
+	appendStr(header, ":", strlen(header));
+
+	// we need to determine the sizes of all associated data	
+	temp_size += strlen(header);
+	temp_size += data_message_len;
+	for (size_t i = 0; i < sensor_count; i++){
+		temp_size += sensor_table[i]->getBufferSize();
+		
+	}
+	for (size_t i = 0; i < motor_count; i++){
+		temp_size += motor_table[i]->getBufferSize();
+		
+	}
+	temp_size += vector_count * sizeof(vector_t);
+
+	// now we can allocate	
+	temp_str = new char[temp_size];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//OLD STUFF 
+
 	// mode check
 	switch(mode){
 		//mode 0: send generic string data

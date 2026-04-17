@@ -12,11 +12,19 @@ motor_t::motor_t(size_t fields){
 	protocol = new char[16];
 	type = new char[32];
 
-	data = new char*[field_count];
-
-	for (size_t i = 0; i < field_count; i++){
-		data[i] = new char[128];
-
+	switch (type){
+		case UINT8:
+			data = new uint8_t*[field_count];
+			break;
+		case INT32:
+			data = new int32_t*[field_count];				
+			break;
+		case INT64:
+			data = new int64_t*[field_count];
+			break;
+		case FLOAT:
+			data = new float*[field_count];
+			break;
 	}
 
 }
@@ -27,12 +35,6 @@ motor_t::~motor_t(){
 	delete[] protocol;
 	delete[] type;
 	delete[] label;
-
-	for (size_t i = 0; i < field_count; i++){
-		delete[] data[i];
-
-	}
-
 	delete[] data;
 
 }
@@ -71,7 +73,7 @@ char *motor_t::getType(){
 	return type;
 }
 
-char *motor_t::read(size_t field){
+void *motor_t::read(size_t field){
 	return data[field];
 
 }
@@ -85,27 +87,107 @@ void motor_t::write(const char *input, size_t field, size_t n){
 	//NOTE n should be 128 or less
 }
 
+void motor_t::writeToBuffer(char *data_n){
 
-void motor_t::log(log_t *log){
+	char field_to_string[TO_STRING_SIZE];
+	intiStr(field_to_string, TO_STRING_SIZE);
+
+	char field_count_str[4];
+	intiStr(field_count_str, 4);
+	sprintf(field_count_str, "%d", field_count);
+
+
 	//automatically log all values to a log_t object
-	char *data_n = new char[64 + field_count * 130]; //130 just to add some extra room for other chars
-	initStr(data_n, 64 + field_count *130);
+	initStr(data_n, 64 + field_count * TO_STRING_SIZE);
 	appendStr(data_n, type, 0);
 	appendStr(data_n, ":", strlen(data_n));
 	appendStr(data_n, model, strlen(data_n));
 	appendStr(data_n, " ", strlen(data_n));
 	
-	appendStr(data_n, std::to_string(field_count).c_str(), strlen(data_n));	
+	appendStr(data_n, field_count_str, strlen(data_n));	
 	appendStr(data_n, " fields: ", strlen(data_n));
 	for (size_t i = 0; i < field_count; i++){
-		appendStr(data_n, data[i], strlen(data_n));
+
+		switch (type){
+		case UINT8:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case INT32:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case INT64:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case FLOAT:
+			sprintf(field_to_string, "%.3f", data[i]);
+			break;
+	}
+
+		appendStr(data_n, " ", strlen(data_n));
+	}
+
+
+	
+}
+
+
+size_t motor_t::getBufferSize(){
+ 
+	return 64 + field_count * TO_STRING_SIZE;
+ 
+}
+
+
+
+void motor_t::log(log_t *log){
+
+	char field_to_string[TO_STRING_SIZE];
+	intiStr(field_to_string, TO_STRING_SIZE);
+
+	char field_count_str[4];
+	intiStr(field_count_str, 4);
+	sprintf(field_count_str, "%d", field_count);
+
+
+	//automatically log all values to a log_t object
+	char *data_n = new char[64 + field_count * TO_STRING_SIZE];
+	initStr(data_n, 64 + field_count * TO_STRING_SIZE);
+	appendStr(data_n, type, 0);
+	appendStr(data_n, ":", strlen(data_n));
+	appendStr(data_n, model, strlen(data_n));
+	appendStr(data_n, " ", strlen(data_n));
+	
+	appendStr(data_n, field_count_str, strlen(data_n));	
+	appendStr(data_n, " fields: ", strlen(data_n));
+	for (size_t i = 0; i < field_count; i++){
+
+		switch (type){
+		case UINT8:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case INT32:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case INT64:
+			sprintf(field_to_string, "%d", data[i]);
+			break;
+		case FLOAT:
+			sprintf(field_to_string, "%.3f", data[i]);
+			break;
+	}
+
 		appendStr(data_n, " ", strlen(data_n));
 	}
 
 	log->log(data_n);	
 	delete[] data_n;
 
+
+	
 }
+
+
+
 void motor_t::print(){
 
 	std::cout << "START MOTOR_T PRINT\n";

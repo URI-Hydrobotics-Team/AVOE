@@ -17,22 +17,13 @@
 #include "lib.h"
 
 
-
-tx_socket::tx_socket(size_t buffer_size){
-	tx_buffer_len = buffer_size;
-	tx_buffer = new char[buffer_size];
-
-}
-
 tx_socket::tx_socket(){	
-	tx_buffer_len = NETWORK_BUFFER_SIZE;
-	tx_buffer = new char[NETWORK_BUFFER_SIZE];
+
 }
 
 
 tx_socket::~tx_socket(){
 	close(fd);
-	delete[] tx_buffer;	
 }
 
 
@@ -82,12 +73,20 @@ void tx_socket::init(const char *host, int port){
 
 
 }
-void tx_socket::transmit(const char *bufferIn){
+
+void tx_socket::transmit(const void *bufferIn){
 	
-	initStr(tx_buffer, tx_buffer_len); 
-	strncpy(tx_buffer, bufferIn, tx_buffer_len);
 	
-	if (sendto(fd, tx_buffer, tx_buffer_len, 0, (struct sockaddr *)&remote_addr, slen) == -1){
+	if (sendto(fd, bufferIn, NETWORK_BUFFER_SIZE, 0, (struct sockaddr *)&remote_addr, slen) == -1){
+		std::cout << "[NETWORK] error sendto\n";
+	}
+	
+
+}
+
+void tx_socket::transmit(const void *bufferIn, size_t buffer_size){
+	
+	if (sendto(fd, bufferIn, buffer_size, 0, (struct sockaddr *)&remote_addr, slen) == -1){
 		std::cout << "[NETWORK] error sendto\n";
 	}
 	

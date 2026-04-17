@@ -26,15 +26,14 @@ class tx_socket{
 		char server[32];
 		struct sockaddr_in my_addr, remote_addr;
 		int port, fd, i, slen=sizeof(remote_addr);
-		char *tx_buffer;
-		size_t tx_buffer_len;
 
 	public:
 		tx_socket(size_t buffer_size);
 		tx_socket(); //init with default buffer size
 		~tx_socket();
 		void init(const char *host, int port);
-		void transmit(const char *bufferIn);
+		void transmit(const void *bufferIn);
+		void transmit(const void *bufferIn, size_t buffer_size);
 		void closefd();
 
 
