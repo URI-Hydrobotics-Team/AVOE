@@ -14,6 +14,7 @@
 // include sensors
 
 #include <ctime>
+#include "types.h"
 #include "sensor.h"
 #include "motor.h"
 #include "vehicle.h"
@@ -67,18 +68,18 @@ tardigrade_controller_t	controller_full;
 // AVOE MOTORS
 //bph, bsh, sh, y, ps, ss
 
-motor_t thruster_BPH(1);
-motor_t thruster_BSH(1);
-motor_t thruster_SH(1);
-motor_t thruster_Y(1);
-motor_t thruster_PS(1);
-motor_t thruster_SS(1);
+motor_t thruster_BPH(1, FLOAT);
+motor_t thruster_BSH(1, FLOAT);
+motor_t thruster_SH(1, FLOAT);
+motor_t thruster_Y(1, FLOAT);
+motor_t thruster_PS(1, FLOAT);
+motor_t thruster_SS(1, FLOAT);
 
 // AVOE SENSORS
 vehicle_t tardigrade("Tardigrade", "2", "AUV");
-sensor_t tardigrade_imu(8); 	
-sensor_t tardigrade_pressure(4);
-sensor_t tardigrade_leak(1);
+sensor_t tardigrade_imu(8, FLOAT); 	
+sensor_t tardigrade_pressure(4, FLOAT);
+sensor_t tardigrade_leak(1, UINT8);
 
 // REAL TARDIGRADE TARGET
 

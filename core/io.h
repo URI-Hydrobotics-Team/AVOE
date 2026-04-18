@@ -96,6 +96,7 @@ class avoe_comm_reciever{
 		void set_message(char *mptr, size_t len);
 		void refresh(); // continous recieve based on clock period
 		void rx();
+		void rx_fields(char* sensor, char* motor, char* vector, char* msg); 
 		void set_timer(unsigned int period); 
 };
 

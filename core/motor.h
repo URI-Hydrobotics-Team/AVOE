@@ -10,7 +10,7 @@
 #define MOTOR_H
 #define TO_STRING_SIZE 32
 
-
+#include "types.h"
 #include "../lib/lib.h"
 #include "log.h"
 
@@ -24,14 +24,7 @@ class motor_t{
 		char *type; 
 		void *data;
 		size_t field_count; //generally one
-		enum data_type {
-			UINT8,
-			INT32,
-			INT64,
-			FLOAT,
-			DOUBLE
-		};
-
+		int data_type;
 		vector_t position;
 		vector_t direction;		
 		//float *force_func;
@@ -41,7 +34,7 @@ class motor_t{
 
 	public:
 
-		motor_t(size_t fields);
+		motor_t(size_t fields, int type_);
 		~motor_t();
 		void init(const char *l, const char *m, const char *v, const char *p, const char *t, vector_t pos, vector_t dir);
 		char *getModel();
@@ -50,7 +43,7 @@ class motor_t{
 		char *getProtocol();
 		char *getType();
 		void *read(size_t field);
-		void write(const char *input, size_t field, size_t n);
+		void write(const void *input, size_t field);
 		void log(log_t *log);
 		void print();
 		size_t getFieldCount();

@@ -1,10 +1,11 @@
 #include <cstring>
+#include <cstdint>
 #include <iostream>
 
 #include "motor.h"
 
 
-motor_t::motor_t(size_t fields){
+motor_t::motor_t(size_t fields, int type_){
 	field_count = fields;
 	model = new char[32];
 	vendor = new char[32];
@@ -12,7 +13,7 @@ motor_t::motor_t(size_t fields){
 	protocol = new char[16];
 	type = new char[32];
 
-	switch (type){
+	switch (type_){
 		case UINT8:
 			data = new uint8_t*[field_count];
 			break;
@@ -25,6 +26,10 @@ motor_t::motor_t(size_t fields){
 		case FLOAT:
 			data = new float*[field_count];
 			break;
+		case VECTOR:
+			data = new vector_t*[field_count];
+			break;
+
 	}
 
 }
@@ -81,19 +86,34 @@ void *motor_t::read(size_t field){
 
 
 
-void motor_t::write(const char *input, size_t field, size_t n){
-	initStr(data[field], 128);
-	strncpy(data[field], input, n);
-	//NOTE n should be 128 or less
+void motor_t::write(const void *input, size_t field){
+	switch (data_type){
+		case UINT8:
+			data[field] = static_cast<uint8_t*>(input);
+			break;
+		case INT32:
+			data = new int32_t*[field_count];				
+			break;
+		case INT64:
+			data = new int64_t*[field_count];
+			break;
+		case FLOAT:
+			data = new float*[field_count];
+			break;
+		case VECTOR:
+			data = new vector_t*[field_count];
+			break;
+
+	}
 }
 
 void motor_t::writeToBuffer(char *data_n){
 
 	char field_to_string[TO_STRING_SIZE];
-	intiStr(field_to_string, TO_STRING_SIZE);
+	initStr(field_to_string, TO_STRING_SIZE);
 
 	char field_count_str[4];
-	intiStr(field_count_str, 4);
+	initStr(field_count_str, 4);
 	sprintf(field_count_str, "%d", field_count);
 
 
@@ -108,18 +128,18 @@ void motor_t::writeToBuffer(char *data_n){
 	appendStr(data_n, " fields: ", strlen(data_n));
 	for (size_t i = 0; i < field_count; i++){
 
-		switch (type){
+		switch (data_type){
 		case UINT8:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<uint8_t**>(data))[i]);
 			break;
 		case INT32:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<int32_t**>(data))[i]);
 			break;
 		case INT64:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<int64_t**>(data))[i]);
 			break;
 		case FLOAT:
-			sprintf(field_to_string, "%.3f", data[i]);
+			sprintf(field_to_string, "%.3f", (static_cast<float**>(data))[i]);
 			break;
 	}
 
@@ -142,10 +162,10 @@ size_t motor_t::getBufferSize(){
 void motor_t::log(log_t *log){
 
 	char field_to_string[TO_STRING_SIZE];
-	intiStr(field_to_string, TO_STRING_SIZE);
+	initStr(field_to_string, TO_STRING_SIZE);
 
 	char field_count_str[4];
-	intiStr(field_count_str, 4);
+	initStr(field_count_str, 4);
 	sprintf(field_count_str, "%d", field_count);
 
 
@@ -161,18 +181,18 @@ void motor_t::log(log_t *log){
 	appendStr(data_n, " fields: ", strlen(data_n));
 	for (size_t i = 0; i < field_count; i++){
 
-		switch (type){
+		switch (data_type){
 		case UINT8:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<uint8_t**>(data))[i]);
 			break;
 		case INT32:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<int32_t**>(data))[i]);
 			break;
 		case INT64:
-			sprintf(field_to_string, "%d", data[i]);
+			sprintf(field_to_string, "%d", (static_cast<int64_t**>(data))[i]);
 			break;
 		case FLOAT:
-			sprintf(field_to_string, "%.3f", data[i]);
+			sprintf(field_to_string, "%.3f", (static_cast<float**>(data))[i]);
 			break;
 	}
 

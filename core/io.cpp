@@ -168,11 +168,11 @@ void avoe_comm_transmitter::update_index(){
 
 void avoe_comm_transmitter::tx() {
 	size_t temp_size;
-	char *header;
+	char *header, temp_str, temp_buffer;
 
-	char *temp_str, *data_n;
-
+	temp_buffer = new char[128];
 	// make header
+	updateIndex();
 	temp_str = new char[128];
 	initStr(header, 128);
 	appendStr(header, "$AVOE:", 0); 
@@ -196,113 +196,66 @@ void avoe_comm_transmitter::tx() {
 
 	// now we can allocate	
 	temp_str = new char[temp_size];
+	initStr(temp_str, temp_size);
+	std::cout << "[IO] created tx buffer of length: " << temp_size << '\n';
+	
+	appendStr(temp_str, header, 0);
+	// add sensors
 
+	for (size_t i = 0; i < sensor_count; i++){
 
+		initStr(temp_buffer, 128);
+		sensor_table[i]->writeToBuffer(temp_buffer);
+		appendStr(temp_str, temp_buffer, strlen(temp_str));
+		appendStr(temp_str, "!", strlen(temp_str));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//OLD STUFF 
-
-	// mode check
-	switch(mode){
-		//mode 0: send generic string data
-		case 0:
-
-			// allocate new char array
-			temp_str = new char[data_message_len + 64]; //+ 64 for header stuff
-			initStr(temp_str, data_message_len + 64);
-			appendStr(temp_str, "$AVOEG:", 0); //'G' indicates generic message
-			appendStr(temp_str, channel_name, strlen(temp_str));
-			appendStr(temp_str, ":", strlen(temp_str));
-			appendStr(temp_str, type, strlen(temp_str));
-			appendStr(temp_str, ":", strlen(temp_str));
-			appendStr(temp_str, data_message, strlen(temp_str));
-			appendStr(temp_str, "$", strlen(temp_str));
-
-			//std::cout << "MODE 0 TRANSMIT: " << temp_str << '\n';
-
-			socket->transmit(temp_str);
-			
-			delete[] temp_str;
-			break;
-
-		//mode 1: send sensor data fields
-		case 1:
-			if (sensor_index == sensor_count){
-				sensor_index = 0;
-			}
-
-
-			std::cout << "[IO] TXing " << sensor_table[sensor_index]->getModel() << '\n';
-
-			// setup socket
-			data_sensor_message_len = 128 * (sensor_table[sensor_index]->getFieldCount() + 1); // + 1 just so we have room for a header
-			socket = new tx_socket(data_sensor_message_len + 64);
-			socket->init(dest_ip, port);
-		
-
-			temp_str = new char[data_sensor_message_len + 64]; //+ 64 for header stuff
-			initStr(temp_str, data_sensor_message_len + 64);
-			appendStr(temp_str, "$AVOES:", 0); //'S' indicates sensor
-			appendStr(temp_str, channel_name, strlen(temp_str));
-			appendStr(temp_str, ":", strlen(temp_str));
-			appendStr(temp_str, type, strlen(temp_str));
-			appendStr(temp_str, ":", strlen(temp_str));
-
-			// format sensor_t data
-			temp_size = 64 + sensor_table[sensor_index]->getFieldCount() * 128;
-			data_n = new char[temp_size]; 
-			initStr(data_n, temp_size);
-
-			appendStr(data_n, sensor_table[sensor_index]->getType(), 0);
-			appendStr(data_n, " ", strlen(data_n));
-			appendStr(data_n, sensor_table[sensor_index]->getModel(), strlen(data_n));
-			appendStr(data_n, " ", strlen(data_n));
-
-			appendStr(data_n, std::to_string(sensor_table[sensor_index]->getFieldCount()).c_str(), strlen(data_n));	
-			appendStr(data_n, " ", strlen(data_n));
-
-			for (size_t i = 0; i < sensor_table[sensor_index]->getFieldCount(); i++){
-				appendStr(data_n, sensor_table[sensor_index]->read(i), strlen(data_n));
-				appendStr(data_n, " ", strlen(data_n));
-			}
-
-			//done
-			appendStr(temp_str, data_n, strlen(temp_str)); //append sensor_t data to  temp_str
-			appendStr(temp_str, "$", strlen(temp_str));
-
-			//std::cout << "MODE 1 TRANSMIT: " << temp_str << '\n';
-
-			socket->transmit(temp_str);
-
-			sensor_index++; //rotate sensor
-			delete socket;
-			delete[] data_n;
-			delete[] temp_str;
-			break;
-			
-		default:
-			break;
 	}
+
+	appendStr(temp_str, ":", strlen(temp_str));
+	for (size_t i = 0; i < sensor_count; i++){
+		initStr(temp_buffer, 128);
+		sensor_table[i]->writeToBuffer(temp_buffer);
+		appendStr(temp_str, temp_buffer, strlen(temp_str));
+		appendStr(temp_str, "!", strlen(temp_str));
+
+	}
+
+
+	appendStr(temp_str, ":", strlen(temp_str));
+	for (size_t i = 0; i < vector_count; i++){
+		initStr(temp_buffer, 128);
+
+		appendStr(temp_buffer, (std::to_string(tm_vector.x)).c_str(), 0);
+		appendStr(temp_buffer, ",", strlen(temp_buffer));
+		appendStr(temp_buffer, (std::to_string(tm_vector.y)).c_str(), strlen(t_vector_str));
+		appendStr(temp_buffer, ",", strlen(temp_buffer));
+		appendStr(temp_buffer, (std::to_string(tm_vector.z)).c_str(), strlen(t_vector_str));
+		appendStr(temp_buffer, ",", strlen(temp_buffer));
+
+
+
+		appendStr(temp_str, temp_buffer, strlen(temp_str));
+		appendStr(temp_str, "!", strlen(temp_str));
+
+	}
+
+	appendStr(temp_str, ":", strlen(temp_str));
+	// add generic data message
+
+	if (data_message_len > 0){
+		appendStr(temp_str, data_message, strlen(temp_str));
+
+	}
+
+		
+	appendStr(temp_str, "$", strlen(temp_str)); //terminate with '$'
+
+	
+
+	delete temp_str[];
+	delete temp_buffer[];
+
+
 }
 
 

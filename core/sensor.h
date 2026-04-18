@@ -14,6 +14,8 @@
 
 #define TO_STRING_SIZE 32
 
+
+#include "types.h"
 #include "log.h"
 #include "../lib/lib.h"
 
@@ -25,13 +27,7 @@ class sensor_t{
 		void *data;
 		int state = 0; //0 = uninit. , 1 = ready		
 		size_t field_count;
-		enum data_type {
-			UINT8,
-			INT32,
-			INT64,
-			FLOAT,
-			DOUBLE
-		};
+		int data_type;		
 		//size_t data_type_digits; // maximum number of digits required for each data type, useful for logging
 
 		/* positioning */
@@ -41,7 +37,7 @@ class sensor_t{
 
 	public:
 
-		sensor_t(size_t fields, enum type);
+		sensor_t(size_t fields, int type_);
 		~sensor_t();
 		void init(const char *m, const char *v, const char *p, const char *t, vector_t off, vector_t face);
 		void local_update(const char *t, const char* model);
@@ -52,7 +48,7 @@ class sensor_t{
 		void *read(size_t field);
 		void init();
 		int getState();
-		void write(const void input, size_t field);
+		void write(const void *input, size_t field);
 		void log(log_t *log);
 		void print();
 		size_t getFieldCount();

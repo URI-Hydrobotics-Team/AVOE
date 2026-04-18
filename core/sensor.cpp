@@ -5,14 +5,14 @@
 
 #include "sensor.h"
 
-sensor_t::sensor_t(size_t fields, enum type){
+sensor_t::sensor_t(size_t fields, int type_){
 	field_count = fields;
 	model = new char[32];
 	vendor = new char[32];
 	protocol = new char[16];
 	type = new char[32];
 
-	switch (type){
+	switch (type_){
 		case UINT8:
 			data = new uint8_t*[field_count];
 			break;
@@ -24,6 +24,10 @@ sensor_t::sensor_t(size_t fields, enum type){
 			break;
 		case FLOAT:
 			data = new float*[field_count];
+			break;
+
+		case VECTOR:
+			data = new vector_t*[field_count];
 			break;
 	}
 }
@@ -85,7 +89,7 @@ int sensor_t::getState(){
 }
 
 
-void sensor_t::write(const void input, size_t field){
+void sensor_t::write(const void *input, size_t field){
 
 	data[i] = input;
 }
