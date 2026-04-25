@@ -213,8 +213,10 @@ void avoe_comm_transmitter::tx() {
 	// now we can allocate	
 	temp_str = new char[temp_size];
 	initStr(temp_str, temp_size);
+
+	#ifdef VERBOSE
 	std::cout << "[IO] created tx buffer of length: " << temp_size << '\n';
-	
+	#endif
 	appendStr(temp_str, header, 0);
 	delete[] header;
 	// add sensors
@@ -492,7 +494,19 @@ int map_sensor(sensor_t *sensor, const char *message, size_t message_len){
 	initStr(temp_str, 32);
 
 	// start parsing
-	index = 0; temp_index = 0;
+	temp_index = 0;
+	for (index = 1; index < message_len; index++){
+
+		if (message[index] == ':'){
+			break;
+		}
+		temp_str[temp_index] = message[index];
+		temp_index++;
+	}
+
+	strncpy(type, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
 
 	for (index < message_len; index++;){
 
@@ -521,9 +535,9 @@ int map_sensor(sensor_t *sensor, const char *message, size_t message_len){
 	initStr(temp_str, 32);
 	temp_index = 0;
 
-	std::cout << "DETECTED TYPE: " << type << '\n';
-	std::cout << "DETECTED MODEL: " << model << '\n';
-	std::cout << "DETECTED FIELDS: " << field_count_str << '\n';
+	//std::cout << "DETECTED TYPE: " << type << '\n';
+	//std::cout << "DETECTED MODEL: " << model << '\n';
+	//std::cout << "DETECTED FIELDS: " << field_count_str << '\n';
 	
 	field_count = atoi(field_count_str);
 
@@ -534,7 +548,6 @@ int map_sensor(sensor_t *sensor, const char *message, size_t message_len){
 	}else{
 		return -1;
 	} 
-
 
 	char temp_field_str[128];
 	initStr(temp_field_str, 128);
@@ -562,6 +575,184 @@ int map_sensor(sensor_t *sensor, const char *message, size_t message_len){
 
 }
 
+int map_motor(motor_t *motor, const char *message, size_t message_len){
+
+	// *message should point to the start of the sensor_t object's contens
+
+	// structure <type>:<model>:<field count>:DATA:<field 1>:<field 2>:...%
+
+	// create some temp strings for the mapping
+
+
+	char temp_str[32];
+	size_t index, temp_index;
+
+
+
+	size_t field_count;
+	char field_count_str[4];
+	char model[32]; 
+	char type[32];
+
+	initStr(model, 32);
+	initStr(type, 32);
+
+
+	initStr(field_count_str, 4);
+
+
+	initStr(temp_str, 32);
+
+	// start parsing
+	temp_index = 0;
+	for (index = 1; index < message_len; index++){
+
+		if (message[index] == ':'){
+			break;
+		}
+		temp_str[temp_index] = message[index];
+		temp_index++;
+	}
+
+	strncpy(type, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+	for (index < message_len; index++;){
+
+		if (message[index] == ':'){
+			break;
+		}
+		temp_str[temp_index] = message[index];
+		temp_index++;
+	}
+
+	
+	strncpy(model, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+	
+	for (index < message_len; index++;){
+
+		if (message[index] == ':'){
+			break;
+		}
+		temp_str[temp_index] = message[index];
+		temp_index++;
+	}
+	
+	strncpy(field_count_str, temp_str, temp_index);
+	initStr(temp_str, 32);
+	temp_index = 0;
+
+	//std::cout << "DETECTED TYPE: " << type << '\n';
+	//std::cout << "DETECTED MODEL: " << model << '\n';
+	//std::cout << "DETECTED FIELDS: " << field_count_str << '\n';
+	
+	field_count = atoi(field_count_str);
+
+	// match
+
+	if (strncmp(motor->getType(), type, 32) == 0 && strncmp(motor->getModel(), model, 32) == 0){
+		//std::cout << "sensor_t match for \n";
+	}else{
+		return -1;
+	} 
+
+	char temp_field_str[128];
+	initStr(temp_field_str, 128);
+	
+	for (size_t i = 0; i < field_count; i++){
+		for (index < message_len; index++;){
+
+			if (message[index] == ':'){
+				break;
+			}
+
+			temp_field_str[temp_index] = message[index];
+			temp_index++;
+		}
+		motor->write(temp_field_str, i, temp_index);
+		temp_index = 0;
+		initStr(temp_field_str, 128);
+
+	}
+
+	// now we will now compare these values to sensor and update values accordingly
+
+
+	return 1;
+
+}
+
+
+
+void map_vector(vector_t *vecta, const char *str, size_t n){
+
+	double x;
+	double y;
+	double z;
+
+	// Allocate n size memory to prevent stack buffer overflow
+	char temp_str[n];
+	size_t temp_index = 0;
+	short comma_count = 0;
+	
+	initStr(temp_str, 32);
+
+	if (!charIsInt(str[0]) && (str[0] != '-')){
+
+		vector_t ret_val(0.0, 0.0, 0.0);
+
+		vecta->x = ret_val.x;
+		vecta->y = ret_val.y;
+		vecta->z = ret_val.z;
+	
+
+	}
+
+	for (size_t i = 0; i < n; i++){
+
+		if(str[i] == ','){
+
+			if (comma_count == 0){
+				x = std::stod(temp_str);
+				temp_index = 0;
+				initStr(temp_str, 32);
+			}
+
+			if (comma_count == 1){
+				y = std::stod(temp_str);
+				temp_index = 0;
+				initStr(temp_str, 32);
+			}
+
+			if (comma_count == 2){
+				z = std::stod(temp_str);
+				temp_index = 0;
+				initStr(temp_str, 32);
+				break;
+			}
+
+			comma_count++;
+			continue;
+		}
+
+
+		temp_str[temp_index] = str[i];
+		temp_index++;
+
+	}
+
+
+	vector_t ret_val(x, y, z);
+
+	vecta->x = ret_val.x;
+	vecta->y = ret_val.y;
+	vecta->z = ret_val.z;
+
+}
+
 
 
 void avoe_comm_reciever::rx(){
@@ -576,7 +767,9 @@ void avoe_comm_reciever::rx(){
 
 	if (rx_message_len > 0){
 
+		#ifdef VERBOSE
 		std::cout << "[IO] Recevied Message of Length " << rx_message_len << '\n';
+		#endif
 	}else{
 		// no message
 		return;
@@ -599,7 +792,10 @@ void avoe_comm_reciever::rx(){
 
 	//std::cout << "header len: " << header_len << '\n';	
 	if (strncmp(local_header, rx_buffer, header_len) != 0){
+
+		#ifdef VERBOSE
 		std::cout << "[IO] RX Header Mismatch. Local: \"" << local_header << "\" Recevied: \"" <<  rx_buffer << "\"\n";
+		#endif
 		return;
 	}
 
@@ -623,17 +819,15 @@ void avoe_comm_reciever::rx(){
 				break;
 			case '*':
 				if (section_index == 1){
-					map_sensor(sensor_table[sensor_index], rx_buffer + index - 1, rx_buffer_len);
+					map_sensor(sensor_table[sensor_index], rx_buffer + index, rx_buffer_len);
 					sensor_index++;
 				}
 				if (section_index == 2){
-					//map_motor(sensor_table[sensor_index], rx_buffer[index], rx_buffer_len);
+					map_motor(motor_table[motor_index], rx_buffer + index, rx_buffer_len);
 					motor_index++;
 				}	
 				if (section_index == 3){
-					//map_vector(sensor_table[sensor_index], rx_buffer[index], rx_buffer_len);
-					
-					std::cout << "process some vectors\n";
+					map_vector(vector_table[vector_index], rx_buffer + index + 1, rx_buffer_len);
 					vector_index++;
 				}
 				if (section_index == 4){

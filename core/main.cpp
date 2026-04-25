@@ -232,6 +232,7 @@ void tardigrade_virtual(){
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			//update, print and log every one second
 			tardigrade.print();
+			std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 			tardigrade_imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
