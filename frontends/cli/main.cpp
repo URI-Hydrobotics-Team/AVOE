@@ -19,7 +19,6 @@
 #include "../../plugins/gamepad_maps/sixaxis.h"
 #include "../../plugins/gamepad_maps/f710.h"
 #include "setup.h"
-#include "sensor.h"
 
 
 

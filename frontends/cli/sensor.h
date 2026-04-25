@@ -1,6 +1,6 @@
 #include "../../core/sensor.h"
 /*
-
+	DEPRECATED, DON'T USE
 	AVOE frontend sensor handling functions
 	once implemented for cli, this should be moved to /frontends/lib/
 */

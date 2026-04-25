@@ -5,10 +5,10 @@ if [ "$1" == "deckbox" ]; then
 
 	if [ "$2" == "sixaxis" ]; then
 		echo "SIXAXIS"
-		g++ main.cpp -o avoe-frontend-cli -DSIXAXIS ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+		g++ main.cpp -o avoe-frontend-cli -DSIXAXIS ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp
 	elif [ "$2" == "f710" ]; then
 		echo "F710"
-		g++ main.cpp -o avoe-frontend-cli -DF710 ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp sensor.cpp
+		g++ main.cpp -o avoe-frontend-cli -DF710 ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp
 	else
 		echo "You must specify a controller type, pimp <sixaxis> or <f710>"
 	fi
