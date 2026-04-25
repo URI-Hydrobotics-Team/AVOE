@@ -26,15 +26,14 @@ class tx_socket{
 		char server[32];
 		struct sockaddr_in my_addr, remote_addr;
 		int port, fd, i, slen=sizeof(remote_addr);
-		char *tx_buffer;
-		size_t tx_buffer_len;
+		//char *tx_buffer;
+		//size_t tx_buffer_len;
 
 	public:
-		tx_socket(size_t buffer_size);
 		tx_socket(); //init with default buffer size
 		~tx_socket();
 		void init(const char *host, int port);
-		void transmit(const char *bufferIn);
+		void transmit(const char *tx_buffer, size_t tx_buffer_len);
 		void closefd();
 
 
@@ -49,13 +48,10 @@ class rx_socket{
 		socklen_t addrlen = sizeof(remote_addr);		/* length of addresses */
 		int recvlen;			/* # bytes received */
 		int fd;				/* the socket */
-		char *rx_buffer;
-		size_t rx_buffer_len;
 	public:
-		rx_socket(size_t buffer_size);
 		rx_socket();
 		~rx_socket();
-		char* rec(int print);
+		void rec(int print, char* rx_buffer, size_t rx_buffer_len);
 		int probe();
 		void init(int port);
 

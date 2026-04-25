@@ -45,6 +45,8 @@ class motor_t{
 		void log(log_t *log);
 		void print();
 		size_t getFieldCount();
+		void writeToBuffer(char *buffer);
+		size_t getBufferSize();
 };
 
 #endif

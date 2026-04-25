@@ -15,6 +15,7 @@ class auv_mission_t{
 
 	private:
 
+		
 		//external trigger variable?
 		vector_t offset, pose1, pose2; //relative, not absolute
 		vector_t heading; 

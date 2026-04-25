@@ -112,6 +112,39 @@ void sensor_t::log(log_t *log){
 	delete[] data_n;
 
 }
+
+
+size_t sensor_t::getBufferSize(){
+
+	return 64 + field_count * 130;
+}
+
+void sensor_t::writeToBuffer(char *buffer){
+	size_t data_size = 64 + field_count * 130;
+
+	char *data_n = new char[64 + field_count * 130]; //130 just to add some extra room for other chars
+	initStr(data_n, 64 + field_count *130);
+	appendStr(data_n, type, 0);
+	appendStr(data_n, ":", strlen(data_n));
+	appendStr(data_n, model, strlen(data_n));
+	appendStr(data_n, ":", strlen(data_n));
+	
+	appendStr(data_n, std::to_string(field_count).c_str(), strlen(data_n));	
+	appendStr(data_n, ":DATA:", strlen(data_n));
+	for (size_t i = 0; i < field_count; i++){
+		appendStr(data_n, data[i], strlen(data_n));
+		appendStr(data_n, ":", strlen(data_n));
+	}
+	strncpy(buffer, data_n, data_size);
+
+	delete[] data_n;
+
+
+
+}
+
+
+
 void sensor_t::print(){
 
 	std::cout << "START SENSOR_T PRINT\n";

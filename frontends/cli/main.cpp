@@ -159,14 +159,15 @@ void tardigrade_raw(){
 
 
 
-	char rx_message[2048]; //big buffer
 
 	//networking setup
-	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY);
+	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY, 2000);
 
-	core_to_frontend.set_message(rx_message, 2048);
+	core_to_frontend.add_sensor(&tardigrade_imu);
+	core_to_frontend.add_sensor(&tardigrade_pressure);
+	core_to_frontend.add_sensor(&tardigrade_leak);
 
-
+	core_to_frontend.set_timer(NETWORK_REFRESH_INTERVAL);
 	std::cout << "AVOE Frontend CLI Test Mode\n";
 	avoe_clock_t ui_timer;
 	avoe_clock_t network_timer;
@@ -175,16 +176,10 @@ void tardigrade_raw(){
 	ui_timer.reset();
 	while(1){
 		usleep(1000);
-		if (network_timer.getElaspedTimeMS() > NETWORK_REFRESH_INTERVAL){
-			core_to_frontend.rx();
-			network_timer.reset();
-		}
+	
+		core_to_frontend.refresh();
 
 		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-			map_sensor_string(&tardigrade_imu, rx_message, 2048);
-			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
-			map_sensor_string(&tardigrade_leak, rx_message, 2048);
-
 			std::cout << "--AVOE deckbox-cli--\n";
 			tardigrade_imu.print();
 			tardigrade_pressure.print();
@@ -196,9 +191,6 @@ void tardigrade_raw(){
 	}
 
 }
-
-
-//void tardigrade(const char *vector_in){
 
 void tardigrade(){
 	//setup controller
@@ -224,29 +216,32 @@ void tardigrade(){
 
 	float movement_scale = 0.5; //default 0.5
 
-	char t_vector_str[64];
-	char r_vector_str[64];
-	//initStr(vector_str, 64);
-	//strncpy(vector_str, vector_in, 64);
 
-	char rx_message[2048]; //big buffer
 
 	//networking setup
-	//temp
-	avoe_comm_transmitter r_vector_tx("message", "vector", 8112, IP_CORE); //implement a multi vector messaging scheme
 	avoe_comm_transmitter frontend_to_core("message", "vector", PORT_CORE_INPUT, IP_CORE);
-	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY);
+
+	avoe_comm_reciever core_to_frontend("sensor", "telemetry", PORT_CORE_TELEMETRY, 2000);
+
 
 	/* setup and initilizae all connections */	
-	frontend_to_core.set_message(t_vector_str, 128);
-	frontend_to_core.set_timer(10);	
+	core_to_frontend.add_sensor(&tardigrade_imu);
+	core_to_frontend.add_sensor(&tardigrade_pressure);
+	core_to_frontend.add_sensor(&tardigrade_leak);
+	core_to_frontend.add_motor(&thruster_SH);
+	core_to_frontend.add_motor(&thruster_BSH);
+	core_to_frontend.add_motor(&thruster_BPH);
+	core_to_frontend.add_motor(&thruster_Y);
 
-	r_vector_tx.set_message(r_vector_str, 128);
-	r_vector_tx.set_timer(10);	
+	
+
+	frontend_to_core.add_vector(&tm_vector);
+	frontend_to_core.add_vector(&rt_vector);
+	
+	core_to_frontend.set_timer(NETWORK_REFRESH_INTERVAL);
+	frontend_to_core.set_timer(NETWORK_REFRESH_INTERVAL);
 
 
-
-	core_to_frontend.set_message(rx_message, 2048);
 
 
 	std::cout << "AVOE Frontend CLI Test Mode\n";
@@ -257,43 +252,14 @@ void tardigrade(){
 	ui_timer.reset();
 	while(1){
 		usleep(1000);
-		if (network_timer.getElaspedTimeMS() > NETWORK_REFRESH_INTERVAL){
-			frontend_to_core.tx();
-			r_vector_tx.tx();
-			core_to_frontend.rx();
-			network_timer.reset();
-		}
 
+		core_to_frontend.refresh();
+		frontend_to_core.refresh();
 		// convert controller input into movement vector
 
 		tardigrade_manual_control(&deckbox_input, &tm_vector, &rt_vector, movement_scale);
 
-
-
-		initStr(t_vector_str, 64);
-		appendStr(t_vector_str, (std::to_string(tm_vector.x)).c_str(), 0);
-		appendStr(t_vector_str, ",", strlen(t_vector_str));
-		appendStr(t_vector_str, (std::to_string(tm_vector.y)).c_str(), strlen(t_vector_str));
-		appendStr(t_vector_str, ",", strlen(t_vector_str));
-		appendStr(t_vector_str, (std::to_string(tm_vector.z)).c_str(), strlen(t_vector_str));
-		appendStr(t_vector_str, ",", strlen(t_vector_str));
-
-		initStr(r_vector_str, 64);
-		appendStr(r_vector_str, (std::to_string(rt_vector.x)).c_str(), 0);
-		appendStr(r_vector_str, ",", strlen(r_vector_str));
-		appendStr(r_vector_str, (std::to_string(rt_vector.y)).c_str(), strlen(r_vector_str));
-		appendStr(r_vector_str, ",", strlen(r_vector_str));
-		appendStr(r_vector_str, (std::to_string(rt_vector.z)).c_str(), strlen(r_vector_str));
-		appendStr(r_vector_str, ",", strlen(r_vector_str));
-
-
-
-
 		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-			map_sensor_string(&tardigrade_imu, rx_message, 2048);
-			map_sensor_string(&tardigrade_pressure, rx_message, 2048);
-			map_sensor_string(&tardigrade_leak, rx_message, 2048);
-
 			std::cout << "--AVOE deckbox-cli--\n";
 			tardigrade_imu.print();
 			tardigrade_pressure.print();
@@ -309,9 +275,7 @@ void tardigrade(){
 
 			std::cout << "TRANSLATIONAL MOVEMENT VECTOR: " << tm_vector.x << ' ' << tm_vector.y << ' ' << tm_vector.z << '\n';			
 			std::cout << "ROTATIONAL MOVEMENT VECTOR: " << rt_vector.x << ' ' << rt_vector.y << ' ' << rt_vector.z << '\n';			
-			std::cout << "TRANSLATIONAL MOVEMENT VECTOR STRING: " << t_vector_str << '\n';			
-			std::cout << "ROTATIONAL MOVEMENT VECTOR STRING: " << r_vector_str << '\n';			
-			vtClear();
+			//vtClear();
 			ui_timer.reset();
 		}
 

@@ -43,6 +43,11 @@ class sensor_t{
 		void log(log_t *log);
 		void print();
 		size_t getFieldCount();
+		size_t getBufferSize(); //used for io.h
+		void writeToBuffer(char *buffer); // used for io.h 
+
+
+
 };
 
 #endif
