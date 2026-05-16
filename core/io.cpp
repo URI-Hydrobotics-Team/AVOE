@@ -303,12 +303,15 @@ avoe_comm_reciever::avoe_comm_reciever(const char *type_in, const char *channel,
 	sensor_count = 0;
 	vector_count = 0;
 	motor_count = 0;
+	string_count = 0;
 	data_message_len = 0;
 	//null ptrs
 	motor_table = nullptr;
 	sensor_table = nullptr;
 	vector_table = nullptr;
-	data_message = nullptr;	
+	string_table = nullptr;
+	data_message = nullptr;
+		
 
 
 	// setup socket
@@ -753,7 +756,18 @@ void map_vector(vector_t *vecta, const char *str, size_t n){
 
 }
 
+int map_string(char string, const char *str, size_t n){
+	char temp_str[n];
+	size_t temp_index = 0;
 
+	for(int i = 0; i < n; i++){
+		if(str[i] == '*'){
+			return -1;
+		}
+		temp_str[temp_index] = str[i];
+		temp_index++;
+	}
+}
 
 void avoe_comm_reciever::rx(){
 	// first we recieve via the socket
@@ -809,6 +823,7 @@ void avoe_comm_reciever::rx(){
 	size_t sensor_index = 0;
 	size_t motor_index = 0;
 	size_t vector_index = 0;
+	size_t string_index = 0;
 
 
 	for (index = 0; index < rx_message_len; index++){
@@ -831,7 +846,8 @@ void avoe_comm_reciever::rx(){
 					vector_index++;
 				}
 				if (section_index == 4){
-					//extract string
+					map_string(string_table[string_index], rx_buffer + index, rx_buffer_len);
+					string_index++;
 
 				}
 

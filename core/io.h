@@ -83,11 +83,12 @@ class avoe_comm_reciever{
 		size_t data_message_len;
 		rx_socket *socket;
 	
-		size_t sensor_count, vector_count, motor_count;
+		size_t sensor_count, vector_count, motor_count,string_count;
 		size_t rx_buffer_len;
 		sensor_t **sensor_table;
 		motor_t **motor_table;
 		vector_t **vector_table;
+		char *string_table;
 
 		avoe_clock_t clock;
 		unsigned int rx_period; //in ms
