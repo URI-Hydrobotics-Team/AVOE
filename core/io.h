@@ -67,7 +67,16 @@ class avoe_comm_transmitter{
 
 		// continous transmit based on clock period
 		void refresh();
+		
+		/*
+		tx/rx message structure
+		$<header>%<sensors>%<motors>%<vectors>%<string>$
 
+		$	start and end of message
+		%	start of new section
+		*	start of object
+		:	internal seperators
+		*/
 
 };
 
@@ -105,7 +114,19 @@ class avoe_comm_reciever{
 		void update_index();
 
 			
+		/*
+		Set methods string outline
+		structure <type>:<model>:<field count>:DATA:<field 1>:<field 2>:...%
+		
+		tx/rx message structure
+		$<header>%<sensors>%<motors>%<vectors>%<string>$
 
+		$	start and end of message
+		%	start of new section
+		*	start of object
+		:	internal seperators
+
+		*/
 
 
 };
