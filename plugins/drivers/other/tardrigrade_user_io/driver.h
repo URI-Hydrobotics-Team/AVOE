@@ -1,7 +1,7 @@
-#include <cstring.h>
-#include "lib.h"
-
-
+#include <cstring>
+#include "../../../../lib/lib.h"
+#include <cstdint>
+#include <iostream>
 
 #ifndef AVOE_USER_IO
 #define AVOE_USER_IO
@@ -23,8 +23,8 @@ class avoe_user_io{
 
 	public:
 
-		user_io;
-		~user_io;
+		avoe_user_io();
+		~avoe_user_io();
 		void init(bool gpio_is_init);
 		void add_output(uint8_t pin, const char *label, int8_t pull);
 		void add_input(uint8_t pin, const char *label, int8_t pull);

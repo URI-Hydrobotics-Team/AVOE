@@ -1,9 +1,8 @@
 #include "driver.h"
+#include <pigpio.h>
 
 
-
-
-void avoe_user_io::user_io(){
+avoe_user_io::avoe_user_io(){
 
 	//init strings
 	for (int i = 0; i < AVOE_USER_IO_DEVICES; i++){
@@ -13,15 +12,16 @@ void avoe_user_io::user_io(){
 
 }
 
+avoe_user_io::~avoe_user_io(){
+
+}
+
 
 void avoe_user_io::init(bool gpio_is_init){
 
 	if (!gpio_is_init){
-		gpioInitialize();	
-
+		gpioInitialise();
 	}
-
-
 }
 
 void avoe_user_io::add_output(uint8_t pin, const char *label, int8_t pull){
@@ -103,7 +103,7 @@ void avoe_user_io::add_input(uint8_t pin, const char *label, int8_t pull){
 uint8_t avoe_user_io::read(const char *label){
 
 	for (int i = 0; i < entries; i++){
-		if (strmcp(label, labels[i], AVOE_USER_IO_LABEL_SIZE) == 0{
+		if (strncmp(label,labels[i], AVOE_USER_IO_LABEL_SIZE) == 0){
 			
 			return gpioRead(pins[i]);
 		}
@@ -111,6 +111,7 @@ uint8_t avoe_user_io::read(const char *label){
 	}
 
 	std::cout << "[USER IO] No Output " << label << '\n';
+	return 255;
 
 }
 
@@ -123,7 +124,7 @@ void avoe_user_io::write(const char *label, uint8_t val){
 
 
 	for (int i = 0; i < entries; i++){
-		if (strmcp(label, labels[i], AVOE_USER_IO_LABEL_SIZE) == 0{
+		if (strncmp(label,labels[i], AVOE_USER_IO_LABEL_SIZE) == 0){
 			
 			gpioWrite(pins[i], val);
 		}
@@ -133,11 +134,3 @@ void avoe_user_io::write(const char *label, uint8_t val){
 	std::cout << "[USER IO] No Input " << label << '\n';
 
 }
-
-
-
-
-
-
-
-
