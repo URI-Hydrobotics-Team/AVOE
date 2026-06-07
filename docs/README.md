@@ -30,7 +30,6 @@ AVOE/
 	lib/
 	plugins/
 	tests/
-	tools/
 
 ```
 
@@ -44,9 +43,6 @@ The files `vehicle_setup.h` and `main.cpp` are where you are expected to setup y
 #### `lib/`
 #### `plugins/`
 #### `test/`
-#### `tools/`
-Originally AVOE was planned to have a program called `auto-tool` that would parse some kind of formatted text file (called the "manifest") containing a definition for a vehicle, essentially a list of all vehicle properties including sensors and motors. This tool would have lived under `tools/`. As of right now `auto-tool` is not implemented and there is no immediate plan to do so.
-
 ## Installation
 
 ### Dependency List for Debian Based Systems
