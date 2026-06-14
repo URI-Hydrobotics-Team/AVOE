@@ -52,22 +52,22 @@ void tardigrade_physical(){
 	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_transmitter tx_device1("sensor", "imu_message", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
-	tx_device1.add_sensor(&tardigrade_imu); //set source to imu
-	tx_device1.add_sensor(&tardigrade_pressure); //set source to imu
-	tx_device1.add_sensor(&tardigrade_leak); //set source to imu
-	tx_device1.add_motor(&thruster_SH);
-	tx_device1.add_motor(&thruster_BSH);
-	tx_device1.add_motor(&thruster_BPH);
-	tx_device1.add_motor(&thruster_Y);
+	avoe_comm_transmitter tx_device("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+	tx_device.add_sensor(&tardigrade_imu); //set source to imu
+	tx_device.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device.add_sensor(&tardigrade_leak); //set source to imu
+	tx_device.add_motor(&thruster_SH);
+	tx_device.add_motor(&thruster_BSH);
+	tx_device.add_motor(&thruster_BPH);
+	tx_device.add_motor(&thruster_Y);
 
 
-	tx_device1.set_timer(100); //set 100ms transmit interval
+	tx_device.set_timer(100); //set 100ms transmit interval
 	
 
 	vector_t translational_vector, rotational_vector;	
-	avoe_comm_reciever rx_device1("message", "vector", PORT_DECKBOX_INPUT, 2048);
-	rx_device1.set_timer(10);
+	avoe_comm_reciever rx_device("message", "vector", PORT_DECKBOX_INPUT, 2048);
+	rx_device.set_timer(10);
 	rx_device.add_vector(&translational_vector);
 	rx_device.add_vector(&rotational_vector);
 	
@@ -103,8 +103,8 @@ void tardigrade_physical(){
 		}
 		
 		// NETWORK REFRESH
-		tx_device1.refresh();
-		rx_device1.refresh();
+		tx_device.refresh();
+		rx_device.refresh();
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
 			
