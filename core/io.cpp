@@ -813,6 +813,11 @@ void avoe_comm_reciever::rx(){
 		return;
 	}
 
+	#ifdef VERBOSE
+
+	std::cout << "[IO] RX Header Match. Local: \"" << local_header << "\" Recevied: \"" <<  rx_buffer << "\"\n";
+	#endif
+
 
 	//std::cout << "header match\n";
 	//extract all fields
