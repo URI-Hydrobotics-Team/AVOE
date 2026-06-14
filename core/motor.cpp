@@ -80,7 +80,7 @@ char *motor_t::read(size_t field){
 
 
 void motor_t::write(const char *input, size_t field, size_t n){
-	initStr(data[field], 128);
+	initStr(data[field], n);
 	strncpy(data[field], input, n);
 	//NOTE n should be 128 or less
 }

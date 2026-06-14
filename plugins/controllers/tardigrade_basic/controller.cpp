@@ -1,6 +1,6 @@
 #include "controller.h"
 #include <string>
-
+#include <iostream>
 
 
 tardigrade_basic_controller_t::tardigrade_basic_controller_t(){
@@ -39,5 +39,6 @@ void tardigrade_basic_controller_t::send_vector(vector_t thrust_vector){ //we as
         std::strncpy(temp, std::to_string(total).c_str(), sizeof(temp));
         motorTable[i]->write(temp,0,sizeof(temp));
     }
-    
+	//std::cout << "basic controller call " << thrust_vector.x << "     " << thrust_vector.y << " " << thrust_vector.z << '\n';
+   
 } 

@@ -95,11 +95,18 @@ void tardigrade_physical(){
 			tardigrade_update_sensors_physical();
 			
 			// send vectors to controller
+			if (translational_vector.x == 0 && translational_vector.y == 0 && translational_vector.z == 0){
 
-			controller_full.send_translation_vector(translational_vector);
-			controller_full.send_lateral_vector(rotational_vector);
+
+				controller_full.send_lateral_vector(rotational_vector);
+			}
+
+			if (rotational_vector.x == 0 && rotational_vector.y == 0 && rotational_vector.z == 0){ 
+				controller_full.send_translation_vector(translational_vector);
+			}
+
+			//controller.send_vector(translational_vector);
 			sensor_timer.reset();
-;
 		}
 		
 		// NETWORK REFRESH
@@ -119,8 +126,9 @@ void tardigrade_physical(){
 
 			//update, print and log every one second
 			tardigrade.print();
-			std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
+			std::cout << "TRANSLATIONAL VECTOR " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
 
+			std::cout << "ROTATIONAL VECTOR " << rotational_vector.x << " " << rotational_vector.y << " " << rotational_vector.z << '\n';
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 			tardigrade_imu.log(&test_log); //log imu sensor data
 			tel_timer.reset(); //always reset
@@ -194,6 +202,9 @@ void tardigrade_virtual(){
 			tardigrade_update_sensors_dummy();
 			controller_full.send_translation_vector(translational_vector);
 			controller_full.send_lateral_vector(rotational_vector);
+
+			//controller.send_vector(translational_vector);
+
 			sensor_timer.reset();
 		}
 		

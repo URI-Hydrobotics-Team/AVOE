@@ -1,7 +1,6 @@
 #include "controller.h"
 #include <string>
-
-
+#include <iostream>
 
 tardigrade_controller_t::tardigrade_controller_t(){
 	name = nullptr;
@@ -22,6 +21,7 @@ void tardigrade_controller_t::init(const char *n, vehicle_t *vehicle_in){
 }
 
 void tardigrade_controller_t::send_translation_vector(vector_t thrust_vector){ //we assume pivot and orgin are about the center of the robot
+
     double x = thrust_vector.x;
     double y = thrust_vector.y;
     double z = thrust_vector.z;
@@ -32,12 +32,16 @@ void tardigrade_controller_t::send_translation_vector(vector_t thrust_vector){ /
         double total = (x * translation_thrust_table[i][0]) + (y * translation_thrust_table[i][1]) + (z * translation_thrust_table[i][2]);
         // Gets motor from vehicle objects motor table and writes the intended value to it 
         // (only works if motors in correct order of thrust_table)
-        std::string str = std::to_string(total);
-        char temp[str.length()];
+	char str[16];
+	
+	memset(str, 0, sizeof(char) * 16);
+	sprintf(str, "%f", total);
 
-        std::strncpy(temp, std::to_string(total).c_str(), sizeof(temp));
-        motorTable[i]->write(temp,0,sizeof(temp));
+        motorTable[i]->write(str, 0, 16);
     }
+
+
+
 }
 void tardigrade_controller_t::send_lateral_vector(vector_t thrust_vector){
     //Rotational movement vectors
@@ -51,10 +55,13 @@ void tardigrade_controller_t::send_lateral_vector(vector_t thrust_vector){
         double total = (rx * lateral_thrust_table[i][0]) + (ry * lateral_thrust_table[i][1]) + (rz * lateral_thrust_table[i][2]);
         // Gets motor from vehicle objects motor table and writes the intended value to it 
         // (only works if motors in correct order of thrust_table)
-        std::string str = std::to_string(total);
-        char temp[str.length()];
 
-        std::strncpy(temp, std::to_string(total).c_str(), sizeof(temp));
-        motorTable[i]->write(temp,0,sizeof(temp));
+	char str[16];
+	memset(str, 0, sizeof(char) * 16);
+	sprintf(str, "%f", total);
+
+        motorTable[i]->write(str, 0, 16);
+
+
     }
 }
