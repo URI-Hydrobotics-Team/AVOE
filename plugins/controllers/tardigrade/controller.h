@@ -31,12 +31,12 @@ class tardigrade_controller_t{
 
 		float lateral_thrust_table[6][3] = {
 		//  roll,pitch,yaw
-			{0.0, 1.0, 0},	//SH
-			{0.0, 0.5, 0},	//BSH
-			{0.0, 0.5, 0}, 	//BPH
-			{0.0, 0, 0.6}, 	//Y
-			{0, 0, 0.4}, //SS
-			{0, 0, -0.4}	//PS
+			{-1.0, 0.0, 0},	//SH
+			{5.0, 0.0, 0},	//BSH
+			{5.0, 0.0, 0}, 	//BPH
+			{0.0, 0.0, 1}, 	//Y
+			{0, 0, 0.0}, //SS
+			{0, 0, 0.0}	//PS
 		};
 		motor_t** motorTable;
 
