@@ -1,3 +1,2 @@
 # avoe-frontend-cli
-
-AVOE's dekcbox-cli equivelant
+AVOE's reference CLI frontend for tardigrade. The build target is referred to as "deckbox".

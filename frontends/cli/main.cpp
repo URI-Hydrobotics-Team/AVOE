@@ -13,7 +13,7 @@
 #include "../../lib/network.h"
 #include "../../core/io.h"
 #include "../../lib/controller.h"
-#include "../../lib/keyboard.h"
+//#include "../../lib/keyboard.h"
 #include "../../lib/vt100.h"
 #include "../../lib/clock.h"
 #include "../../plugins/gamepad_maps/sixaxis.h"
@@ -57,15 +57,6 @@ std::cout << "--- INPUT STAUS ---\n";
 	std::cout << "\t\tRight: " << deckbox_input->slr_x << ' ' << deckbox_input->slr_y << '\n';
 }
 
-
-void raw(){
-
-
-
-
-
-}
-
 void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_vector, vector_t *r_vector, float scale){
 		bool no_input = true;
 		t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
@@ -94,11 +85,11 @@ void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_ve
 
 		#ifdef F710
 		// translational
-		if (input->fc_2){
+		if (input->fc_4){
 			t_vector->x += scale;
 			no_input = false;
 		} 
-		if (input->fc_3){
+		if (input->fc_2){
 			t_vector->x -= scale;
 			no_input = false;
 		} 	
@@ -107,7 +98,7 @@ void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_ve
 			t_vector->y -= scale;
 			no_input = false;
 		} 
-		if (input->fc_4){
+		if (input->fc_3){
 			t_vector->y += scale;
 			no_input = false;
 		}
@@ -121,11 +112,11 @@ void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_ve
 			no_input = false;
 		}
 		if (input->sll_x == -1){
-			r_vector->y -= scale;
+			r_vector->z -= scale;
 			no_input = false;
 		}
 		if (input->sll_x == 1){
-			r_vector->y += scale;
+			r_vector->z += scale;
 			no_input = false;
 		}
 
@@ -151,13 +142,8 @@ void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_ve
 }
 void tardigrade_raw(){
 
-
-
 	tardigrade_setup_sensors_virtual();
 	std::cout << "[DEBUG] Setup Done\n";
-
-
-
 
 	//networking setup
 	avoe_comm_reciever core_to_frontend("sensor", "sensors", PORT_CORE_TELEMETRY, 2000);
