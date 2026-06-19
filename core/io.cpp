@@ -333,6 +333,15 @@ void avoe_comm_reciever::refresh(){
 		}		
 
 		clock.reset();
+	}else{
+		//Killswitch for when network connection is lost, Experimental currently
+		for(size_t i = 0; i < (sizeof(motor_table) / sizeof((motor_table)[0])); i++){
+			motor_t* motor = motor_table[i];
+			for(size_t j = 0; j < motor->getFieldCount();j++){
+				motor->write("0.0",j,sizeof("0.0"));
+			}
+		}
+		std::cout << "[IO] NETWORK CONNECTION LOST, BUILT IN KILL ACTIVE" << std::endl;
 	}
 }
 
