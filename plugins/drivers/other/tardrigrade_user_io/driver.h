@@ -19,8 +19,6 @@ class avoe_user_io{
 		uint8_t pins[AVOE_USER_IO_DEVICES];
 		int8_t pull_status[AVOE_USER_IO_DEVICES];
 		
-
-
 	public:
 
 		avoe_user_io();

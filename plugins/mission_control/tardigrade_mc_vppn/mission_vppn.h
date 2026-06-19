@@ -1,19 +1,13 @@
 #define KEYWORD_LEN 128
+#include "lib.h"
+#include <stdint.h>
 
 
-class mission_vppn_t{
+struct mission_vppn{
 
-	private:
-
-		char keyword[KEYWORD_LEN];
-		size_t keyword_len;
-		uint8_t type; //main, hold, dr
-		float speed;	
-
-	public:
-
-		mission_vppn(const char *keyword_, size_t keyword_len_, uint8_t type_, float speed_);
-		~mission_vppn;
-
+	char keyword[KEYWORD_LEN];
+	size_t keyword_len;
+	uint8_t type; //main, hold, dr
+	float speed;	
 
 };
