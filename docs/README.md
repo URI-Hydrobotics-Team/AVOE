@@ -80,7 +80,7 @@ Included within the directory is some examples of rewritten drivers that have be
 AVOE also supports PWM enabled Thrusters. We use our own middleware for BlueRobotics thrusters. Currently we use a Microcontroller that interfaces with PPSTI. We plan on changing PPSTI to be supported on a Jetson Nano in the future.
 
 ## Networking
-Chris do this stuff
+Wizard Magic (To be done at a later time)
 
 ## Vehicle Setup and main.cpp
 Vehicle Setup is done within "Vehicle_Setup.h" . This allows for a simplified setup process when creating different parameters for vehicles. This may at a future time be changed to a single config file to allow for a single place for all parameters to be changed. This file should be treated as a configuration file for your specific vehicle. This is where most Vehicle specific methods should be called when you have your own implementation of AVOE. 
