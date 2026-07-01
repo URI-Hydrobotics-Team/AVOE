@@ -21,5 +21,5 @@ class dummy_mission_vppn{
         std::string data;
     public:
         void getRandData();
-        std::string getData();
+        std::string getData(size_t amtOfMsgs);
 };
