@@ -24,6 +24,10 @@
 #define MAX_PER_VEHICLE_CLOCKS 5
 #define TARDIGRADE_SENSOR_UPDATE_INTERVAL 500
 
+/* ROBOSUB */
+#define TASK_TIMEOUT 10 //seconds
+
+
 
 /* NETWORKING */
 //#define IP_DECKBOX "127.0.0.1"

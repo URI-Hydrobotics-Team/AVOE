@@ -30,10 +30,55 @@
 
 */
 
-/* test function */
+
+/* 
+
+	ROBOSUB TASKS
+	This is the simplest way to implement task selection, essentially each task is it's own target. A better way would be to integrate this into a 'tardigrade_physical()' function that handles selecting tasks based on signals recieved from deckbox.
+	
 
 
-void tardigrade_physical(){
+*/
+
+void tardigrade_task_1(){
+	printf("[MAIN] QUALIFICATION TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	usleep(1000 * 1000 * TASK_TIMEOUT);
+	
+
+#ifdef TARGET_TARDIGRADE
+#endif
+
+
+}
+
+void tardigrade_task_2(){
+
+	printf("[MAIN] QUALIFICATION TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	usleep(1000 * 1000 * TASK_TIMEOUT);
+#ifdef TARGET_TARDIGRADE
+#endif
+
+}
+
+void tardigrade_task_3(){
+
+	printf("[MAIN] QUALIFICATION TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	usleep(1000 * 1000 * TASK_TIMEOUT);
+#ifdef TARGET_TARDIGRADE
+#endif
+
+}
+
+
+
+
+
+
+
+
+
+
+void tardigrade_remote(){
 
 #ifdef TARGET_TARDIGRADE
 
@@ -243,8 +288,10 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	std::cout << "\ttardigrade_virtual\t(run the tardigrade_virtual() function and quit)\n"; 
-	std::cout << "\ttardigrade_physical\t(run the tardigrade_physical() function and quit)\n"; 
+	std::cout << "\ttardigrade_virtual\t(run tardigrade virtual configuration for testing)\n"; 
+	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
+	std::cout << "\ttardigrade_task <task number>\t(place holder robosub task)\n"; 
+
 }
 
 
@@ -265,13 +312,38 @@ int main(int argc, char *argv[]){
 	/* Define arguments for custom configurations here */
 
 	if (strncmp(argv[1], "tardigrade_virtual", 32) == 0){
-		tardigrade_virtual(); //points to a test config
+		tardigrade_virtual();
 		return 0;
 	}
-	if (strncmp(argv[1], "tardigrade_physical", 32) == 0){
-		tardigrade_physical(); //points to a test config
+	if (strncmp(argv[1], "tardigrade_remote", 32) == 0){
+		tardigrade_remote();
 		return 0;
 	}
+
+	if (strncmp(argv[1], "tardigrade_task", 32) == 0){
+		if (strncmp(argv[2], "qual", 16) == 0){
+		
+			tardigrade_task_1();
+			return 0;
+		}
+		if (strncmp(argv[2], "two", 16) == 0){
+		
+			tardigrade_task_2();
+			return 0;
+		}
+
+		if (strncmp(argv[2], "three", 16) == 0){
+		
+			tardigrade_task_3();
+			return 0;
+		}
+
+		std::cout << "Invalid Task. Try \"avoe help\"\n";
+
+		return 0;
+	}
+
+
 	std::cout << "Invalid Argument. Try \"avoe help\"\n";
 
 	return 0;
