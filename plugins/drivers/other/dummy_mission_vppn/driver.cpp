@@ -18,6 +18,14 @@ void dummy_mission_vppn::getRandData(){
 
     xOffset = rand() % X_OFFSET_MAX;
     yOffset = rand() % Y_OFFSET_MAX;
+} 
+
+std::string tm_to_string(const std::tm& tm){
+    std::string str;
+    str.resize(sizeof(std::tm));
+
+    std::memcpy(&str[0], &tm, sizeof(std::tm));
+    return str;
 }
 
 std::string dummy_mission_vppn::getData(size_t amountOfMsgs){
@@ -31,12 +39,4 @@ std::string dummy_mission_vppn::getData(size_t amountOfMsgs){
         "|" + std::to_string(xOffset) + std::to_string(yOffset) + std::to_string(zDistance) + "\n";
     }
     return output;
-}
-
-std::string tm_to_string(const std::tm& tm){
-    std::string str;
-    str.resize(sizeof(std::tm));
-
-    std::memcpy(&str[0], &tm, sizeof(std::tm));
-    return str;
 }

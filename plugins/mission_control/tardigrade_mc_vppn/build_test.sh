@@ -1,1 +1,1 @@
-g++ -o vppn_simulation test.cpp ../../../core/io.cpp ../../../lib/lib.cpp ../../drivers/other/dummy_mission_vppn/driver.cpp mc_vppn.cpp ../../controllers/tardigrade/controller.cpp
+g++ -o vppn_simulation test.cpp ../../../core/io.cpp ../../../core/motor.cpp ../../../core/sensor.cpp ../../../core/vehicle.cpp ../../../core/log.cpp  ../../../lib/network.cpp ../../../lib/lib.cpp ../../../lib/clock.cpp ../../drivers/other/dummy_mission_vppn/driver.cpp mc_vppn.cpp ../../controllers/tardigrade/controller.cpp
