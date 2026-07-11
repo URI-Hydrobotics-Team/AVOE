@@ -1,8 +1,8 @@
 #include "../../../lib/lib.h"
 #include <stdint.h>
 
-#ifndef MISSION_VPPN
-#define MISSION_VPPN
+#ifndef MISSION_VPPN_H
+#define MISSION_VPPN_H
 
 #define MISSION_VPPN_KEYWORD_LEN 128
 struct vppn_mission_t{
