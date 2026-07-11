@@ -1,11 +1,13 @@
-#define KEYWORD_LEN 128
-#include "lib.h"
+#include "../../../lib/lib.h"
 #include <stdint.h>
 
+#ifndef MISSION_VPPN
+#define MISSION_VPPN
 
-struct mission_vppn{
+#define MISSION_VPPN_KEYWORD_LEN 128
+struct vppn_mission_t{
 
-	char keyword[KEYWORD_LEN];
+	char keyword[MISSION_VPPN_KEYWORD_LEN];
 	size_t keyword_len;
 	uint8_t type;
 	/*
@@ -17,3 +19,5 @@ struct mission_vppn{
 	float speed;	
 
 };
+
+#endif

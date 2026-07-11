@@ -69,15 +69,6 @@ void tardigrade_task_3(){
 
 }
 
-
-
-
-
-
-
-
-
-
 void tardigrade_remote(){
 
 #ifdef TARGET_TARDIGRADE

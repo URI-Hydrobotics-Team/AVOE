@@ -2,26 +2,27 @@
 
 
 
-tardigrade_mc_vppn_t::tardigrade_mc_vppn_t();
-tardigrade_mc_vppn_t::~tardigrade_mc_vppn_t();
+//tardigrade_mc_vppn_t::tardigrade_mc_vppn_t();
+//tardigrade_mc_vppn_t::~tardigrade_mc_vppn_t();
 
 
-void tardigrade_mc_vppn_t::init(vppn_mission_t *vppn_main_object, vppn_mission_t *vppn_dr_object, size_t vppn_main_object_len_, size_t vppn_dr_object_len_, vector_t *offset_, char *keyword_str_, vector_t *output_){
-
+void tardigrade_mc_vppn_t::init(vppn_mission_t *vppn_main_object, vppn_mission_t *vppn_dr_object, size_t vppn_main_object_len_, size_t vppn_dr_object_len_, char *keyword_str_raw_, size_t keyword_str_raw_len_, vector_t *output_translational_vector_, vector_t *output_lateral_vector_){
 
 	vppn_main_object_index = 0;
 	vppn_dr_object_index = 0;
 	vppn_main_object_len = vppn_main_object_len_;
 	vppn_dr_object_len = vppn_dr_object_len_;
-	keyword_str = keyword_str_;
-	offset_vector = offset_;
-	output_vector = output_;
-	clock.reset();
-
+	keyword_str_raw = keyword_str_raw_;
+	keyword_str_raw_len = keyword_str_raw_len_;
+	output_translational_vector = output_translational_vector_;
+	output_lateral_vector = output_lateral_vector_;
+	main_clock.reset();
+	adjustment_timer.reset();
+	scan_timer.reset();
 }
 
 
-void tardigrade_mc_vppn::sweep_and_scan(int angle){
+void tardigrade_mc_vppn_t::sweep_and_scan(int angle){
 	std::cout << "[TARDIGRADE MC VPPN] sweep and scan started for " << angle << " degrees"<< '\n';
 
 
@@ -32,38 +33,37 @@ void tardigrade_mc_vppn::sweep_and_scan(int angle){
 
 
 
-void tardigrade_mc_vppn::reset(){
+void tardigrade_mc_vppn_t::reset(){
 	vppn_main_object_index = 0;
 	vppn_dr_object_index = 0;
-	global_state = 0;
+	global_state = TARDIGRADE_MC_VPPN_GLOBAL_STATE_RESET;
 	paused = false;
 }
 
 
 
-void tardigrade_mc_vppn::start(){
-	global_state = 3; // scan initially
+void tardigrade_mc_vppn_t::start(){
+	global_state = TARDIGRADE_MC_VPPN_GLOBAL_STATE_SCAN; // scan initially
 
 }
-void tardigrade_mc_vppn::kill(){
-	global_state = -1; //killed
+void tardigrade_mc_vppn_t::kill(){
+	global_state = TARDIGRADE_MC_VPPN_GLOBAL_STATE_STOP; //killed
 	vector_t zero_vector(0,0,0);
 	controller->send_lateral_vector(zero_vector);
 	controller->send_translation_vector(zero_vector);
-}
 
-
-void tardigrade_mc_vppn::pause(){
 	paused = true;
 }
-void tardigrade_mc_vppn::resume(){
+
+
+void tardigrade_mc_vppn_t::resume(){
 	paused = false;
 
 }
 
 
 
-tardigrade_mc_vppn::refresh(){
+void tardigrade_mc_vppn_t::refresh(){
 
 	vector_t output_temp(0, 0, 0);
 
@@ -76,62 +76,76 @@ tardigrade_mc_vppn::refresh(){
 
 	 */
 
-	//offset_vector.x and offset_vector.y define the pixel offsets RXed for CV
+	//offset_vector.x and offset_vector.y define the pixel offsets RXed from CV
 
 
 	//check timers
 
-	if (adjustment_timer.getElaspedMS() > TARDIGRADE_MC_VPPN_ADJUST_TIME && local_state == 1){
+	if (adjustment_timer.getElaspedTimeMS() > TARDIGRADE_MC_VPPN_ADJUST_TIME && local_state == TARDIGRADE_MC_VPPN_LOCAL_STATE_ADJUSTING){
 		//done adjusting course, switch back to following course
-		local_state = 0;
+		local_state = TARDIGRADE_MC_VPPN_LOCAL_STATE_FOLLOWING;
 
 
 	}
 
+	//extract offset from keyword
+	int cv_x_offset;
+	int cv_y_offset;
 	// determine if we should dead reckon
-	bool dead_reckon = !(strncmp(keyword_str, vppn_main_object_ptr[vppn_main_object_index]->keyword, vppn_main_object_ptr[vppn_main_object_index]->keyword_len) == 0); //false if match, true if no
-	dead_reckon = dead_reckon * (main_clock.getElaspedTimeMS > TARDIGRADE_MC_VPPN_DEAD_RECKON_DELAY) * !paused;
+	bool dead_reckon = !(strncmp(keyword_str_raw, vppn_main_object_ptr[vppn_main_object_index].keyword, vppn_main_object_ptr[vppn_main_object_index].keyword_len) == 0);
+	//this comparison is too simple
+	//false if match, true if no
+	
 
-	if (!dead_reckon && global_state == 1){
+	dead_reckon = dead_reckon * (main_clock.getElaspedTimeMS() > TARDIGRADE_MC_VPPN_DEAD_RECKON_DELAY) * !paused;
+
+	if (!dead_reckon && global_state == TARDIGRADE_MC_VPPN_GLOBAL_STATE_RUNNING){
+		
 		main_clock.reset(); // update clock everytime we check and get a match
 
 
 
-		int cv_x_offset = offset->x;
-		int cv_y_offset = offset->y;
-		float speed = offset->speed;
+
+		float speed = vppn_main_object_ptr[vppn_main_object_index].speed;
 
 
-		if (cv_x_offset > TARDIGRADE_MC_VPPN_PIXEL_BUFFER && local_state != 1){
+		if (cv_x_offset > TARDIGRADE_MC_VPPN_PIXEL_BUFFER && local_state != TARDIGRADE_MC_VPPN_LOCAL_STATE_ADJUSTING){
 
+			
 
-			//scale lateral_adjusment vector memebrs
+			float yaw_adjustment = 1.0 * cv_x_offset / TARDIGRADE_MC_VPPN_CV_RESOLUTION_X;
 			vector_t adjustment;
-			adjustment.x = lateral_adjustment.x * 1;
-			adjustment.y = lateral_adjustment.y * 1;
-			adjustment.z = lateral_adjustment.z * 1;
+			adjustment.x = 0;
+			adjustment.y = 0 ;
+			adjustment.z =  yaw_adjustment; //YAW
+
 			controller->send_lateral_vector(adjustment);
+	
 			adjustment_timer.reset();
-			local_state = 1;
+			local_state = TARDIGRADE_MC_VPPN_LOCAL_STATE_ADJUSTING;
 		}
 
-		if (local_state == 0){
+		if (local_state == TARDIGRADE_MC_VPPN_LOCAL_STATE_FOLLOWING){
 			//following course
 
 			vector_t course;
 			//define course here
+			course.x = 0;
+			course.y = speed;
+			course.z = 0;
+
 			controller->send_translation_vector(course);
 			
 		}
 
 	
-	}else if (global_state == 1){
+	}else if (global_state == TARDIGRADE_MC_VPPN_GLOBAL_STATE_RUNNING){
 
 		//dead reckon now
 		
 		/*
 		get vars from dr object and send scan signal
-		*/		
+		*/	
 
 
 	
