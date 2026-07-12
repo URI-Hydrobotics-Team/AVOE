@@ -20,6 +20,7 @@
 #include "mission.h"
 #include "../controllers/tardigrade/controller.h"
 #include "../middleware/general-sensor/imu.h"
+#include "../../core/sensor.h"
 #include "../../lib/clock.h"
 
 
@@ -32,13 +33,14 @@ class tardigrade_mc_basic_t{
 		tardigrade_mission_basic_t **mission_ptr;
 		avoe_clock_t main_timer, mission_timer;
 		uint8_t state;
-
-
+		sensor_t *imu;
+		vector_t imu_orientation;
+		uint16_t start_orientation;
 	public:
 
 		mission_control_tardigrade_t();
 		~mission_control_tardigrade_t();
-		void init(tardigrade_controller_t *controller, tardigrade_mission_basic_t **missions, size_t mission_count);
+		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count);
 		void refresh(); // update
 		void start(); //start / resume
 		void stop(); // stop

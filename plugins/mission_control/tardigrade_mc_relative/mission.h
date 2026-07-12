@@ -16,7 +16,8 @@ struct tardigrade_mission_basic_t{
 	vector_t translational_movement, lateral_movement;
 
 	bool maintain_pose;
-	uint16_t desired_pose, desired_pitch, desired_roll;
+	uint16_t desired_yaw, desired_pitch, desired_roll;
+	uint16_t initial_yaw, initial_pitch, initial_roll;
 };
 
 #endif
