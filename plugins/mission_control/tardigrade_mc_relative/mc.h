@@ -44,7 +44,6 @@ class tardigrade_mc_basic_t{
 		void stop(); // stop
 		void hold(); //hold position
 		void reset();
-
 };
 
 
