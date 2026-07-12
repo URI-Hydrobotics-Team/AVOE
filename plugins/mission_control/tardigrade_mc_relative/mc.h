@@ -35,7 +35,6 @@ class tardigrade_mc_basic_t{
 		uint8_t state;
 		sensor_t *imu;
 		vector_t imu_orientation;
-		uint16_t start_orientation;
 	public:
 
 		mission_control_tardigrade_t();
