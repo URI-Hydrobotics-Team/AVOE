@@ -158,47 +158,107 @@ void tardigrade_mc_vppn_t::refresh(){
 
 }
 
-/*
-
-void CVTranslation(const char* CVData, size_t mode){
+void tardigrade_mc_vppn_t::CVTranslation(const char* CVData, size_t mode){
 	char temp_str[strlen(CVData)];
+
 	if(mode == 1){
 		//Virtual
-		size_t objCounter = 0;
-		size_t barCount = 0;
+		size_t charIndex = 0;
 		size_t temp_index = 0;
 
 		char name[32];
 		uint16_t duration;
 		float speed;
-		vector_t translation_vector, lateral_movement;
+		vector_t translational_movement, lateral_movement;
 
-		for(size_t i = 0; i < strlen(CVData); i++){
-			initStr(temp_str,32);
-			if(objCounter == 0 || CVData[i] == ':'){
-				if (barCount == 0){
-					name = std::stod(temp_str);
-					temp_index = 0;
-					initStr(temp_str, 32);
-				}
+		initStr(name,32);
 
-				if (barCount == 1){
-					y = std::stod(temp_str);
-					temp_index = 0;
-					initStr(temp_str, 32);
-				}
-
-				if (barCount == 2){
-					z = std::stod(temp_str);
-					temp_index = 0;
-					initStr(temp_str, 32);
+		temp_index = 0;
+		for(charIndex = 1; charIndex < strlen(CVData); charIndex++){
+			if(CVData[charIndex] == '|'){
 				break;
+			}
+			temp_str[temp_index] = CVData[charIndex];
+			temp_index++;
+		}
+		strncpy(name, temp_str, temp_index);
+		temp_index = 0;
+
+		for(charIndex += 1; charIndex < strlen(CVData); charIndex++){
+			if(CVData[charIndex] == '|'){
+				break;
+			}
+			temp_str[temp_index] = CVData[charIndex];
+			temp_index++;
+		}
+
+		speed = strtof(temp_str,NULL);
+		size_t commaCount = 0;
+
+		for(charIndex += 1; charIndex < strlen(CVData); charIndex++){
+			if(CVData[charIndex] == '|'){
+				break;
+			}
+			temp_str[temp_index] = CVData[charIndex];
+			temp_index++;
+		}
+
+		duration = (uint16_t)atoi(temp_str);
+		temp_index = 0;
+
+		for(charIndex += 1; charIndex < strlen(CVData); charIndex++){
+			if(CVData[charIndex] == '|'){
+				break;
+			}
+			temp_str[temp_index] = CVData[charIndex];
+			temp_index++;
+		}
+
+		for(size_t i = 0; i < 3; i++){
+			for(charIndex += 1; charIndex < strlen(CVData); charIndex++){
+				if(CVData[charIndex] == '|'){
+					break;
+				}else if(CVData[charIndex] == ','){
+					commaCount++;
 				}
-				objCounter++;
-				temp_str[temp_index] = str[i];
+				temp_str[temp_index] = CVData[charIndex];
 				temp_index++;
 			}
+			switch(commaCount){
+				case 1:
+					translational_movement.x = std::stod(temp_str);
+				case 2:
+					translational_movement.y = std::stod(temp_str);
+				case 3:
+					translational_movement.z = std::stod(temp_str);
+			}
 		}
+
+		for(size_t i = 0; i < 3; i++){
+			for(charIndex += 1; charIndex < strlen(CVData); charIndex++){
+				if(CVData[charIndex] == '|'){
+					break;
+				}else if(CVData[charIndex] == ','){
+					commaCount++;
+				}
+				temp_str[temp_index] = CVData[charIndex];
+				temp_index++;
+			}
+			switch(commaCount){
+				case 1:
+					lateral_movement.x = std::stod(temp_str);
+				case 2:
+					lateral_movement.y = std::stod(temp_str);
+				case 3:
+					lateral_movement.z = std::stod(temp_str);
+			}
+		}
+
+		strncpy(rawCV.name,name,32);
+		rawCV.duration = duration;
+		rawCV.speed = speed;
+		rawCV.translational_movement = translational_movement;
+		rawCV.lateral_movement = lateral_movement;
 	}else if (mode == 2){
 		//Physical
 	}else{
@@ -206,4 +266,3 @@ void CVTranslation(const char* CVData, size_t mode){
 	}
 }
 
-*/

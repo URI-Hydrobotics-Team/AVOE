@@ -3,6 +3,7 @@
 #include "../../../lib/lib.h"
 #include "../../../lib/clock.h"
 #include "../../controllers/tardigrade/controller.h"
+#include "cv.h"
 
 
 #ifndef TARDIGRADE_MC_VPPN
@@ -44,12 +45,8 @@ class tardigrade_mc_vppn_t{
 		size_t vppn_dr_object_index;
 		tardigrade_controller_t *controller;
 		
-		//from CV (input)
-		char *keyword_str_raw;
-		size_t keyword_str_raw_len;
-
-		//to controller (output)
-		vector_t *output_translational_vector, *output_lateral_vector;
+		//CV raw data, Input/Output stored here. Stored in cv.h
+		tardigrade_mission_cv_t rawCV;
 
 		avoe_clock_t adjustment_timer, main_clock, scan_timer;
 		short global_state, local_state;
@@ -81,7 +78,7 @@ class tardigrade_mc_vppn_t{
 		void kill(); //send 0 vector
 		void hold(); //stop movement and hold position
 		void resume(); //resume from hold or kill
-		//void CVTranslation(const char* CVData, size_t mode);
+		void CVTranslation(const char* CVData, size_t mode);
 
 		
 
