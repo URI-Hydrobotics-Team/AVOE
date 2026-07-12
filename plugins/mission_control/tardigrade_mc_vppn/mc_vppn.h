@@ -81,7 +81,7 @@ class tardigrade_mc_vppn_t{
 		void kill(); //send 0 vector
 		void hold(); //stop movement and hold position
 		void resume(); //resume from hold or kill
-		
+		//void CVTranslation(const char* CVData, size_t mode);
 
 		
 

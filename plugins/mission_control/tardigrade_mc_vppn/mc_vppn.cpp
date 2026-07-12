@@ -157,8 +157,55 @@ void tardigrade_mc_vppn_t::refresh(){
 
 
 }
+/*
 
+void CVTranslation(const char* CVData, size_t mode){
+	char temp_str[strlen(CVData)];
+	if(mode == 1){
+		//Virtual
+		size_t objCounter = 0;
+		size_t barCount = 0;
+		size_t temp_index = 0;
 
+		char name[32];
+		uint16_t duration;
+		float speed;
+		vector_t translation_vector, lateral_movement;
+
+		for(size_t i = 0; i < strlen(CVData); i++){
+			initStr(temp_str,32);
+			if(objCounter == 0 || CVData[i] == ':'){
+				if (barCount == 0){
+					name = std::stod(temp_str);
+					temp_index = 0;
+					initStr(temp_str, 32);
+				}
+
+				if (barCount == 1){
+					y = std::stod(temp_str);
+					temp_index = 0;
+					initStr(temp_str, 32);
+				}
+
+				if (barCount == 2){
+					z = std::stod(temp_str);
+					temp_index = 0;
+					initStr(temp_str, 32);
+				break;
+				}
+				objCounter++;
+				temp_str[temp_index] = str[i];
+				temp_index++;
+			}
+		}
+	}else if (mode == 2){
+		//Physical
+	}else{
+		fprintf(stderr,"Please enter a correct mode (1(Virtual),2(Physical))\n");
+	}
+}
+
+*/
 
 
 
