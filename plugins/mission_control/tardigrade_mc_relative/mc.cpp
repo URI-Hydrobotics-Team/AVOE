@@ -58,9 +58,9 @@ void tardigrade_mc_basic_t::refresh(){
 
 			if (mission_ptr[mission_index]->maintain_pose){
 				uint16_t yaw_offset, pitch_offset, roll_offset;
-				yaw_offset = mission_ptr[mission_index]->desired_yaw - imu_orientation.x;
-				pitch_offset = mission_ptr[mission_index]->desired_pitch - imu_orientation.y;
-				roll_offset = mission_ptr[mission_index]->desired_roll - imu_orientation.z;
+				yaw_offset = mission_ptr[mission_index]->initial_yaw - imu_orientation.x;
+				pitch_offset = mission_ptr[mission_index]->initial_pitch - imu_orientation.z;
+				roll_offset = mission_ptr[mission_index]->initial_roll - imu_orientation.y;
 
 				//compensate if needed
 

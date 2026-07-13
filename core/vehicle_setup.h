@@ -31,10 +31,16 @@
 #include "../plugins/drivers/sensors/leak-sensor-dummy/driver.h"
 
 
-// INCLUDE OTHER PLUGINS
+// INCLUDE CONTROLLERS
 #include "../plugins/controllers/tardigrade_basic/controller.h"
 //#include "../plugins/drivers/sensors/adafruit_bno055/tools/restore_offsets/restore_offsets.h" //restore_offsets for imu
 #include "../plugins/controllers/tardigrade/controller.h"
+
+// INCLUDE AUTONOMY
+#include "../plugins/mission_control/tardigrade_mc_relative/mission.h"
+#include "../plugins/mission_control/tardigrade_mc_relative/mc.h"
+
+
 
 
 // INCLUDE REAL DRIVERS

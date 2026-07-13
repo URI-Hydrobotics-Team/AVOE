@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "mc.h"
+#include "mission.h"
 #include "../../../core/io.h"
 
 /*
@@ -20,6 +21,17 @@
 
 
 int main(int argc, char **argv){
+
+	// create objects
+	tardigrade_controller_t controller;
+	sensor_t imu;
+	tardigrade_mc_basic_t mc;	
+	tardigrade_mission_basic_t mission_1, mission_2, mission_3, mission_4;	
+	tardigrade_mission_basic_t* missions[4] = {&mission_1, &mission_2, &mission_3, &mission_4};
+	
+	mc.init(&controller, &imu, missions, 4, 0.05);
+
+
 
 	return 0;
 }
