@@ -27,7 +27,7 @@ void tardigrade_mc_basic_t::init(tardigrade_controller_t *controller_, sensor_t 
 	state = TARDIGRADE_MC_BASIC_STATE_STOPPED;
 	main_timer.reset();
 	mission_timer.reset();
-	
+
 }
 
 
@@ -35,36 +35,55 @@ void tardigrade_mc_basic_t::refresh(){
 	update_imu();
 
 	if (state == TARDIGRADE_MC_BASIC_STATE_RUNNING){
-		
-		if (mission_timer.getElaspedTimeMS() , mission_ptr[mission_index].duration){
 
-		// send base vectors
-		controller->send_lateral_vector();
-		controller->send_translational_vector();
-		
-		// maintain pose
+		if (mission_timer.getElaspedTimeMS() < mission_ptr[mission_index].duration){
 
-		if (mission_ptr[mission_index].maintain_pose){
-			uint16_t yaw_offset, pitch_offset, roll_offset;
-			yaw_offset = desired_yaw - imu_orientation.x;
-			pitch_offset = desired_yaw - imu_orientation.y;
-			roll_offset = desired_roll - imu_orientation.z;
-						
-			//compensate if needed
+			//we are in a mission
+			vector_t translational, lateral;
 
-			if (abs(yaw_offset) > adjustment_compensation){
-				printf("[MC REN] yaw compensation required\n");
+			translational.x = mission_ptr[mission_index].translational_movement.x;
+			translational.y = mission_ptr[mission_index].translational_movement.y;
+			translational.z = mission_ptr[mission_index].translational_movement.z;
+
+			lateral.x = mission_ptr[mission_index].lateral_movement.x;
+			lateral.y = mission_ptr[mission_index].lateral_movement.y;
+			lateral.z = mission_ptr[mission_index].lateral_movement.z;
+
+
+			// maintain pose
+
+			if (mission_ptr[mission_index].maintain_pose){
+				uint16_t yaw_offset, pitch_offset, roll_offset;
+				yaw_offset = desired_yaw - imu_orientation.x;
+				pitch_offset = desired_yaw - imu_orientation.y;
+				roll_offset = desired_roll - imu_orientation.z;
+
+				//compensate if needed
+
+				if (abs(yaw_offset) > adjustment_compensation){
+					printf("[MC REN] yaw compensation required\n");
+					//do some stuff to the lateral johns
+				}
+
+				if (abs(pitch_offset) > adjustment_compensation){
+					printf("[MC REN] pitch compensation required\n");
+				}
+				if (abs(roll_offset) > adjustment_compensation){
+					printf("[MC REN] roll compensation required\n");
+				}
+
+
 			}
+			//wont work like this
+			switch (mission_ptr[mission_index].movement_type){
 
-			if (abs(pitch_offset) > adjustment_compensation){
-				printf("[MC REN] pitch compensation required\n");
+				case MISSION_BASIC_LATERAL_ONLY:
+					controller->send_lateral_vector(lateral);
+					break;
+				case MISSION_BASIC_TRANSLATIONAL_ONLY:
+					controller->send_translational_vector(translational);	
+					break;
 			}
-			if (abs(roll_offset) > adjustment_compensation){
-				printf("[MC REN] roll compensation required\n");
-			}
- 	
-			
-		}
 
 			//running
 		}else{
@@ -84,10 +103,10 @@ void tardigrade_mc_basic_t::refresh(){
 				//end of missions
 				state = TARDIGRADE_MC_BASIC_STATE_STOPPED;
 			}	
-		
 
 
-	
+
+
 
 		}
 
@@ -97,7 +116,7 @@ void tardigrade_mc_basic_t::refresh(){
 	}
 
 	//stopped
-	
+
 
 
 }

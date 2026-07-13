@@ -6,7 +6,8 @@
 #define MISSION_BASIC_H
 
 #define MISSION_BASIC_NAME_LEN 32
-
+#define MISSION_BASIC_LATERAL_ONLY 0
+#define MISSION_BASIC_TRANSLATIONAL_ONLY 1
 
 struct tardigrade_mission_basic_t{
 
@@ -15,8 +16,8 @@ struct tardigrade_mission_basic_t{
 	float speed;
 	vector_t translational_movement, lateral_movement;
 
+	uint8_t movement_type;
 	bool maintain_pose;
-	
 	//units: degrees
 	uint16_t desired_yaw, desired_pitch, desired_roll; //read only
 	uint16_t initial_yaw, initial_pitch, initial_roll; //write 
