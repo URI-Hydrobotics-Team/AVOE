@@ -2,7 +2,7 @@
 
 
 
-void update_imu(){
+void tardigrade_mc_basic_t::update_imu(){
 	vector_t imu_read = sensor_get_imu_ABSOULUTE_ORIENTATION_EULER(imu);
 	imu_orientation.x = imu_read.x;
 	imu_orientation.y = imu_read.y;
@@ -12,15 +12,19 @@ void update_imu(){
 }
 
 
-tardigrade_mc_basic_t::tardigrade_mc_basic_t();
-~tardigrade_mc_basic_t::tardigrade_mc_basic_t();
+tardigrade_mc_basic_t::tardigrade_mc_basic_t(){
+
+}
+tardigrade_mc_basic_t::~tardigrade_mc_basic_t(){
+
+}
 
 
 void tardigrade_mc_basic_t::init(tardigrade_controller_t *controller_, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count, float adjustment_compensation_){
 
 	controller = controller_;
 	imu = imu_;
-	misson_ptr = mission;
+	mission_ptr = missions;
 	mission_size = mission_count;
 	adjustment_compensation = adjustment_compensation_;
 	mission_index = 0;
@@ -36,27 +40,27 @@ void tardigrade_mc_basic_t::refresh(){
 
 	if (state == TARDIGRADE_MC_BASIC_STATE_RUNNING){
 
-		if (mission_timer.getElaspedTimeMS() < mission_ptr[mission_index].duration){
+		if (mission_timer.getElaspedTimeMS() < mission_ptr[mission_index]->duration){
 
 			//we are in a mission
 			vector_t translational, lateral;
 
-			translational.x = mission_ptr[mission_index].translational_movement.x;
-			translational.y = mission_ptr[mission_index].translational_movement.y;
-			translational.z = mission_ptr[mission_index].translational_movement.z;
+			translational.x = mission_ptr[mission_index]->translational_movement.x;
+			translational.y = mission_ptr[mission_index]->translational_movement.y;
+			translational.z = mission_ptr[mission_index]->translational_movement.z;
 
-			lateral.x = mission_ptr[mission_index].lateral_movement.x;
-			lateral.y = mission_ptr[mission_index].lateral_movement.y;
-			lateral.z = mission_ptr[mission_index].lateral_movement.z;
+			lateral.x = mission_ptr[mission_index]->lateral_movement.x;
+			lateral.y = mission_ptr[mission_index]->lateral_movement.y;
+			lateral.z = mission_ptr[mission_index]->lateral_movement.z;
 
 
 			// maintain pose
 
-			if (mission_ptr[mission_index].maintain_pose){
+			if (mission_ptr[mission_index]->maintain_pose){
 				uint16_t yaw_offset, pitch_offset, roll_offset;
-				yaw_offset = desired_yaw - imu_orientation.x;
-				pitch_offset = desired_yaw - imu_orientation.y;
-				roll_offset = desired_roll - imu_orientation.z;
+				yaw_offset = mission_ptr[mission_index]->desired_yaw - imu_orientation.x;
+				pitch_offset = mission_ptr[mission_index]->desired_pitch - imu_orientation.y;
+				roll_offset = mission_ptr[mission_index]->desired_roll - imu_orientation.z;
 
 				//compensate if needed
 
@@ -75,13 +79,13 @@ void tardigrade_mc_basic_t::refresh(){
 
 			}
 			//wont work like this
-			switch (mission_ptr[mission_index].movement_type){
+			switch (mission_ptr[mission_index]->movement_type){
 
 				case MISSION_BASIC_LATERAL_ONLY:
 					controller->send_lateral_vector(lateral);
 					break;
 				case MISSION_BASIC_TRANSLATIONAL_ONLY:
-					controller->send_translational_vector(translational);	
+					controller->send_translation_vector(translational);	
 					break;
 			}
 
@@ -93,9 +97,9 @@ void tardigrade_mc_basic_t::refresh(){
 				update_imu();
 
 				//initial stuff probably not needed
-				mission_ptr[mission_index].initial_yaw = imu_orientation.x;
-				mission_ptr[mission_index].initial_pitch = imu_orientation.y;
-				mission_ptr[mission_index].initial_roll = imu_orientation.z;
+				mission_ptr[mission_index]->initial_yaw = imu_orientation.x;
+				mission_ptr[mission_index]->initial_pitch = imu_orientation.y;
+				mission_ptr[mission_index]->initial_roll = imu_orientation.z;
 
 
 
@@ -122,12 +126,12 @@ void tardigrade_mc_basic_t::refresh(){
 }
 
 void tardigrade_mc_basic_t::start(){
-	if (state == TARDIGRADE_MC_BASIC_STOPPED){
+	if (state == TARDIGRADE_MC_BASIC_STATE_STOPPED){
 		state = TARDIGRADE_MC_BASIC_STATE_RUNNING;
 		update_imu();
-		mission_ptr[mission_index].initial_yaw = imu_orientation.x;
-		mission_ptr[mission_index].initial_pitch = imu_orientation.y;
-		mission_ptr[mission_index].initial_roll = imu_orientation.z;
+		mission_ptr[mission_index]->initial_yaw = imu_orientation.x;
+		mission_ptr[mission_index]->initial_pitch = imu_orientation.y;
+		mission_ptr[mission_index]->initial_roll = imu_orientation.z;
 
 	}
 
@@ -135,8 +139,6 @@ void tardigrade_mc_basic_t::start(){
 
 void tardigrade_mc_basic_t::kill(){
 	state = TARDIGRADE_MC_BASIC_STATE_STOPPED;
-
-
 }
 
 void tardigrade_mc_basic_t::reset(){

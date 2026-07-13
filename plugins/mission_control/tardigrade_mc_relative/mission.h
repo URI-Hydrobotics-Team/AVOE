@@ -1,6 +1,9 @@
 #include <stdint.h>
-
-
+#include "../../../lib/lib.h"
+#include <sys/types.h>
+#include "../../../core/sensor.h"
+#include "../../../lib/clock.h"
+#include "../../../lib/lib.h"
 
 #ifndef MISSION_BASIC_H
 #define MISSION_BASIC_H

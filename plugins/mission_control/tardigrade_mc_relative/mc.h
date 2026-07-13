@@ -13,15 +13,14 @@
 #define TARDIGRADE_MC_BASIC_STATE_HELD 2
 
 
-
-
 #include <cstdio>
-#include <types.h>
+#include <sys/types.h>
 #include "mission.h"
-#include "../controllers/tardigrade/controller.h"
-#include "../middleware/general-sensor/imu.h"
-#include "../../core/sensor.h"
-#include "../../lib/clock.h"
+#include "../../controllers/tardigrade/controller.h"
+#include "../../middleware/general-sensor/imu.h"
+#include "../../../core/sensor.h"
+#include "../../../lib/clock.h"
+#include "../../../lib/lib.h"
 
 
 class tardigrade_mc_basic_t{
@@ -29,7 +28,7 @@ class tardigrade_mc_basic_t{
 	private:
 		size_t mission_index;
 		size_t mission_size;
-		tarsigrade_controller_t *controller;
+		tardigrade_controller_t *controller;
 		tardigrade_mission_basic_t **mission_ptr;
 		avoe_clock_t main_timer, mission_timer;
 		uint8_t state;
@@ -39,13 +38,14 @@ class tardigrade_mc_basic_t{
 		void update_imu();
 	public:
 
-		mission_control_tardigrade_t();
-		~mission_control_tardigrade_t();
+		tardigrade_mc_basic_t();
+		~tardigrade_mc_basic_t();
 		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count, float adjustment_compensation_);
 		void refresh(); // update
 		void start(); //start / resume
 		void stop(); // stop
 		void hold(); //hold position
+		void kill();
 		void reset();
 };
 

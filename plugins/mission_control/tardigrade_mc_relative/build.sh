@@ -1,1 +1,1 @@
-g++ -o mc_ren_test main.cpp mc.cpp
+g++ -o mc_ren_test test.c mc.cpp ../../../core/io.cpp ../../../core/motor.cpp ../../../core/sensor.cpp ../../../core/vehicle.cpp ../../../core/log.cpp  ../../../lib/network.cpp ../../../lib/lib.cpp ../../../lib/clock.cpp ../../controllers/tardigrade/controller.cpp ../../middleware/general-sensor/imu.cpp
