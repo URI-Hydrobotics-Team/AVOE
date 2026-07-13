@@ -15,7 +15,7 @@
 
 
 
-
+#include <cstdio>
 #include <types.h>
 #include "mission.h"
 #include "../controllers/tardigrade/controller.h"
@@ -35,11 +35,13 @@ class tardigrade_mc_basic_t{
 		uint8_t state;
 		sensor_t *imu;
 		vector_t imu_orientation;
+		float adjustment_compensation;
+		void update_imu();
 	public:
 
 		mission_control_tardigrade_t();
 		~mission_control_tardigrade_t();
-		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count);
+		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count, float adjustment_compensation_);
 		void refresh(); // update
 		void start(); //start / resume
 		void stop(); // stop
