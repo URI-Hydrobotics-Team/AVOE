@@ -13,7 +13,7 @@
 
 
 tardigrade_mission_basic_t qual_descend, qual_forward, qual_ascend;
-tardigrade_mission_basic_t* qualification_robosub_2026[4];
+tardigrade_mission_basic_t* qualification_robosub_2026[3];
 //qual_descend
 
 void write_tasks_qualification(){

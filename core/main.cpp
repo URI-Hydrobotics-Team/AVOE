@@ -99,6 +99,9 @@ void tardigrade_task_1(){
 	*/
 	tardigrade_update_sensors_physical();
 	
+	tardigrade_mc_basic_t mc_ren;
+	mc_ren.start();
+	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 4, 0.1);
 	while (1){
 		usleep(1000);
 		//the loop
@@ -109,8 +112,7 @@ void tardigrade_task_1(){
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
-
-
+		mc_ren.refresh();
 		// NETWORK REFRESH
 		tx_device.refresh();
 		rx_device.refresh();
