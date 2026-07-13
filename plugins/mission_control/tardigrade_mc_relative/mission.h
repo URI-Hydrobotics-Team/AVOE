@@ -16,7 +16,7 @@ struct tardigrade_mission_basic_t{
 
 	char name[MISSION_BASIC_NAME_LEN];
 	uint16_t duration; //ms
-	float speed;
+	float speed; //rate
 	vector_t translational_movement, lateral_movement;
 
 	uint8_t movement_type;
@@ -24,7 +24,8 @@ struct tardigrade_mission_basic_t{
 	//units: degrees
 	uint16_t desired_yaw_offset, desired_pitch_offset, desired_roll_offset; //read only
 	uint16_t initial_yaw, initial_pitch, initial_roll; //write 
-	uint16_t adjustment_threshold;
+	uint16_t adjustment_threshold; //degrees
+	uint16_t thruster_time_run, thruster_time_adjust; // ms
 };
 
 #endif

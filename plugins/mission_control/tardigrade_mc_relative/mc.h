@@ -8,10 +8,14 @@
 #define TARDIGRADE_MC_BASIC_H
 
 
+// global states
 #define TARDIGRADE_MC_BASIC_STATE_STOPPED 0
 #define TARDIGRADE_MC_BASIC_STATE_RUNNING 1
 #define TARDIGRADE_MC_BASIC_STATE_HELD 2
 
+// running modes
+#define TARDIGRADE_MC_BASIC_RUN_DRIVING 0
+#define TARDIGRADE_MC_BASIC_RUN_ADJUSTING 1
 
 #include <cstdio>
 #include <sys/types.h>
@@ -30,12 +34,14 @@ class tardigrade_mc_basic_t{
 		size_t mission_size;
 		tardigrade_controller_t *controller;
 		tardigrade_mission_basic_t **mission_ptr;
-		avoe_clock_t main_timer, mission_timer;
-		uint8_t state;
+		avoe_clock_t main_timer, mission_timer, thruster_timer;
+		uint8_t state, run_mode;
 		sensor_t *imu;
 		vector_t imu_orientation;
 		float adjustment_compensation;
 		void update_imu();
+		int16_t yaw_offset, pitch_offset, roll_offset;
+
 	public:
 
 		tardigrade_mc_basic_t();

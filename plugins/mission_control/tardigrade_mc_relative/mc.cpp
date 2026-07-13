@@ -29,8 +29,10 @@ void tardigrade_mc_basic_t::init(tardigrade_controller_t *controller_, sensor_t 
 	adjustment_compensation = adjustment_compensation_;
 	mission_index = 0;
 	state = TARDIGRADE_MC_BASIC_STATE_STOPPED;
+	run_mode = TARDIGRADE_MC_BASIC_RUN_DRIVING;
 	main_timer.reset();
 	mission_timer.reset();
+	thruster_timer.reset();
 
 }
 
@@ -54,10 +56,10 @@ void tardigrade_mc_basic_t::refresh(){
 			lateral.z = mission_ptr[mission_index]->lateral_movement.z;
 
 
-			// maintain pose
-
+			// maintain pose, which is a lateral only type of movement
+			run_mode = TARDIGRADE_MC_BASIC_RUN_DRIVING;
 			if (mission_ptr[mission_index]->maintain_pose){
-				uint16_t yaw_offset, pitch_offset, roll_offset;
+				//detect if we need to compensate for roll, pitch, yaw
 				yaw_offset = mission_ptr[mission_index]->initial_yaw - imu_orientation.x;
 				pitch_offset = mission_ptr[mission_index]->initial_pitch - imu_orientation.z;
 				roll_offset = mission_ptr[mission_index]->initial_roll - imu_orientation.y;
@@ -66,33 +68,63 @@ void tardigrade_mc_basic_t::refresh(){
 
 				if (abs(yaw_offset) > adjustment_compensation){
 					printf("[MC REN] yaw compensation required\n");
-					//do some stuff to the lateral johns
+					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
 
 				if (abs(pitch_offset) > adjustment_compensation){
 					printf("[MC REN] pitch compensation required\n");
+					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
 				if (abs(roll_offset) > adjustment_compensation){
 					printf("[MC REN] roll compensation required\n");
+					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
 
 
 			}
-			//wont work like this
-			switch (mission_ptr[mission_index]->movement_type){
 
-				case MISSION_BASIC_LATERAL_ONLY:
-					controller->send_lateral_vector(lateral);
-					break;
-				case MISSION_BASIC_TRANSLATIONAL_ONLY:
-					controller->send_translation_vector(translational);	
-					break;
+			if (run_mode == TARDIGRADE_MC_BASIC_RUN_DRIVING){
+				printf("[MC REN] run_mode = driving");
+
+
+				if (thruster_timer.getElaspedTimeMS() > mission_ptr[mission_index]->thruster_time_run){	
+
+					switch (mission_ptr[mission_index]->movement_type){
+
+						case MISSION_BASIC_LATERAL_ONLY:
+							controller->send_lateral_vector(lateral);
+							break;
+						case MISSION_BASIC_TRANSLATIONAL_ONLY:
+							controller->send_translation_vector(translational);	
+							break;
+					}
+
+					thruster_timer.reset();
+				}
 			}
 
+
+			if (run_mode == TARDIGRADE_MC_BASIC_RUN_ADJUSTING){
+				//adjust in order of which offset is greatest
+
+				//throw all offsets into an array, sort it, and operate sequentially
+
+
+				//just yaw for now
+				lateral.zero();
+				lateral.z = yaw_offset * adjustment_compensation * -1;
+				if (thruster_timer.getElaspedTimeMS() > mission_ptr[mission_index]->thruster_time_adjust){	
+					controller->send_lateral_vector(lateral);
+				}
+
+
+				thruster_timer.reset();
+
+			}
 			//running
 		}else{
 			mission_index++;
-			if (mission_index != mission_size){
+			if (mission_index < mission_size){
 				// next mission
 				update_imu();
 
@@ -116,7 +148,7 @@ void tardigrade_mc_basic_t::refresh(){
 
 	}else if(state == TARDIGRADE_MC_BASIC_STATE_HELD){
 
-		// adjustments adjustments
+		// adjustments
 	}
 
 	//stopped

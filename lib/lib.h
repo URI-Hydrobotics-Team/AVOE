@@ -27,6 +27,7 @@ struct vector_t{
 	double z;
 	vector_t();
 	vector_t(double X, double Y, double Z);	
+	void zero();
 };
 
 struct vector4_t{
