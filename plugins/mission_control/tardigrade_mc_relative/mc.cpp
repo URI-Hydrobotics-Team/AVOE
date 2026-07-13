@@ -43,7 +43,7 @@ void tardigrade_mc_basic_t::refresh(){
 	if (state == TARDIGRADE_MC_BASIC_STATE_RUNNING){
 
 		if (mission_timer.getElaspedTimeMS() < mission_ptr[mission_index]->duration){
-
+			printf("[MC REN] running mission %d\n", mission_index);
 			//we are in a mission
 			vector_t translational, lateral;
 
@@ -84,7 +84,7 @@ void tardigrade_mc_basic_t::refresh(){
 			}
 
 			if (run_mode == TARDIGRADE_MC_BASIC_RUN_DRIVING){
-				printf("[MC REN] run_mode = driving");
+				printf("[MC REN] driving");
 
 
 				if (thruster_timer.getElaspedTimeMS() > mission_ptr[mission_index]->thruster_time_run){	
@@ -107,6 +107,8 @@ void tardigrade_mc_basic_t::refresh(){
 			if (run_mode == TARDIGRADE_MC_BASIC_RUN_ADJUSTING){
 				//adjust in order of which offset is greatest
 
+				printf("[MC REN] driving");
+
 				//throw all offsets into an array, sort it, and operate sequentially
 
 
@@ -123,6 +125,8 @@ void tardigrade_mc_basic_t::refresh(){
 			}
 			//running
 		}else{
+			printf("[MC REN] next mission\n");
+			mission_timer.reset();
 			mission_index++;
 			if (mission_index < mission_size){
 				// next mission

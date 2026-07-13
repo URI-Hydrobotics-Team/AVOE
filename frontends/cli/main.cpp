@@ -199,7 +199,7 @@ void tardigrade(){
 	tm_vector.x = 0; tm_vector.y = 0; tm_vector.z = 0;
 	rt_vector.x = 0; rt_vector.y = 0; rt_vector.z = 0;
 
-	float movement_scale = 1.0; //default 0.5
+	float movement_scale = 0.5; //default 0.5
 
 
 
