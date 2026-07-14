@@ -19,12 +19,15 @@ class avoe_clock_t{
 	private:
 
 		struct timespec timer;
+		//struct timespec paused_timer;
 		clock_t traditional_timer;
-
+		
 	public:
 
 		unsigned long getElaspedTimeMS();
 		void reset();
 		char* getTimeStr();
+		void resume();
+		void pause();
 };
 #endif

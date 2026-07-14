@@ -3,27 +3,20 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
+#include "../../../core/io.h"
 
 /* getting */
 vector_t sensor_get_imu_ABSOULUTE_ORIENTATION_EULER(sensor_t *obj){
 	//data field 0
+	
+	char str[128];
+	vector_t vals;
+	strncpy(str, obj->read(0), 128);
+	//std::cout << str << "\n";
+	map_vector(&vals, str, 128);
 
-	std::string str = obj->read(0);
-	double x,y,z;
-	std::vector<double> vals = {x,y,z};
-	size_t valsIndex = 0;
-
-	for(size_t i = 0; i < str.size(); i++){
-		double val = str[i];
-		if(val == ','){
-			++valsIndex;
-			continue;
-		}else{
-			vals[valsIndex] += val;
-		}
-	}
-	return vector_t(vals[0],vals[1],vals[2]);
+	
+	return vector_t(vals.x,vals.y,vals.z);
 }
 vector_t sensor_get_imu_ABSOLUTE_ORIENTAION_QUATERNION(sensor_t *obj){
 	//data field 1

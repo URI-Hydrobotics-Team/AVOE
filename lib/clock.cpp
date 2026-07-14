@@ -13,6 +13,16 @@ unsigned long avoe_clock_t::getElaspedTimeMS(){
 	return after - before;
 
 }
+void avoe_clock_t::pause(){
+
+	
+
+}
+
+void avoe_clock_t::resume(){
+
+}
+
 
 
 void avoe_clock_t::reset(){
