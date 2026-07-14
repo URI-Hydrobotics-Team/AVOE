@@ -101,7 +101,11 @@ void tardigrade_task_1(){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
+<<<<<<< HEAD
 	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 1, 0.1);
+=======
+	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 3, 0.01);
+>>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();

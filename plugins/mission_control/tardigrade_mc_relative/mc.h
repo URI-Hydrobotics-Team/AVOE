@@ -17,10 +17,13 @@
 #define TARDIGRADE_MC_BASIC_RUN_DRIVING 0
 #define TARDIGRADE_MC_BASIC_RUN_ADJUSTING 1
 
+<<<<<<< HEAD
 
 #define TARDIGRADE_MC_BASIC_ADJUSTMENT_NOT_STARTED 0
 #define TARDIGRADE_MC_BASIC_ADJUSTMENT_STARTED 1
 
+=======
+>>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
 #include "math.h"
 #include <cstdio>
 #include <sys/types.h>
