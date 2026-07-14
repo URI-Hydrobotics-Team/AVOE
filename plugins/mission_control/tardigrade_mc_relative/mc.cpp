@@ -8,7 +8,7 @@ void tardigrade_mc_basic_t::update_imu(){
 	imu_orientation.y = imu_read.y;
 	imu_orientation.z = imu_read.z;
 
-	printf("[MC REN] IMU refreshed: %.2f, %.2f, %.2f\n", imu_orientation.x, imu_orientation.y, imu_orientation.z);
+	printf("[MC REN] IMU refreshed: %f, %f, %f\n", imu_orientation.x, imu_orientation.y, imu_orientation.z);
 }
 
 
@@ -40,6 +40,7 @@ void tardigrade_mc_basic_t::init(tardigrade_controller_t *controller_, sensor_t 
 void tardigrade_mc_basic_t::refresh(){
 	update_imu();
 
+	uint16_t adjustment_threshold = mission_ptr[mission_index]->adjustment_threshold; 
 	if (state == TARDIGRADE_MC_BASIC_STATE_RUNNING){
 
 		if (mission_timer.getElaspedTimeMS() < mission_ptr[mission_index]->duration){
@@ -47,36 +48,37 @@ void tardigrade_mc_basic_t::refresh(){
 			//we are in a mission
 			vector_t translational, lateral;
 
-			translational.x = mission_ptr[mission_index]->translational_movement.x;
-			translational.y = mission_ptr[mission_index]->translational_movement.y;
-			translational.z = mission_ptr[mission_index]->translational_movement.z;
+			translational.x = mission_ptr[mission_index]->translational_movement.x * mission_ptr[mission_index]->speed;
+			translational.y = mission_ptr[mission_index]->translational_movement.y *  mission_ptr[mission_index]->speed;
+			translational.z = mission_ptr[mission_index]->translational_movement.z *  mission_ptr[mission_index]->speed;
 
-			lateral.x = mission_ptr[mission_index]->lateral_movement.x;
-			lateral.y = mission_ptr[mission_index]->lateral_movement.y;
-			lateral.z = mission_ptr[mission_index]->lateral_movement.z;
+			lateral.x = mission_ptr[mission_index]->lateral_movement.x *  mission_ptr[mission_index]->speed;
+			lateral.y = mission_ptr[mission_index]->lateral_movement.y *  mission_ptr[mission_index]->speed;
+			lateral.z = mission_ptr[mission_index]->lateral_movement.z * mission_ptr[mission_index]->speed;
 
 
 			// maintain pose, which is a lateral only type of movement
 			run_mode = TARDIGRADE_MC_BASIC_RUN_DRIVING;
 			if (mission_ptr[mission_index]->maintain_pose){
 				//detect if we need to compensate for roll, pitch, yaw
-				yaw_offset = mission_ptr[mission_index]->initial_yaw - imu_orientation.x;
-				pitch_offset = mission_ptr[mission_index]->initial_pitch - imu_orientation.z;
-				roll_offset = mission_ptr[mission_index]->initial_roll - imu_orientation.y;
+				yaw_offset = mission_ptr[mission_index]->initial_yaw - floor(imu_orientation.x);
+				pitch_offset = mission_ptr[mission_index]->initial_pitch - floor(imu_orientation.z);
+				roll_offset = mission_ptr[mission_index]->initial_roll - floor(imu_orientation.y);
 
+				printf("initial %d, %d, %d\n", mission_ptr[mission_index]->initial_yaw, mission_ptr[mission_index]->initial_roll, mission_ptr[mission_index]->initial_pitch);
 				//compensate if needed
 
-				if (abs(yaw_offset) > adjustment_compensation){
-					printf("[MC REN] yaw compensation required\n");
+				if (abs(yaw_offset) > adjustment_threshold){
+					printf("[MC REN] yaw compensation required %d\n", yaw_offset);
 					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
 
-				if (abs(pitch_offset) > adjustment_compensation){
-					printf("[MC REN] pitch compensation required\n");
+				if (abs(pitch_offset) > adjustment_threshold){
+					printf("[MC REN] pitch compensation required %d\n", pitch_offset);
 					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
-				if (abs(roll_offset) > adjustment_compensation){
-					printf("[MC REN] roll compensation required\n");
+				if (abs(roll_offset) > adjustment_threshold){
+					printf("[MC REN] roll compensation required %d\n",roll_offset );
 					run_mode = TARDIGRADE_MC_BASIC_RUN_ADJUSTING;
 				}
 
@@ -84,7 +86,7 @@ void tardigrade_mc_basic_t::refresh(){
 			}
 
 			if (run_mode == TARDIGRADE_MC_BASIC_RUN_DRIVING){
-				printf("[MC REN] driving");
+				printf("[MC REN] driving\n");
 
 
 				if (thruster_timer.getElaspedTimeMS() > mission_ptr[mission_index]->thruster_time_run){	
@@ -107,7 +109,7 @@ void tardigrade_mc_basic_t::refresh(){
 			if (run_mode == TARDIGRADE_MC_BASIC_RUN_ADJUSTING){
 				//adjust in order of which offset is greatest
 
-				printf("[MC REN] driving");
+				printf("[MC REN] adjusting\n");
 
 				//throw all offsets into an array, sort it, and operate sequentially
 
@@ -127,21 +129,26 @@ void tardigrade_mc_basic_t::refresh(){
 		}else{
 			printf("[MC REN] next mission\n");
 			mission_timer.reset();
-			mission_index++;
-			if (mission_index < mission_size){
+			if (mission_index < mission_size - 1){
 				// next mission
 				update_imu();
 
+				mission_index++;
 				//initial stuff probably not needed
-				mission_ptr[mission_index]->initial_yaw = imu_orientation.x;
-				mission_ptr[mission_index]->initial_pitch = imu_orientation.y;
-				mission_ptr[mission_index]->initial_roll = imu_orientation.z;
+				mission_ptr[mission_index]->initial_yaw = (int)imu_orientation.x;
+				mission_ptr[mission_index]->initial_pitch = (int)imu_orientation.z;
+				mission_ptr[mission_index]->initial_roll = (int)imu_orientation.y;
 
 
 
 			}else{
+				printf("[MC REN] MISSION COMPLETE");
 				//end of missions
 				state = TARDIGRADE_MC_BASIC_STATE_STOPPED;
+					
+				vector_t zero_vector(0,0,0);
+				controller->send_translation_vector(zero_vector);	
+				controller->send_lateral_vector(zero_vector);	
 			}	
 
 
@@ -150,11 +157,15 @@ void tardigrade_mc_basic_t::refresh(){
 
 		}
 
-	}else if(state == TARDIGRADE_MC_BASIC_STATE_HELD){
+	}
+	if(state == TARDIGRADE_MC_BASIC_STATE_HELD){
 
 		// adjustments
 	}
-
+	if(state == TARDIGRADE_MC_BASIC_STATE_STOPPED){
+		printf("[MC REN] MISSION STOPPED\n");
+		// adjustments
+	}
 	//stopped
 
 
@@ -162,12 +173,17 @@ void tardigrade_mc_basic_t::refresh(){
 }
 
 void tardigrade_mc_basic_t::start(){
+
+	printf("[MC REN] Start Called\n");
 	if (state == TARDIGRADE_MC_BASIC_STATE_STOPPED){
+		printf("[MC REN] MISSION STARTED\n");
 		state = TARDIGRADE_MC_BASIC_STATE_RUNNING;
 		update_imu();
-		mission_ptr[mission_index]->initial_yaw = imu_orientation.x;
-		mission_ptr[mission_index]->initial_pitch = imu_orientation.y;
-		mission_ptr[mission_index]->initial_roll = imu_orientation.z;
+	
+		printf("%f, %f, %f\n", imu_orientation.x,imu_orientation.y,imu_orientation.z);	
+		mission_ptr[mission_index]->initial_yaw = (int)floor(imu_orientation.x);
+		mission_ptr[mission_index]->initial_pitch = (int)(imu_orientation.z);
+		mission_ptr[mission_index]->initial_roll = (int)(imu_orientation.y);
 
 	}
 

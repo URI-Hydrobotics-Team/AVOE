@@ -17,6 +17,7 @@
 #define TARDIGRADE_MC_BASIC_RUN_DRIVING 0
 #define TARDIGRADE_MC_BASIC_RUN_ADJUSTING 1
 
+#include "math.h"
 #include <cstdio>
 #include <sys/types.h>
 #include "mission.h"

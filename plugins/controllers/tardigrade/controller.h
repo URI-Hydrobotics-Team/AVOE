@@ -21,7 +21,7 @@ class tardigrade_controller_t{
 		char *name; //name and version string (unimportant)
 		vehicle_t *vehicle; //Pull Motors from Vehicle object
 		float translation_thrust_table[6][3] = {
-			{0.0, 0.0, 1.0},	//SH
+			{0.0, 0.0, 0.9},	//SH
 			{0.0, 0.0, 0.5},	//BSH
 			{0.0, 0.0, 0.5}, 	//BPH
 			{0.0, 0.6, 0.0}, 	//Y

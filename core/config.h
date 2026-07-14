@@ -25,7 +25,7 @@
 #define TARDIGRADE_SENSOR_UPDATE_INTERVAL 500
 
 /* ROBOSUB */
-#define TASK_TIMEOUT 10 //seconds
+#define TASK_TIMEOUT 5 //seconds
 
 
 

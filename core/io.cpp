@@ -751,6 +751,12 @@ void map_vector(vector_t *vecta, const char *str, size_t n){
 
 			comma_count++;
 			continue;
+		
+		}
+		if (str[i] == ';'){
+
+			z = std::stod(temp_str);
+			break;
 		}
 
 

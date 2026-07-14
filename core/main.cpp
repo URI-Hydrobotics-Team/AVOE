@@ -97,11 +97,15 @@ void tardigrade_task_1(){
 	when sensor_timer.getElaspedTimeMS() <= 100
 	due to appendstr access allocated but uninitialized values
 	*/
-	tardigrade_update_sensors_physical();
 	
 	tardigrade_mc_basic_t mc_ren;
+	std::cout << "[MAIN] Delaying for IMU startup\n";
+	usleep(1000 * 1000* 1);
+	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 3, 0.01);
+	
+	tardigrade_update_sensors_physical();
+	tardigrade_update_sensors_physical();
 	mc_ren.start();
-	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 4, 0.1);
 	while (1){
 		usleep(1000);
 		//the loop

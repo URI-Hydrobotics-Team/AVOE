@@ -22,8 +22,8 @@ struct tardigrade_mission_basic_t{
 	uint8_t movement_type;
 	bool maintain_pose;
 	//units: degrees
-	uint16_t desired_yaw_offset, desired_pitch_offset, desired_roll_offset; //read only
-	uint16_t initial_yaw, initial_pitch, initial_roll; //write 
+	int16_t desired_yaw_offset, desired_pitch_offset, desired_roll_offset; //read only
+	int16_t initial_yaw, initial_pitch, initial_roll; //write 
 	uint16_t adjustment_threshold; //degrees
 	uint16_t thruster_time_run, thruster_time_adjust; // ms
 	
