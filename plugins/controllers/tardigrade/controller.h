@@ -20,7 +20,13 @@ class tardigrade_controller_t{
 	private:
 		char *name; //name and version string (unimportant)
 		vehicle_t *vehicle; //Pull Motors from Vehicle object
-		float translation_thrust_table[6][3] = {
+
+
+		float (*translation_thrust_table)[3], (*lateral_thrust_table)[3];
+
+
+		float translation_thrust_table_default[6][3] = {
+			//default thruster table
 			{0.16, 0.0, 1.0},	//SH
 			{0.10, 0.0, 0.55},	//BSH
 			{0.10, 0.0, 0.55}, 	//BPH
@@ -40,7 +46,7 @@ class tardigrade_controller_t{
 			{1, -0.4, 0.0}	//PS
 		*/
 
-		float lateral_thrust_table[6][3] = {
+		float lateral_thrust_table_default[6][3] = {
 		//  roll,pitch,yaw
 			{-1.0, 0.0, 0},	//SH
 			{5.0, 0.0, 0},	//BSH
@@ -59,6 +65,7 @@ class tardigrade_controller_t{
 		void init(const char *n, vehicle_t *vehicle_in);
 		void send_translation_vector(vector_t thrust_vector);
 		void send_lateral_vector(vector_t thrust_vector);
+		void overide_thrust_table(float (*translation_thrust_table_)[3], float (*lateral_thrust_table_)[3]); //NULl resets to default
 };
 
 #endif

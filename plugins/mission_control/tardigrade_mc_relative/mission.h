@@ -27,6 +27,10 @@ struct tardigrade_mission_basic_t{
 	int16_t initial_yaw, initial_pitch, initial_roll; //write 
 	uint16_t adjustment_threshold; //degrees
 	uint16_t thruster_time_run, thruster_time_adjust; // ms
+
+	//thruster table overide
+	bool thruster_table_overide;
+	float *translation_thrust_table, *lateral_thrust_table;
 	
 };
 

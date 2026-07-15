@@ -18,7 +18,27 @@ void tardigrade_controller_t::init(const char *n, vehicle_t *vehicle_in){
     strncpy(name, n, NAME_LEN);
     vehicle = vehicle_in;
     motorTable = vehicle->getMotorTable();
+	translation_thrust_table = translation_thrust_table_default;
+	lateral_thrust_table = lateral_thrust_table_default;
 }
+
+
+void tardigrade_controller_t::overide_thrust_table(float (*translation_thrust_table_)[3], float (*lateral_thrust_table_)[3]){
+	if (translation_thrust_table_){	
+		translation_thrust_table = translation_thrust_table_;
+	}else{
+
+		translation_thrust_table = translation_thrust_table_default;
+	}
+	if (lateral_thrust_table_){	
+		lateral_thrust_table = lateral_thrust_table_;
+	}else{
+
+		lateral_thrust_table = lateral_thrust_table_default;
+
+	}
+}
+
 
 void tardigrade_controller_t::send_translation_vector(vector_t thrust_vector){ //we assume pivot and orgin are about the center of the robot
 
