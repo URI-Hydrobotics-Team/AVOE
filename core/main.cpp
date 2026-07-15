@@ -101,11 +101,7 @@ void tardigrade_task_1(){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
-<<<<<<< HEAD
-	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 1, 0.1);
-=======
-	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 3, 0.01);
->>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
+	mc_ren.init(&controller_full, &tardigrade_imu, qualification_robosub_2026, 3, 0.1, false, false, false);
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();
@@ -224,7 +220,7 @@ void tardigrade_task_imu_test(){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
-	mc_ren.init(&controller_full, &tardigrade_imu, imu_test_task, 1, 0.1);
+	mc_ren.init(&controller_full, &tardigrade_imu, imu_test_task, 1, 0.015, true, false, false);
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();
@@ -310,7 +306,7 @@ void tardigrade_task_box(){
 	network_timer.reset();
 
 	// INIT TASKS
-	write_tasks_imu_test();
+	write_tasks_box();
 
 
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
@@ -324,7 +320,7 @@ void tardigrade_task_box(){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
-	mc_ren.init(&controller_full, &tardigrade_imu, box_task, 7, 0.01);
+	mc_ren.init(&controller_full, &tardigrade_imu, box_task, 7, 0.05, true, false, false);
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();

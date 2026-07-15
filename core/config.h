@@ -10,7 +10,7 @@
 
 
 /* MISC */
-#define IMU_OFFSETS_FILENAME "offsets.bin"
+#define IMU_OFFSETS_FILENAME "irvine.bin"
 //#define IMU_OFFSETS_FILENAME "NULL" //no calibration
 
 
@@ -25,7 +25,7 @@
 #define TARDIGRADE_SENSOR_UPDATE_INTERVAL 500
 
 /* ROBOSUB */
-#define TASK_TIMEOUT 5 //seconds
+#define TASK_TIMEOUT 1 //seconds
 
 
 

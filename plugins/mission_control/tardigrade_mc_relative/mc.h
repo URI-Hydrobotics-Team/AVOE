@@ -8,6 +8,8 @@
 #define TARDIGRADE_MC_BASIC_H
 
 
+#define TARDIGRADE_MC_BASIC_DISPLAY_UPDATE_RATE 200 //ms
+
 // global states
 #define TARDIGRADE_MC_BASIC_STATE_STOPPED 0
 #define TARDIGRADE_MC_BASIC_STATE_RUNNING 1
@@ -17,13 +19,12 @@
 #define TARDIGRADE_MC_BASIC_RUN_DRIVING 0
 #define TARDIGRADE_MC_BASIC_RUN_ADJUSTING 1
 
-<<<<<<< HEAD
 
 #define TARDIGRADE_MC_BASIC_ADJUSTMENT_NOT_STARTED 0
 #define TARDIGRADE_MC_BASIC_ADJUSTMENT_STARTED 1
 
-=======
->>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
+
+
 #include "math.h"
 #include <cstdio>
 #include <sys/types.h>
@@ -44,7 +45,7 @@ class tardigrade_mc_basic_t{
 		size_t mission_size;
 		tardigrade_controller_t *controller;
 		tardigrade_mission_basic_t **mission_ptr;
-		avoe_clock_t main_timer, mission_timer, thruster_timer, adjustment_timer;
+		avoe_clock_t main_timer, mission_timer, display_timer, adjustment_timer;
 		uint8_t state, run_mode;
 		sensor_t *imu;
 		vector_t imu_orientation;
@@ -52,12 +53,13 @@ class tardigrade_mc_basic_t{
 		void update_imu();
 		int16_t yaw_offset, pitch_offset, roll_offset;
 		uint8_t adjustment_flag;
-		
+		uint32_t adjustment_time;
+		bool yaw_adjustment_enable, roll_adjustment_enable, pitch_adjustment_enable;		
 	public:
 
 		tardigrade_mc_basic_t();
 		~tardigrade_mc_basic_t();
-		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count, float adjustment_compensation_);
+		void init(tardigrade_controller_t *controller, sensor_t *imu_, tardigrade_mission_basic_t **missions, size_t mission_count, float adjustment_compensation_,  bool yaw_adjustment_enable_, bool roll_adjustment_enable_, bool pitch_adjustment_enable_);
 		void refresh(); // update
 		void start(); //start / resume
 		void stop(); // stop

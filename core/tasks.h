@@ -12,19 +12,15 @@
 #include "../plugins/mission_control/tardigrade_mc_relative/mission.h"
 
 
-tardigrade_mission_basic_t qual_descend, qual_forward, qual_ascend;
-tardigrade_mission_basic_t* qualification_robosub_2026[3];
+tardigrade_mission_basic_t qual_descend, qual_forward, qual_ascend, qual_style;
+tardigrade_mission_basic_t* qualification_robosub_2026[4];
 //qual_descend
 
 void write_tasks_qualification(){
 
 	//qual_descend
-	qual_descend.duration = 1000 * 4;
-<<<<<<< HEAD
-	qual_descend.speed = 0.8;
-=======
+	qual_descend.duration = 1000 * 5;
 	qual_descend.speed = 1.0;
->>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
 	
 	qual_descend.translational_movement.x = 0.0;
 	qual_descend.translational_movement.y = 0.0;
@@ -37,16 +33,12 @@ void write_tasks_qualification(){
 	qual_descend.desired_pitch_offset = 0;
 	qual_descend.desired_roll_offset = 0;
 	
-<<<<<<< HEAD
 	qual_descend.adjustment_threshold = 10;
-=======
-	qual_descend.adjustment_threshold = 5;
->>>>>>> d3a58ce958d1221c03142a57a20e37599b5111cd
 
 	qual_descend.thruster_time_run = 100;
 	qual_descend.thruster_time_adjust = 100;
 	//qual_descend
-	qual_forward.duration = 1000 * 5;
+	qual_forward.duration = 1000 * 20;
 	qual_forward.speed = 0.5;
 	
 	qual_forward.translational_movement.x = 1.0; //going forward
@@ -54,7 +46,7 @@ void write_tasks_qualification(){
 	qual_forward.translational_movement.z = 0.0; //going down ...
 
 	qual_forward.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
-	qual_forward.maintain_pose = true;
+	qual_forward.maintain_pose = false;
 	
 	qual_forward.desired_yaw_offset = 0;
 	qual_forward.desired_pitch_offset = 0;
@@ -74,7 +66,7 @@ void write_tasks_qualification(){
 	qual_ascend.translational_movement.z = -1.0; //going up
 
 	qual_ascend.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
-	qual_ascend.maintain_pose = true;
+	qual_ascend.maintain_pose = false;
 	
 	qual_ascend.desired_yaw_offset = 0;
 	qual_ascend.desired_pitch_offset = 0;
@@ -99,10 +91,10 @@ tardigrade_mission_basic_t *imu_test_task[1];
 
 void write_tasks_imu_test(){
 
-	imu_test.duration = 1000 * 1000;
+	imu_test.duration = 1000 * 10;
 	imu_test.speed = 0.5;
 	
-	imu_test.translational_movement.x = 0.0;
+	imu_test.translational_movement.x = 1.0;
 	imu_test.translational_movement.y = 0.0;
 	imu_test.translational_movement.z = 0.0; //going up
 
@@ -286,7 +278,7 @@ void write_tasks_box(){
 	box_task[2] = &side_2;
 	box_task[3] = &corner_2;
 	box_task[4] = &side_3;
-	box_task[5] = &corner_2;
+	box_task[5] = &corner_3;
 	box_task[6] = &side_4;
 }
 
