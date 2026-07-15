@@ -28,6 +28,7 @@ void write_tasks_qualification(){
 
 	qual_descend.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
 	qual_descend.maintain_pose = false;
+	qual_descend.maintain_pose_abs = false;
 	
 	qual_descend.desired_yaw_offset = 0;
 	qual_descend.desired_pitch_offset = 0;
@@ -288,7 +289,7 @@ tardigrade_mission_basic_t *vertical_test_task[1];
 void write_tasks_vertical_test(){
 
 	vertical_test.duration = 1000 * 10;
-	vertical_test.speed = 1.0;
+	vertical_test.speed = 0.5;
 	
 	vertical_test.translational_movement.x = 0.0;
 	vertical_test.translational_movement.y = 0.0;
@@ -328,26 +329,64 @@ void write_tasks_coin_flip(uint16_t angle){
 	coin_flip_rotate.translational_movement.z = 0.0; //going down
 
 	coin_flip_rotate.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
-	coin_flip_rotate.maintain_pose = false;
-	
+	coin_flip_rotate.maintain_pose = true;
+	coin_flip_rotate.maintain_pose_abs = true;
+
 	coin_flip_rotate.desired_yaw_offset = 0;
+	coin_flip_rotate.desired_yaw_abs = angle;
 	coin_flip_rotate.desired_pitch_offset = 0;
 	coin_flip_rotate.desired_roll_offset = 0;
 	
-	coin_flip_rotate.adjustment_threshold = 10;
+	coin_flip_rotate.adjustment_threshold = 5;
 
 	coin_flip_rotate.thruster_time_run = 100;
 	coin_flip_rotate.thruster_time_adjust = 100;
 
+	//go down
+
+	coin_flip_down.duration = 1000 * 5;
+	coin_flip_down.speed = 0.8;
+	
+	coin_flip_down.translational_movement.x = 0.0;
+	coin_flip_down.translational_movement.y = 0.0;
+	coin_flip_down.translational_movement.z = 1.0; //going down
+
+	coin_flip_down.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
+	coin_flip_down.maintain_pose = false;
+	
+	coin_flip_down.desired_yaw_offset = 0;
+	coin_flip_down.desired_pitch_offset = 0;
+	coin_flip_down.desired_roll_offset = 0;
+	
+	coin_flip_down.adjustment_threshold = 10;
+
+	coin_flip_down.thruster_time_run = 100;
+	coin_flip_down.thruster_time_adjust = 100;
+
+	//drive forward
+
+	coin_flip_forward.duration = 1000 * 10;
+	coin_flip_forward.speed = .5;
+	
+	coin_flip_forward.translational_movement.x = 1.0;
+	coin_flip_forward.translational_movement.y = 0.0;
+	coin_flip_forward.translational_movement.z = 0.0; //going down
+
+	coin_flip_forward.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
+	coin_flip_forward.maintain_pose = false;
+	
+	coin_flip_forward.desired_yaw_offset = 0;
+	coin_flip_forward.desired_pitch_offset = 0;
+	coin_flip_forward.desired_roll_offset = 0;
+	
+	coin_flip_forward.adjustment_threshold = 10;
+
+	coin_flip_forward.thruster_time_run = 100;
+	coin_flip_forward.thruster_time_adjust = 100;
 
 
-
-
-
-
-
-	coin_flip_task[0] = &coin_flip_rotate;
-	coin_flip_task[1] = &coin_flip_down;
+	coin_flip_task[1] = &coin_flip_rotate;
+	coin_flip_task[0] = &coin_flip_down;
 	coin_flip_task[2] = &coin_flip_forward;
 
 

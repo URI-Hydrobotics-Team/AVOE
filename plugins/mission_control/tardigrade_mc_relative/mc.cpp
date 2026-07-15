@@ -82,9 +82,14 @@ void tardigrade_mc_basic_t::refresh(){
 			run_mode = TARDIGRADE_MC_BASIC_RUN_DRIVING;
 			if (mission_ptr[mission_index]->maintain_pose){
 				//detect if we need to compensate for roll, pitch, yaw
-				yaw_offset = mission_ptr[mission_index]->initial_yaw - floor(imu_orientation.x) +  mission_ptr[mission_index]->desired_yaw_offset;
+				yaw_offset = mission_ptr[mission_index]->initial_yaw - floor(imu_orientation.x) + mission_ptr[mission_index]->desired_yaw_offset;
 				pitch_offset = mission_ptr[mission_index]->initial_pitch - floor(imu_orientation.z) + mission_ptr[mission_index]->desired_pitch_offset;
 				roll_offset = mission_ptr[mission_index]->initial_roll - floor(imu_orientation.y) + mission_ptr[mission_index]->desired_roll_offset;
+				if (mission_ptr[mission_index]->maintain_pose_abs){
+					yaw_offset = - (int)(imu_orientation.x) + mission_ptr[mission_index]->desired_yaw_abs;
+
+				}
+
 
 				//printf("initial %d, %d, %d\n", mission_ptr[mission_index]->initial_yaw, mission_ptr[mission_index]->initial_roll, mission_ptr[mission_index]->initial_pitch);
 				//compensate if needed
@@ -159,8 +164,14 @@ void tardigrade_mc_basic_t::refresh(){
 
 				//just yaw for now
 				if (abs(yaw_offset) > adjustment_threshold){
+					int8_t yaw_loop_back = 1;
+					if(yaw_offset > 180){
+						yaw_loop_back = -1;
+					}
+
+
 					lateral.zero();
-					lateral.z = yaw_offset * adjustment_compensation *1;
+					lateral.z = yaw_offset * adjustment_compensation * 1 * yaw_loop_back;
 					//printf("some shit: %d, %f\n",yaw_offset, adjustment_compensation);
 					printf("lateral.z: %f\n", lateral.z);
 				}

@@ -463,7 +463,7 @@ void tardigrade_task_vertical_test(){
 
 
 void tardigrade_task_coin_flip(int angle){
-	printf("[MAIN] COIN FLIP TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	printf("[MAIN] COIN FLIP TASK STARTING FOR  %d DEGREES: %dS UNTIL START\n", angle, TASK_TIMEOUT);
 	usleep(1000 * 1000 * TASK_TIMEOUT);
 	//this is the tardigrade production routine	
 
@@ -610,9 +610,6 @@ void tardigrade_imu_dump(){
 	sensor_timer.reset();
 	network_timer.reset();
 
-	// INIT TASKS
-	write_tasks_qualification();
-
 
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
 	/*
@@ -644,10 +641,10 @@ void tardigrade_imu_dump(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+			//set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
-			tardigrade.print();
+			tardigrade_imu.print();
 			tel_timer.reset(); //always reset
 		}
 	}
