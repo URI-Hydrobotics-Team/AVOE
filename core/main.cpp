@@ -40,6 +40,8 @@
 
 */
 
+
+
 void tardigrade_task_1(){
 	printf("[MAIN] QUALIFICATION TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
 	usleep(1000 * 1000 * TASK_TIMEOUT);
@@ -320,7 +322,107 @@ void tardigrade_task_box(){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
-	mc_ren.init(&controller_full, &tardigrade_imu, box_task, 7, 0.05, true, false, false);
+	mc_ren.init(&controller_full, &tardigrade_imu, box_task, 7, 0.015, true, false, false);
+	
+	tardigrade_update_sensors_physical();
+	tardigrade_update_sensors_physical();
+	mc_ren.start();
+	while (1){
+		usleep(1000);
+		//the loop
+
+		// UPDATE YOUR SENSORS
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			tardigrade_update_sensors_physical();
+			sensor_timer.reset();
+		}
+		// AUTONOMY		
+		mc_ren.refresh();
+		// NETWORK REFRESH
+		tx_device.refresh();
+		rx_device.refresh();
+
+
+		// DISPLAY
+
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+
+			//update, print and log every one second
+			tardigrade.print();
+			tel_timer.reset(); //always reset
+		}
+	}
+
+
+
+#endif
+
+
+}
+
+void tardigrade_task_vertical_test(){
+	printf("[MAIN] VERTICAL TEST TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	usleep(1000 * 1000 * TASK_TIMEOUT);
+	//this is the tardigrade production routine	
+
+	#ifdef TARGET_TARDIGRADE
+	// TIMERS
+	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	// SENSOR SETUP CALLS
+	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
+
+	// NETWORK SETUP
+	avoe_comm_transmitter tx_device("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+
+	avoe_comm_reciever rx_device("message", "vector", PORT_DECKBOX_INPUT, 2048);
+
+	tx_device.add_sensor(&tardigrade_imu); //set source to imu
+	tx_device.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device.add_sensor(&tardigrade_leak); //set source to imu
+	tx_device.add_motor(&thruster_SH);
+	tx_device.add_motor(&thruster_BSH);
+	tx_device.add_motor(&thruster_BPH);
+	tx_device.add_motor(&thruster_Y);
+
+
+	tx_device.set_timer(100); //set 100ms transmit interval
+	
+
+	vector_t translational_vector, rotational_vector;	
+	rx_device.set_timer(10);
+	rx_device.add_vector(&translational_vector);
+	rx_device.add_vector(&rotational_vector);
+	
+	
+	// RESET TIMERS
+	tel_timer.reset(); 
+	sensor_timer.reset();
+	network_timer.reset();
+
+	// INIT TASKS
+	write_tasks_vertical_test();
+
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	
+	tardigrade_mc_basic_t mc_ren;
+	std::cout << "[MAIN] Delaying for IMU startup\n";
+	usleep(1000 * 1000* 1);
+	mc_ren.init(&controller_full, &tardigrade_imu, vertical_test_task, 1, 0.015, false, false, false);
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();
@@ -360,7 +462,202 @@ void tardigrade_task_box(){
 }
 
 
+void tardigrade_task_coin_flip(int angle){
+	printf("[MAIN] COIN FLIP TASK STARTING: %dS UNTIL START\n", TASK_TIMEOUT);
+	usleep(1000 * 1000 * TASK_TIMEOUT);
+	//this is the tardigrade production routine	
 
+	#ifdef TARGET_TARDIGRADE
+	// TIMERS
+	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	// SENSOR SETUP CALLS
+	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
+
+	// NETWORK SETUP
+	avoe_comm_transmitter tx_device("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+
+	avoe_comm_reciever rx_device("message", "vector", PORT_DECKBOX_INPUT, 2048);
+
+	tx_device.add_sensor(&tardigrade_imu); //set source to imu
+	tx_device.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device.add_sensor(&tardigrade_leak); //set source to imu
+	tx_device.add_motor(&thruster_SH);
+	tx_device.add_motor(&thruster_BSH);
+	tx_device.add_motor(&thruster_BPH);
+	tx_device.add_motor(&thruster_Y);
+
+
+	tx_device.set_timer(100); //set 100ms transmit interval
+	
+
+	vector_t translational_vector, rotational_vector;	
+	rx_device.set_timer(10);
+	rx_device.add_vector(&translational_vector);
+	rx_device.add_vector(&rotational_vector);
+	
+	
+	// RESET TIMERS
+	tel_timer.reset(); 
+	sensor_timer.reset();
+	network_timer.reset();
+
+	// INIT TASKS
+	write_tasks_coin_flip(angle);
+
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	
+	tardigrade_mc_basic_t mc_ren;
+	std::cout << "[MAIN] Delaying for IMU startup\n";
+	usleep(1000 * 1000* 1);
+	mc_ren.init(&controller_full, &tardigrade_imu, coin_flip_task, 3, 0.015, true, false, false);
+	
+	tardigrade_update_sensors_physical();
+	tardigrade_update_sensors_physical();
+	mc_ren.start();
+	while (1){
+		usleep(1000);
+		//the loop
+
+		// UPDATE YOUR SENSORS
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			tardigrade_update_sensors_physical();
+			sensor_timer.reset();
+		}
+		// AUTONOMY		
+		mc_ren.refresh();
+		// NETWORK REFRESH
+		tx_device.refresh();
+		rx_device.refresh();
+
+
+		// DISPLAY
+
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+
+			//update, print and log every one second
+			tardigrade.print();
+			tel_timer.reset(); //always reset
+		}
+	}
+
+
+
+#endif
+
+
+}
+
+
+/* OTHER STUFF*/
+
+void tardigrade_imu_dump(){
+	printf("[MAIN] IMU DUMP\n");
+	//this is the tardigrade production routine	
+
+	#ifdef TARGET_TARDIGRADE
+	// TIMERS
+	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	// SENSOR SETUP CALLS
+	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
+
+	// NETWORK SETUP
+	avoe_comm_transmitter tx_device("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+
+	avoe_comm_reciever rx_device("message", "vector", PORT_DECKBOX_INPUT, 2048);
+
+	tx_device.add_sensor(&tardigrade_imu); //set source to imu
+	tx_device.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device.add_sensor(&tardigrade_leak); //set source to imu
+	tx_device.add_motor(&thruster_SH);
+	tx_device.add_motor(&thruster_BSH);
+	tx_device.add_motor(&thruster_BPH);
+	tx_device.add_motor(&thruster_Y);
+
+
+	tx_device.set_timer(100); //set 100ms transmit interval
+	
+
+	vector_t translational_vector, rotational_vector;	
+	rx_device.set_timer(10);
+	rx_device.add_vector(&translational_vector);
+	rx_device.add_vector(&rotational_vector);
+	
+	
+	// RESET TIMERS
+	tel_timer.reset(); 
+	sensor_timer.reset();
+	network_timer.reset();
+
+	// INIT TASKS
+	write_tasks_qualification();
+
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	
+	std::cout << "[MAIN] Delaying for IMU startup\n";
+	usleep(1000 * 1000* 1);
+	
+	tardigrade_update_sensors_physical();
+	tardigrade_update_sensors_physical();
+	while (1){
+		usleep(1000);
+		//the loop
+
+		// UPDATE YOUR SENSORS
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			tardigrade_update_sensors_physical();
+			sensor_timer.reset();
+		}
+		// NETWORK REFRESH
+		tx_device.refresh();
+		rx_device.refresh();
+
+
+		// DISPLAY
+
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+
+			//update, print and log every one second
+			tardigrade.print();
+			tel_timer.reset(); //always reset
+		}
+	}
+
+
+
+#endif
+
+
+}
 
 
 void tardigrade_remote(){
@@ -605,6 +902,13 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
+	if (strncmp(argv[1], "tardigrade_imu_dump", 32) == 0){
+		tardigrade_imu_dump();
+		return 0;
+	}
+
+
+
 	if (strncmp(argv[1], "tardigrade_task", 32) == 0){
 		if (strncmp(argv[2], "qual", 16) == 0){
 		
@@ -634,6 +938,29 @@ int main(int argc, char *argv[]){
 			tardigrade_task_box();
 			return 0;
 		}
+
+		if (strncmp(argv[2], "vertical_test", 16) == 0){
+		
+			tardigrade_task_vertical_test();
+			return 0;
+		}
+		if (strncmp(argv[2], "coin_flip", 16) == 0){
+	
+			if (argc != 4){
+				printf("coin flip takes angle, aborting\n");
+				return 0;
+			}
+			char coin_flip_angle_str[16];
+			initStr(coin_flip_angle_str, 16);
+			strncpy(coin_flip_angle_str, argv[3], 16);
+			int coin_flip_angle = atoi(coin_flip_angle_str);
+
+	
+			tardigrade_task_coin_flip(coin_flip_angle);
+			return 0;
+		}
+
+
 
 
 		std::cout << "Invalid Task. Try \"avoe help\"\n";
