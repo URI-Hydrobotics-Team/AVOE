@@ -523,11 +523,12 @@ void tardigrade_task_coin_flip(int angle){
 	tardigrade_mc_basic_t mc_ren;
 	std::cout << "[MAIN] Delaying for IMU startup\n";
 	usleep(1000 * 1000* 1);
-	mc_ren.init(&controller_full, &tardigrade_imu, coin_flip_task, 3, 0.015, true, false, false);
+	mc_ren.init(&controller_full, &tardigrade_imu, coin_flip_task, 3, 0.01, true, false, false);
 	
 	tardigrade_update_sensors_physical();
 	tardigrade_update_sensors_physical();
 	mc_ren.start();
+	nightrider_setup();
 	while (1){
 		usleep(1000);
 		//the loop
@@ -545,7 +546,7 @@ void tardigrade_task_coin_flip(int angle){
 
 
 		// DISPLAY
-
+		nightrider_run();
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 

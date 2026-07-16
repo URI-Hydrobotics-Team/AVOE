@@ -165,13 +165,26 @@ void tardigrade_mc_basic_t::refresh(){
 				//just yaw for now
 				if (abs(yaw_offset) > adjustment_threshold){
 					int8_t yaw_loop_back = 1;
-					if(yaw_offset > 180){
+					if(abs(yaw_offset) > 180){
 						yaw_loop_back = -1;
 					}
 
 
 					lateral.zero();
 					lateral.z = yaw_offset * adjustment_compensation * 1 * yaw_loop_back;
+
+					/*
+					if (fabs(lateral.z) < 0.05){
+						if (lateral.z > 0){
+							lateral.z = 0.1;
+						}else{
+							
+							lateral.z = -0.1;
+						
+						}
+				
+					}
+					*/
 					//printf("some shit: %d, %f\n",yaw_offset, adjustment_compensation);
 					printf("lateral.z: %f\n", lateral.z);
 				}

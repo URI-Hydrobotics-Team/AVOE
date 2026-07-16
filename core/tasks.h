@@ -312,16 +312,67 @@ void write_tasks_vertical_test(){
 
 /* COIN FLIP */
 
-tardigrade_mission_basic_t coin_flip_rotate, coin_flip_down, coin_flip_forward;
-tardigrade_mission_basic_t *coin_flip_task[3];
+tardigrade_mission_basic_t coin_flip_rotate, coin_flip_down, coin_flip_forward, coin_flip_style, coin_flip_forward1;
+tardigrade_mission_basic_t *coin_flip_task[4];
 
 
 void write_tasks_coin_flip(uint16_t angle){
 
+	//style
+
+
+	coin_flip_style.duration = 1000 * 15;
+	coin_flip_style.speed = 1.0;
+	
+	coin_flip_style.translational_movement.x = 0.0;
+	coin_flip_style.translational_movement.y = 0.0;
+	coin_flip_style.translational_movement.z = 0.0; //going down
+
+	coin_flip_style.lateral_movement.z = 1.0;
+	coin_flip_style.movement_type = MISSION_BASIC_LATERAL_ONLY;
+	coin_flip_style.maintain_pose = false;
+	coin_flip_style.maintain_pose_abs = false;
+
+	coin_flip_style.desired_yaw_offset = 0;
+	coin_flip_style.desired_yaw_abs = angle;
+	coin_flip_style.desired_pitch_offset = 0;
+	coin_flip_style.desired_roll_offset = 0;
+	
+	coin_flip_style.adjustment_threshold = 3;
+
+	coin_flip_style.thruster_time_run = 100;
+	coin_flip_style.thruster_time_adjust = 100;
+
+	//go down
+	
+	//coin_flip_down.duration = 1000 * 5;
+	coin_flip_down.duration = 1000 * 3;
+	coin_flip_down.speed = 0.8;
+	
+	coin_flip_down.translational_movement.x = 0.0;
+	coin_flip_down.translational_movement.y = 0.0;
+	coin_flip_down.translational_movement.z = 1.0; //going down
+
+	coin_flip_down.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
+	coin_flip_down.maintain_pose = false;
+	
+	coin_flip_down.desired_yaw_offset = 0;
+	coin_flip_down.desired_pitch_offset = 0;
+	coin_flip_down.desired_roll_offset = 0;
+	
+	coin_flip_down.adjustment_threshold = 10;
+
+	coin_flip_down.thruster_time_run = 100;
+	coin_flip_down.thruster_time_adjust = 100;
+
+
+
+
+
 
 	//rotate
 
-	coin_flip_rotate.duration = 1000 * 10;
+	coin_flip_rotate.duration = 1000 * 15;
 	coin_flip_rotate.speed = 1.0;
 	
 	coin_flip_rotate.translational_movement.x = 0.0;
@@ -343,9 +394,10 @@ void write_tasks_coin_flip(uint16_t angle){
 	coin_flip_rotate.thruster_time_adjust = 100;
 
 	//go down
-
-	coin_flip_down.duration = 1000 * 5;
-	coin_flip_down.speed = 0.8;
+	
+	//coin_flip_down.duration = 1000 * 5;
+	coin_flip_down.duration = 1000 * 9;
+	coin_flip_down.speed = 1.0;
 	
 	coin_flip_down.translational_movement.x = 0.0;
 	coin_flip_down.translational_movement.y = 0.0;
@@ -365,7 +417,7 @@ void write_tasks_coin_flip(uint16_t angle){
 
 	//drive forward
 
-	coin_flip_forward.duration = 1000 * 10;
+	coin_flip_forward.duration = 1000 * 30;
 	coin_flip_forward.speed = .5;
 	
 	coin_flip_forward.translational_movement.x = 1.0;
@@ -373,22 +425,49 @@ void write_tasks_coin_flip(uint16_t angle){
 	coin_flip_forward.translational_movement.z = 0.0; //going down
 
 	coin_flip_forward.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
-	coin_flip_forward.maintain_pose = false;
-	
+	coin_flip_forward.maintain_pose = true;	
+	coin_flip_forward.maintain_pose_abs = true;
+	coin_flip_forward.desired_yaw_abs = angle;
+
 	coin_flip_forward.desired_yaw_offset = 0;
 	coin_flip_forward.desired_pitch_offset = 0;
 	coin_flip_forward.desired_roll_offset = 0;
 	
-	coin_flip_forward.adjustment_threshold = 10;
+	coin_flip_forward.adjustment_threshold = 3;
 
 	coin_flip_forward.thruster_time_run = 100;
 	coin_flip_forward.thruster_time_adjust = 100;
 
+	//drive forward
+
+	coin_flip_forward1.duration = 1000 * 20;
+	coin_flip_forward1.speed = .5;
+	
+	coin_flip_forward1.translational_movement.x = 1.0;
+	coin_flip_forward1.translational_movement.y = 0.0;
+	coin_flip_forward1.translational_movement.z = 0.0; //going down
+
+	coin_flip_forward1.movement_type = MISSION_BASIC_TRANSLATIONAL_ONLY;
+	coin_flip_forward1.maintain_pose = true;	
+	coin_flip_forward1.maintain_pose_abs = true;
+	coin_flip_forward1.desired_yaw_abs = angle;
+
+	coin_flip_forward1.desired_yaw_offset = 0;
+	coin_flip_forward1.desired_pitch_offset = 0;
+	coin_flip_forward1.desired_roll_offset = 0;
+	
+	coin_flip_forward1.adjustment_threshold = 3;
+
+	coin_flip_forward1.thruster_time_run = 100;
+	coin_flip_forward1.thruster_time_adjust = 100;
+
 
 	coin_flip_task[1] = &coin_flip_rotate;
+	coin_flip_task[3] = &coin_flip_style;
 	coin_flip_task[0] = &coin_flip_down;
 	coin_flip_task[2] = &coin_flip_forward;
 
+	coin_flip_task[4] = &coin_flip_forward1;
 
 
 

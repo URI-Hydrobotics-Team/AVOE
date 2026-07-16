@@ -23,6 +23,10 @@
 #define MAX_PER_VEHICLE_SENSORS 8
 #define MAX_PER_VEHICLE_CLOCKS 5
 #define TARDIGRADE_SENSOR_UPDATE_INTERVAL 500
+#define LED0 20
+#define LED1 21
+#define LED2 12
+#define LED3 16
 
 /* ROBOSUB */
 #define TASK_TIMEOUT 1 //seconds

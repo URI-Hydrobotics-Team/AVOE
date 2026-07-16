@@ -1,1 +1,1 @@
-g++ -o avoe ../../../../lib/lib.h ../../../../lib/lib.cpp driver.cpp driver.h -l pigpio
+g++ -o led_test ../../../../lib/clock.cpp ../../../../lib/lib.cpp driver.cpp driver.h main.cpp -l pigpio

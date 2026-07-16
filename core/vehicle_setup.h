@@ -12,7 +12,7 @@
 
 /* tardigrade example */
 // include sensors
-
+#include "config.h"
 #include <ctime>
 #include "sensor.h"
 #include "motor.h"
@@ -49,6 +49,7 @@
 #include "../plugins/drivers/sensors/bnO055/driver.h"
 #include "../plugins/drivers/motors/ppsti/driver.h"
 #include "../plugins/middleware/general-motor/ppsti_middleware/motor_mw.h" //andrew's middleware for ppsti
+#include "../plugins/drivers/other/avoe_user_io/driver.h"
 #endif
 
 
@@ -63,6 +64,74 @@ leak_sensor dummy_leak;
 #ifdef TARGET_TARDIGRADE
 BNO055 real_imu;
 MS5837 real_pressure;
+
+//nightrider
+	avoe_clock_t nr_timer;
+	int nr_counter = 0;
+	int nr_direction = 1;
+	avoe_user_io tardigrade_leds;
+
+
+	void nightrider_setup(){
+	tardigrade_leds.init(true);
+
+	tardigrade_leds.add_output(LED1, "one", 0);
+	tardigrade_leds.add_output(LED2, "two", 0);
+	tardigrade_leds.add_output(LED3, "three", 0);
+	tardigrade_leds.add_output(LED0, "zero", 0);
+
+		tardigrade_leds.write("zero", 0);
+		tardigrade_leds.write("one", 0);
+		tardigrade_leds.write("two", 0);
+		tardigrade_leds.write("three", 0);
+
+
+	nr_timer.reset();
+	
+
+}
+
+void nightrider_run(){
+
+
+if (nr_timer.getElaspedTimeMS() > 100){
+		tardigrade_leds.write("zero", 0);
+		tardigrade_leds.write("one", 0);
+		tardigrade_leds.write("two", 0);
+		tardigrade_leds.write("three", 0);
+		switch(nr_counter){
+			case 0:
+		tardigrade_leds.write("zero", 1);
+				break;
+
+			case 1:
+		tardigrade_leds.write("one", 1);
+				break;
+
+			case 2:
+		tardigrade_leds.write("two", 1);
+				break;
+			case 3:
+		tardigrade_leds.write("three", 1);
+				break;
+
+
+		}
+		if ((nr_counter < 3 && nr_direction == 1) ||(nr_counter > 0 && nr_direction == -1)){
+			nr_counter += nr_direction;
+			if (nr_counter == 3 || nr_counter == 0){
+				nr_direction *=-1;
+			}
+		}else{
+			nr_direction *= -1;
+		}
+			nr_timer.reset();
+		}
+
+
+}
+
+
 #endif
 
 
