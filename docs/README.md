@@ -40,9 +40,40 @@ AVOE/
 The files `vehicle_setup.h` and `main.cpp` are where you are expected to setup your "vehicle". `main.cpp` is essential and should at least contain some kind of bootstrap function for starting your control routines. Declaring and setting up your sensors and motors in `vehicle_setup` is not essential but is recommended. Really, you are free to structure your AVOE implementation however you want, for example, you could make a file called `connections.h` for declaring an initializing your network objects. This is explained in more detail in the "Vehicle Setup and main.cpp" section
 
 #### `frontends/`
+
+`frontends/` refers to our CLI interface to view information of all of the created "vehicle". This includes but is not limited to Motors (Vector Information) and Sensors (Output fields for various info). In order for this to work currently, configuration info must be loaded into the `config.h` file. This is mainly settings such as Controller timeout and IP Address to reach the Robot. 
+
+At current, a good portion of these functions are statically programmed for Tardigrade, however there is plans to automate this sequence in the future to some degree.
+
 #### `lib/`
+
+`lib/` is our primary internal library for helper methods, the files that are currently maintained is `lib.h/.cpp` and `clock.h/.cpp`. `lib.h/.cpp` contains helper methods such as appendstr, initstr, and Vector_T struts for data storage of Vector objects. `clock.h/.cpp` contains methods for time keeping or when a timer is needed. All other files at time of writing are considered deprecated/not maintained. A GitHub clean-up is slated for the beginning of Sept. so these files may already be removed after this has been written. When this happens, I will make sure this section is updated for up to date info.
+
 #### `plugins/`
+
+`plugins/` is the location of files that are not part of the core of AVOE, but are needed for Navigation, Control, and Sensor/Motor Middleware. Each folder has it's own purpose which is explained below for each.
+
+- `Controllers`
+	- Main controllers for Vector output for motor movement through thrust tables.
+	
+- `Drivers` 
+	- This houses mainly the Sensor/Motor drivers for communication to both and incoming data from each set. There is also Dummy setup files for Virtual vehicle testing. All of these files are setup in a way where you can call them and they will output your data as whatever data type it pertains too. AVOE also has a separate setup step where any values you call will need to be converted to char to be usable. We did look into Void pointers at a time to try and reduce the use of Chars, but deemed the project too costly for our limited time.
+	
+- `Gamepad Maps`
+	- Explains itself, Gamepad Mapping for two different Gamepads (F710, Logitech) or (Six-Axis, Generic).
+	
+- `Math`
+	- Mainly holds an old testing version of our PID software. It is completely Virtual for output and is not established for actual testing params.
+	
+- `Middleware`
+	- The middleware folder holds both the Motor and Sensor General middleware. Motor Middleware houses PPSTI (Pi Pico Serial Thruster Interface) which handles PPSTI calls to convert Vectors to PWM values and can also pull Motor values from the Motors themselves.
+ 	- The Sensor Middleware handles pulling the actual Sensor data directly from the Sensors themselves. This was done due to how the default driver files are setup, we wanted to keep the Method Signatures the same, even though we had to implement our own logic to get it operational in C++.
+	
+- `Mission Control`
+  	- This folder contains the two different versions of Mission Control, or MC. MC_Relative is mission control that uses only the IMU for navigation, MC_VPPN operates solely on CV. The version of Mission Control we want in the end is both of these combined into each other for max error correction. 
+
 #### `test/`
+`test/` holds various test files that virtually test out different aspects of AVOE to check functionality. There is not many tests here as most changes made during the creation of AVOE were tested Physically due to time constraints and time needed to get AVOE into a zero error state. 
 ## Installation
 
 ### Dependency List for Debian Based Systems
