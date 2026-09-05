@@ -41,14 +41,13 @@ The files `vehicle_setup.h` and `main.cpp` are where you are expected to setup y
 
 #### `frontends/`
 
-`frontends/` refers to our CLI interface to view information of all of the created "vehicle". This includes but is not limited to Motors (Vector Information) and Sensors (Output fields for various info). In order for this to work currently, configuration info must be loaded into the `config.h` file. This is mainly settings such as Controller timeout and IP Address to reach the Robot. 
+`frontends/` refers to programs that provide an interface to view telemetry from the "vehicle" and sending control data, such as gamepad inputs, to the "vehicle". Telemetry includes but is not limited to Motors (raw thruster values in a float representation), Sensors (Output for parsed sensor info fields). We provide a "CLI" refrecne version which is used for our Tardigrade AUV. Our CLI interface is configured in the `config.h` file. This is mainly settings such as Controller timeout and IP address info to reach the AUV.
 
-At current, a good portion of these functions are statically programmed for Tardigrade, however there is plans to automate this sequence in the future to some degree.
+Currently our frontend CLI program and the core AVOE itself are configured through a header file `config.h`, however future plans are to implement a plain text config system that can be parsed on startup to prevent the user to constantly recompile for configuration changes.
 
 #### `lib/`
 
-`lib/` is our primary internal library for helper methods, the files that are currently maintained is `lib.h/.cpp` and `clock.h/.cpp`. `lib.h/.cpp` contains helper methods such as appendstr, initstr, and Vector_T struts for data storage of Vector objects. `clock.h/.cpp` contains methods for time keeping or when a timer is needed. All other files at time of writing are considered deprecated/not maintained. A GitHub clean-up is slated for the beginning of Sept. so these files may already be removed after this has been written. When this happens, I will make sure this section is updated for up to date info.
-
+`lib/` is our primary directory for commonly used components of AVOE, the files that are currently maintained is `lib.h/.cpp` and `clock.h/.cpp`. `lib.h/.cpp` contains helper methods such as `appendstr`, `initstr`, and `vector_t` struts for data storage of 3D-4D Vector objects. `clock.h/.cpp` contains a timer implementation for semi-percise timing events. `network.h` provides core I/O for UDP network sockets. `controller.h` and `keyboard.h` provide easy to use functions for getting gamepad and keyboard input from Linux. `globals.h` stores global macros, such as AVOE version.
 #### `plugins/`
 
 `plugins/` is the location of files that are not part of the core of AVOE, but are needed for Navigation, Control, and Sensor/Motor Middleware. Each folder has it's own purpose which is explained below for each.
@@ -57,7 +56,7 @@ At current, a good portion of these functions are statically programmed for Tard
 	- Main controllers for Vector output for motor movement through thrust tables.
 	
 - `Drivers` 
-	- This houses mainly the Sensor/Motor drivers for communication to both and incoming data from each set. There is also Dummy setup files for Virtual vehicle testing. All of these files are setup in a way where you can call them and they will output your data as whatever data type it pertains too. AVOE also has a separate setup step where any values you call will need to be converted to char to be usable. We did look into Void pointers at a time to try and reduce the use of Chars, but deemed the project too costly for our limited time.
+	- This houses mainly the Sensor/Motor drivers for communication to both and incoming data from each set. There is also Dummy setup files for Virtual vehicle testing. The files here handle getting data directly from the sensor you call. These values should then be fed into `motor_t` or `sensor_t` objects to be sent back in telemetry and ease of pulling data. 
 	
 - `Gamepad Maps`
 	- Explains itself, Gamepad Mapping for two different Gamepads (F710, Logitech) or (Six-Axis, Generic).
@@ -66,8 +65,9 @@ At current, a good portion of these functions are statically programmed for Tard
 	- Mainly holds an old testing version of our PID software. It is completely Virtual for output and is not established for actual testing params.
 	
 - `Middleware`
-	- The middleware folder holds both the Motor and Sensor General middleware. Motor Middleware houses PPSTI (Pi Pico Serial Thruster Interface) which handles PPSTI calls to convert Vectors to PWM values and can also pull Motor values from the Motors themselves.
- 	- The Sensor Middleware handles pulling the actual Sensor data directly from the Sensors themselves. This was done due to how the default driver files are setup, we wanted to keep the Method Signatures the same, even though we had to implement our own logic to get it operational in C++.
+	- The middleware folder holds both the Motor and Sensor General middleware.
+ 	- Motor Middleware houses PPSTI (Pi Pico Serial Thruster Interface) which handles PPSTI calls to convert Vectors to PWM values. PPSTI also is able to pull raw thruster data directly from the motor.
+ 	- The Sensor Middleware handles pulling data from `sensor_t` objects and into the actual data type. This was setup in this fashion for ease of transferring data to and from the bot without having to hard program a part in the network transmission for each sensor. Through this format, you are able to just define a sensor_t object within your vehicle setup that will be transmitted and recieved through your network connection.
 	
 - `Mission Control`
   	- This folder contains the two different versions of Mission Control, or MC. MC_Relative is mission control that uses only the IMU for navigation, MC_VPPN operates solely on CV. The version of Mission Control we want in the end is both of these combined into each other for max error correction. 
@@ -97,18 +97,16 @@ The executable should be titled `avoe` in the `core` folder
 `./build.sh deckbox`
 
 
-### Building AVOE using CMake
+### Building AVOE using Make
 `To be done in future, TODO`
 
 ## Sensors
-AVOE features support for a multitude of sensors using base drivers written/rewritten into C/C++.
+AVOE has our sensors setup in a flexible high level sensor abstraction, what this means is that you can create a sensor using our `sensor_t` object and pull telemetry data easily from your bot, all that is needed to implement this is a driver that can be integrated/rewritten into AVOE (C/C++ drivers are only supported, you can rewrite drivers from Python to C/C++, this is what we did for our driver integration).
 
-The base drivers for these are within plugins/general-sensor, This will be the directory where any sensors you plan on using will have it's drivers put in. With this, the actual vehicle runtime can grab these drivers for use in data collection and logic functions. 
-
-Included within the directory is some examples of rewritten drivers that have been used in actual vehicles for development reference.
+We ship AVOE with some example drivers from our own implementation that can be used for a reference for your own implementation. You can also view how we setup our `sensor_t` objects within `vehicle_setup.h`. At a point in the future, the Core directory will be given a Method layout diagram for easy viewing of all the methods and the purpose of each file for ease of viewing.
 
 ## Motors
-AVOE also supports PWM enabled Thrusters. We use our own middleware for BlueRobotics thrusters. Currently we use a Microcontroller that interfaces with PPSTI. We plan on changing PPSTI to be supported on a Jetson Nano in the future.
+AVOE allows you to implement any thruster telemetry, as long as you have a plugin to handle the conversion of Input to Output for thrusters. With our current use of AVOE, we have a plugin titled `PPSTI (Pi Pico Serial Thruster Interface)` that handles conversion of vectors to PWM values which is used by our ESC's to drive thrusters. Our implementation as of writing has some manual config work needed to be done to allow for different Motor setups, but you would be able to realistically this with some effort. 
 
 ## Networking
 Wizard Magic (To be done at a later time)
@@ -118,7 +116,7 @@ Vehicle Setup is done within "Vehicle_Setup.h" . This allows for a simplified se
 
 Main.cpp is the heart of all of AVOE's components. This is where most of AVOE's important objects are instantied and will either be given data at compile time or run time depending on the nature of the object. Objects include communication objects, motor objects, sensor objects, etc. The main purpose of this is to define behavior that you want to run depending on what is needed. This allows for a single place to change that behavior along with testing it. 
 
-Main.cpp is split into two areas. Physical and Virtual, Physical is self explanitory as this is what you will run when actually running a AUV on AVOE. Virtual is your testing platform that can be used to test methods with random values that you would expect actual sensors to give you.
+Main.cpp is split into two areas. Physical and Virtual, Physical is self explanatory as this is what you will run when actually running a AUV on AVOE. Virtual is your testing platform that can be used to test methods with random values that you would expect actual sensors to give you.
 
 Virtual will work with the base repository with the included plugins for sensors and motors. There is dedicated virtual drivers for each sensor and motor object included within the plugins section of AVOE. Without these dedicated virtual drivers, any run of virtual with your own sensors/motors will not produced any data though should compile and run fine outside of data. 
 
