@@ -26,8 +26,14 @@
 
 
 
+/* AVOE BIDIRECTIONAL COMMUNICATION OBJECTS */
 
-// communication transmitter, send out info to other devices
+
+
+
+/* AVOE ONE WAY COMMUNICATION OBJECTS */
+
+
 class avoe_comm_transmitter{
 
 	private:
@@ -130,6 +136,9 @@ class avoe_comm_reciever{
 
 
 };
+
+
+/* MISC FUNCTIONS */
 
 
 void map_vector(vector_t *vecta, const char *str, size_t n);

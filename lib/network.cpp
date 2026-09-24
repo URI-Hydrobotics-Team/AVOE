@@ -163,7 +163,6 @@ void rx_socket::init(int port){
 
 	memset((char *)&my_addr, 0, sizeof(my_addr));
 	my_addr.sin_family = AF_INET;
-	//my_addr.sin_addr.s_addr = inet_addr(host);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	my_addr.sin_port = htons(port);
 	int reuse = 1;

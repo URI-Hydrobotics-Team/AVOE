@@ -48,21 +48,32 @@ std::string avoe_ppsti::sendAndReceive(const std::string& data, const std::strin
     struct sp_port *port;
     if (sp_get_port_by_name(port_name.c_str(), &port) != SP_OK) {
         std::cerr << "Error: Could not find the serial port " << port_name << std::endl;
+	#ifndef DEBUG
         return "ERROR_PORT_NOT_FOUND";
+	#endif
     }
 
     if (sp_open(port, SP_MODE_READ_WRITE) != SP_OK) {
         std::cerr << "Error: Could not open port " << port_name << std::endl;
+	#ifndef DEBUG
         return "ERROR_PORT_OPEN_FAIL";
+	#endif
     }
 
+	#ifndef DEBUG
     // Serial settings
     sp_set_baudrate(port, 115200);
     sp_set_bits(port, 8);
     sp_set_parity(port, SP_PARITY_NONE);
     sp_set_stopbits(port, 1);
+	#endif
 
     std::string command_with_newline = data + "\n";
+	#ifdef DEBUG
+	std::cout << "[DEBUG] STRING TO WRITE: " << command_with_newline << '\n';
+	return "DEBUG, EXITING";
+	#endif
+
     int bytes_written = sp_blocking_write(port, command_with_newline.c_str(), command_with_newline.size(), 1000);
     if (bytes_written < 0 || bytes_written != static_cast<int>(command_with_newline.size())) {
         std::cerr << "Error: Failed to send data to Pico!" << std::endl;

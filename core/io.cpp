@@ -275,6 +275,7 @@ void avoe_comm_transmitter::tx() {
 	// add generic data message
 
 	if (data_message_len > 0){
+		appendStr(temp_str, "*", strlen(temp_str));
 		appendStr(temp_str, data_message, strlen(temp_str));
 
 	}
@@ -309,7 +310,7 @@ avoe_comm_reciever::avoe_comm_reciever(const char *type_in, const char *channel,
 	motor_table = nullptr;
 	sensor_table = nullptr;
 	vector_table = nullptr;
-	string_table = nullptr;
+	string_table = nullptr; //not use
 	data_message = nullptr;
 		
 
@@ -774,17 +775,22 @@ void map_vector(vector_t *vecta, const char *str, size_t n){
 
 }
 
-int map_string(char string, const char *str, size_t n){
-	char temp_str[n];
+int map_string(char *string, const char *str, size_t n){
+	char *temp_str = new char[n];
 	size_t temp_index = 0;
 
 	for(int i = 0; i < n; i++){
-		if(str[i] == '*'){
-			return -1;
+		if(str[i] == '$'){
+			break;
 		}
 		temp_str[temp_index] = str[i];
 		temp_index++;
 	}
+
+	memset(string, 0, n);
+	strncpy(string, temp_str, temp_index);
+	delete temp_str;
+	return 1;
 }
 
 void avoe_comm_reciever::rx(){
@@ -820,6 +826,9 @@ void avoe_comm_reciever::rx(){
 
 	size_t header_len = strlen(local_header);
 
+	#ifdef VERBOSE
+	std::cout << "[IO] Header Length: " << header_len << '\n';
+	#endif
 	// do the header check
 
 	//std::cout << "header len: " << header_len << '\n';	
@@ -869,7 +878,12 @@ void avoe_comm_reciever::rx(){
 					vector_index++;
 				}
 				if (section_index == 4){
-					map_string(string_table[string_index], rx_buffer + index, rx_buffer_len);
+					#ifdef VERBOSE
+					std::cout << "found string\n";
+					#endif
+
+					//map_string(string_table[string_index], rx_buffer + index, rx_buffer_len)
+					map_string(data_message, rx_buffer + index + 1, data_message_len);
 					string_index++;
 
 				}
