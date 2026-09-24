@@ -39,17 +39,17 @@ int countNonZero(char *str, int len){
 
 void appendStr(char *base, const char *addition, int index){
 
-	int len = strlen(addition); //length of string to add
+	int len = strlen(addition); //length of string to add;
 	int end = len + index; //where to end
 	// end - index = where to end - where to start 
 
 
 	int increment = 0;
-
 	for (int i = 0; i < (end - index); i++){
 		base[index + i + increment] = addition[i];
 	}
 
+	base[end] = '\0';
 }
 
 int countChar(char *str, int key){

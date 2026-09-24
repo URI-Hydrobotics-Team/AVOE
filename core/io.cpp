@@ -183,7 +183,7 @@ void avoe_comm_transmitter::tx() {
 	*/
 
 
-	size_t temp_size = 0;
+	size_t temp_size = 4;
 	char *header, *temp_str, *temp_buffer;
 
 	header = new char[128];
@@ -211,7 +211,7 @@ void avoe_comm_transmitter::tx() {
 
 
 	// now we can allocate	
-	temp_str = new char[temp_size];
+	temp_str = new char[temp_size + 1];
 	initStr(temp_str, temp_size);
 
 	#ifdef VERBOSE
@@ -277,12 +277,12 @@ void avoe_comm_transmitter::tx() {
 	if (data_message_len > 0){
 		appendStr(temp_str, "*", strlen(temp_str));
 		appendStr(temp_str, data_message, strlen(temp_str));
-
 	}
 
 		
 	appendStr(temp_str, "$", strlen(temp_str)); //terminate with '$'
-
+	// std::cout << "temp size final: " << strlen(temp_str) << "\n";
+	// std::cout << temp_str << "\n";
 	//std::cout << temp_str << '\n';
 	socket->transmit(temp_str, strlen(temp_str));	
 
