@@ -26,8 +26,8 @@ AVOE ships with reference code for our Tardigrade AUV. Check out `docs/tardigrad
 - linux-headers
 
 ## Building the Core Program
-### With CMake
-Comming eventually.
+### With GNU Make
+Comming soon
 ### With Bash
 #### Building AVOE
 `cd core`
