@@ -720,15 +720,7 @@ void tardigrade_remote(){
 			tardigrade_update_sensors_physical();
 			
 			// send vectors to controller
-			if (translational_vector.x == 0 && translational_vector.y == 0 && translational_vector.z == 0){
-
-
-				controller_full.send_lateral_vector(rotational_vector);
-			}
-
-			if (rotational_vector.x == 0 && rotational_vector.y == 0 && rotational_vector.z == 0){ 
-				controller_full.send_translation_vector(translational_vector);
-			}
+			controller_full.send_mixed_vector(translational_vector, rotational_vector);
 
 			//controller.send_vector(translational_vector);
 			sensor_timer.reset();
@@ -825,8 +817,7 @@ void tardigrade_virtual(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_dummy();
-			controller_full.send_translation_vector(translational_vector);
-			controller_full.send_lateral_vector(rotational_vector);
+			controller_full.send_mixed_vector(translational_vector, rotational_vector);
 
 			//controller.send_vector(translational_vector);
 
