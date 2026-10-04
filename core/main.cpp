@@ -720,7 +720,15 @@ void tardigrade_remote(){
 			tardigrade_update_sensors_physical();
 			
 			// send vectors to controller
-			controller_full.send_mixed_vector(translational_vector, rotational_vector);
+			if (translational_vector.x == 0 && translational_vector.y == 0 && translational_vector.z == 0){
+
+
+				controller_full.send_lateral_vector(rotational_vector);
+			}
+
+			if (rotational_vector.x == 0 && rotational_vector.y == 0 && rotational_vector.z == 0){
+				controller_full.send_translation_vector(translational_vector);
+			}
 
 			//controller.send_vector(translational_vector);
 			sensor_timer.reset();
@@ -817,7 +825,8 @@ void tardigrade_virtual(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_dummy();
-			controller_full.send_mixed_vector(translational_vector, rotational_vector);
+			controller_full.send_translation_vector(translational_vector);
+			controller_full.send_lateral_vector(rotational_vector);
 
 			//controller.send_vector(translational_vector);
 
@@ -850,6 +859,54 @@ void tardigrade_virtual(){
 
 /* Support functions for main */
 
+/*
+	One-shot check for send_mixed_vector.
+	translation (1, 0, 0) and rotation (0, 0, 0.5) against the default tables:
+	surge sets SS and PS to 1, yaw 0.5 sets Y to 0.5, and the vertical thrusters stay 0.
+	Returns 0 when every thruster matches, 1 otherwise.
+*/
+int tardigrade_mixer_test(){
+	const char *expected_labels[6] = {"SH", "BSH", "BPH", "Y", "SS", "PS"};
+	const double expected_values[6] = {0.0, 0.0, 0.0, 0.5, 1.0, 1.0};
+	vector_t translation(1.0, 0.0, 0.0);
+	vector_t rotation(0.0, 0.0, 0.5);
+	int failed = 0;
+
+	tardigrade_setup_virtual();
+	controller_full.send_mixed_vector(translation, rotation);
+
+	std::cout << "[MIXER TEST] translation 1 0 0, rotation 0 0 0.5\n";
+	for (size_t i = 0; i < 6; i++){
+		motor_t *motor = tardigrade.getMotor(i);
+		double actual = strtod(motor->read(0), NULL);
+		double error = actual - expected_values[i];
+		if (error < 0){
+			error = -error;
+		}
+
+		std::cout << "[MIXER TEST] " << motor->getLabel()
+			<< " expected " << expected_values[i]
+			<< " actual " << actual << std::endl;
+
+		if (strncmp(motor->getLabel(), expected_labels[i], 8) != 0 || error > 0.0001){
+			failed = 1;
+		}
+	}
+
+	if (failed){
+		std::cout << "[MIXER TEST] FAILED" << std::endl;
+		std::_Exit(1);
+	}
+
+	std::cout << "[MIXER TEST] PASSED" << std::endl;
+	/*
+		controller_full does not own the global vehicle, but its destructor
+		deletes that pointer. Skip static destruction so this one-shot check
+		can exit with the comparison result.
+	*/
+	std::_Exit(0);
+}
+
 
 void printHelp(){
 
@@ -861,6 +918,7 @@ void printHelp(){
 	std::cout << "\thelp\t(displays this)\n";
 	std::cout << "\ttardigrade_virtual\t(run tardigrade virtual configuration for testing)\n"; 
 	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
+	std::cout << "\ttardigrade_mixer_test\t(check one known mixed thrust command, then exit)\n";
 	std::cout << "\ttardigrade_task <task number>\t(place holder robosub task)\n"; 
 
 }
@@ -885,6 +943,9 @@ int main(int argc, char *argv[]){
 	if (strncmp(argv[1], "tardigrade_virtual", 32) == 0){
 		tardigrade_virtual();
 		return 0;
+	}
+	if (strncmp(argv[1], "tardigrade_mixer_test", 32) == 0){
+		return tardigrade_mixer_test();
 	}
 	if (strncmp(argv[1], "tardigrade_remote", 32) == 0){
 		tardigrade_remote();
