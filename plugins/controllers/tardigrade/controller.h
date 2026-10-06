@@ -27,7 +27,7 @@ class tardigrade_controller_t{
 
 		float translation_thrust_table_default[6][3] = {
 			//default thruster table
-			{0.00, 0.0, 8.0},	//SH
+			{0.00, 0.0, 0.8},	//SH
 			{0.00, 0.0, 0.85},	//BSH
 			{0.00, 0.0, 0.85}, 	//BPH
 
