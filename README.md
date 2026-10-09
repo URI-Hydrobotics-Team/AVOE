@@ -1,4 +1,5 @@
 # Autonomous Vehicle Operating Envronment (AVOE)
+NOTE! AVOE will be phased out eventually for a newer version that distributes functionality across multiple executables and repositories to make the project more maintainable. See the `avoe_core` repo for more info.
 
 ## Overview
 AVOE is a minimalist robotics middleware suite for AUVs.
@@ -26,8 +27,6 @@ AVOE ships with reference code for our Tardigrade AUV. Check out `docs/tardigrad
 - linux-headers
 
 ## Building the Core Program
-### With GNU Make
-Comming soon
 ### With Bash
 #### Building AVOE
 `cd core`
