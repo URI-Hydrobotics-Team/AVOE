@@ -31,6 +31,21 @@ Use the `build.sh` script under `core/` to build the `avoe` executable.
 - configure network settings in config.h
 - `./build.sh physical`
 
+### Configure Network
+- delete/disable existing network manager network configs
+- add a new ethernet connection called "tardigrade"
+- disable auto negotiation and force 100Mbps full duplex (assuming ethernet cable has not been fixed)
+```
+nmcli c edit "tardigrade"
+goto ethernet
+set auto-negotiate no
+set speed 100
+set duplex full
+back
+save persistent
+quit
+```
+
 ## Run AVOE
 `sudo ./avoe tardigrade_<target>` 
 
