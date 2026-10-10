@@ -115,6 +115,7 @@ void tardigrade_task_1(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
@@ -127,7 +128,6 @@ void tardigrade_task_1(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
@@ -234,6 +234,7 @@ void tardigrade_task_imu_test(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
@@ -246,7 +247,6 @@ void tardigrade_task_imu_test(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
@@ -334,6 +334,7 @@ void tardigrade_task_box(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
@@ -346,7 +347,6 @@ void tardigrade_task_box(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
@@ -434,6 +434,7 @@ void tardigrade_task_vertical_test(){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
@@ -446,7 +447,6 @@ void tardigrade_task_vertical_test(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
@@ -536,6 +536,7 @@ void tardigrade_task_coin_flip(int angle){
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			sensor_timer.reset();
 		}
 		// AUTONOMY		
@@ -548,7 +549,6 @@ void tardigrade_task_coin_flip(int angle){
 		// DISPLAY
 		nightrider_run();
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
@@ -631,6 +631,7 @@ void tardigrade_imu_dump(){
 
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			//set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 			tardigrade_update_sensors_physical();
 			sensor_timer.reset();
 		}
@@ -642,7 +643,6 @@ void tardigrade_imu_dump(){
 		// DISPLAY
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			//set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade_imu.print();
@@ -715,7 +715,7 @@ void tardigrade_remote(){
 		usleep(1000);
 		//the loop
 
-		// UPDATE YOUR SENSORS
+		// UPDATE YOUR SENSORS AND SEND THRUSTERS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
 			tardigrade_update_sensors_physical();
 			
@@ -732,6 +732,8 @@ void tardigrade_remote(){
 
 			//controller.send_vector(translational_vector);
 			sensor_timer.reset();
+
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 		}
 		
 		// NETWORK REFRESH
@@ -744,10 +746,9 @@ void tardigrade_remote(){
 		}
 	
 
-		// DISPLAY OUT AND SEND THRUSTERS
+		// DISPLAY OUT
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
-			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
 
 			//update, print and log every one second
 			tardigrade.print();
