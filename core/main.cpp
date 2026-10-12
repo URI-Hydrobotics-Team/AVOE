@@ -30,6 +30,12 @@
 
 */
 
+//Support Methods for tardigrade Modes
+void trackTransmissionTime(avoe_clock_t* timestamp){
+	printf("trasmission loop time: %ld\n", timestamp->getElaspedTimeMS());
+	timestamp->reset();
+}
+
 
 /* 
 
@@ -741,8 +747,8 @@ void tardigrade_remote(){
 		rx_device.refresh();
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
+                        trackTransmissionTime(&network_timer);
 			
-			network_timer.reset();
 		}
 	
 
@@ -840,8 +846,8 @@ void tardigrade_virtual(){
 
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
+                        trackTransmissionTime(&network_timer);
 			
-			network_timer.reset();
 		}
 	
 
@@ -874,7 +880,6 @@ void printHelp(){
 	std::cout << "\ttardigrade_task <task number>\t(place holder robosub task)\n"; 
 
 }
-
 
 int main(int argc, char *argv[]){
 
