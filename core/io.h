@@ -17,6 +17,9 @@
 #define PER_FIELD_BUFFER_LEN 128
 
 
+#define PROBE_AND_REFRESH 1
+
+
 /*
 	message format:
 	$AVOE:<channel_name>:<type>:<data>$
@@ -112,7 +115,8 @@ class avoe_comm_reciever{
 		avoe_comm_reciever(const char *type, const char *channel, int port_in, size_t len);
 		void set_message(char *mptr, size_t len);
 		void refresh(); // continous recieve based on clock period
-		void rx();
+		void rx(int mode);
+		void refresh_probe();
 		void set_timer(unsigned int period); 
 		void add_sensor(sensor_t *sensor);
 		void add_motor(motor_t *motor);

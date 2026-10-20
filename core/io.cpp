@@ -47,6 +47,10 @@ void avoe_comm_transmitter::refresh(){
 	}
 }
 
+
+
+
+
 void avoe_comm_transmitter::set_message(char *mptr, size_t len){
 
 	// set message length and set the message to be sent
@@ -330,7 +334,7 @@ void avoe_comm_reciever::refresh(){
 	}
 	if (clock.getElaspedTimeMS() >= rx_period){
 		if (socket != nullptr){
-			rx();	
+			rx(0);	
 		}		
 
 		clock.reset();
@@ -348,6 +352,28 @@ void avoe_comm_reciever::refresh(){
 	*/
 	}
 }
+
+
+void avoe_comm_reciever::refresh_probe(){
+	if (rx_period == 0){
+		return; //timer is off
+	}
+	if (clock.getElaspedTimeMS() >= rx_period){
+		if (socket != nullptr){
+			rx(PROBE_AND_REFRESH);
+		}		
+
+		clock.reset();
+	}else{
+	}
+}
+
+
+
+
+
+
+
 
 void avoe_comm_reciever::set_message(char *mptr, size_t len){
 
@@ -793,13 +819,29 @@ int map_string(char *string, const char *str, size_t n){
 	return 1;
 }
 
-void avoe_comm_reciever::rx(){
+void avoe_comm_reciever::rx(int mode){
 	// first we recieve via the socket
 
 
 	char *rx_buffer = new char[rx_buffer_len];
 
-	socket->rec(0, rx_buffer, rx_buffer_len); //recieve the data
+
+	if (mode == 0){
+
+		 socket->rec(0, rx_buffer, rx_buffer_len);
+	}else{
+
+
+		if (socket->probe() > 0){
+			socket->rec(0, rx_buffer, rx_buffer_len); //recieve the data
+
+		}else{
+			#ifdef VERBOSE
+			std::cout << "[IO] RX Probe: no data avaliable\n";
+			#endif
+			return;
+		}
+	}
 
 	size_t rx_message_len = strlen(rx_buffer);
 

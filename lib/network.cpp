@@ -49,12 +49,10 @@ void tx_socket::init(const char *host, int port){
 
 
 	int reuse = 1;
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0){
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, (const char*)&reuse, sizeof(reuse)) < 0){
 		perror("setsockopt(SO_REUSEADDR) failed");
 	}
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&reuse, sizeof(reuse)) < 0){
-		perror("setsockopt(SO_REUSEPORT) failed");
-	}
+
 
 
 	if (bind(fd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
@@ -80,6 +78,7 @@ void tx_socket::transmit(const char *tx_buffer, size_t tx_buffer_len){
 		std::cout << "[NETWORK] error sendto\n";
 	}
 	
+	//shutdown(fd, SHUT_WR); //may have broken some stuff
 
 }
 
@@ -166,13 +165,16 @@ void rx_socket::init(int port){
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	my_addr.sin_port = htons(port);
 	int reuse = 1;
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&reuse, sizeof(reuse)) < 0){
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT | SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0){
 		perror("setsockopt(SO_REUSEPORT) failed");
 	}
+	reuse = 1;
+
+	/*
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0){
 		perror("setsockopt(SO_REUSEADDR) failed");
 	}
-
+	*/
 	/* bind the socket */
 
 	if (bind(fd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
