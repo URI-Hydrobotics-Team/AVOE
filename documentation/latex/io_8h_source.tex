@@ -1,0 +1,155 @@
+\doxysection{io.\+h}
+\hypertarget{io_8h_source}{}\label{io_8h_source}\index{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/io.h@{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/io.h}}
+\doxymbox{\hyperlink{io_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ \ \ \ URI\ Hydrobotics}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ \ \ \ AVOE\ core\ input\ and\ output\ functions}}
+\DoxyCodeLine{00004\ \textcolor{comment}{}}
+\DoxyCodeLine{00005\ \textcolor{comment}{}}
+\DoxyCodeLine{00006\ \textcolor{comment}{}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ AVOE\_COMM\_T}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ AVOE\_COMM\_T}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}sensor.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}motor.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}../lib/network.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}../lib/clock.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ INDEX\_SIZE\ 64}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ PER\_FIELD\_BUFFER\_LEN\ 128}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PROBE\_AND\_REFRESH\ 1}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ message\ format:}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \$AVOE:<channel\_name>:<type>:<data>\$}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ "{}\$AVOE:<channel\_name>:<type>:"{}\ is\ the\ header\ and\ can\ be\ up\ to\ 64\ chars\ long}}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*\ AVOE\ BIDIRECTIONAL\ COMMUNICATION\ OBJECTS\ */}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{/*\ AVOE\ ONE\ WAY\ COMMUNICATION\ OBJECTS\ */}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{class\ }avoe\_comm\_transmitter\{}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ port;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ dest\_ip[32];}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ channel\_name[32];}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ type[32];}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ index[INDEX\_SIZE];}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{comment}{//timing}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ tx\_period;\ \textcolor{comment}{//in\ ms}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ avoe\_clock\_t\ clock;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{comment}{//data\ fields}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ length\ of\ data\ message}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_message\_len;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *data\_message;\ \textcolor{comment}{//pointer\ to\ character\ array}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_sensor\_message\_len,\ data\_motor\_message\_len;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ sensor\_count,\ motor\_count,\ sensor\_index,\ motor\_index,\ vector\_count,\ vector\_index;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classsensor__t}{sensor\_t}}\ **sensor\_table;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classmotor__t}{motor\_t}}\ **motor\_table;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ vector\_t\ **vector\_table;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ tx\_socket\ *socket;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ avoe\_comm\_transmitter(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *type\_in,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *channel,\ \textcolor{keywordtype}{int}\ port\_in,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *ip);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_index();}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_timer(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ period);\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_message(\textcolor{keywordtype}{char}\ *mptr,\ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_sensor(\doxymbox{\hyperlink{classsensor__t}{sensor\_t}}\ *sensor);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_motor(\doxymbox{\hyperlink{classmotor__t}{motor\_t}}\ *motor);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_vector(vector\_t\ *vector);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ tx();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ continous\ transmit\ based\ on\ clock\ period}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ refresh();}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ \ \ \ tx/rx\ message\ structure}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ \ \ \ \$<header>\%<sensors>\%<motors>\%<vectors>\%<string>\$}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ \ \ \ \$\ \ \ start\ and\ end\ of\ message}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ \ \ \ \%\ \ \ start\ of\ new\ section}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ \ \ \ *\ \ \ start\ of\ object}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ \ \ \ :\ \ \ internal\ seperators}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keyword}{class\ }avoe\_comm\_reciever\{}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ port;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ channel\_name[32];}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ type[32];}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ index[INDEX\_SIZE];}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *data\_message;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_message\_len;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ rx\_socket\ *socket;}
+\DoxyCodeLine{00111\ \ \ \ \ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ sensor\_count,\ vector\_count,\ motor\_count,string\_count;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ rx\_buffer\_len;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classsensor__t}{sensor\_t}}\ **sensor\_table;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classmotor__t}{motor\_t}}\ **motor\_table;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ vector\_t\ **vector\_table;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *string\_table;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ avoe\_clock\_t\ clock;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ rx\_period;\ \textcolor{comment}{//in\ ms}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ avoe\_comm\_reciever(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *type,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *channel,\ \textcolor{keywordtype}{int}\ port\_in,\ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_message(\textcolor{keywordtype}{char}\ *mptr,\ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ refresh();\ \textcolor{comment}{//\ continous\ recieve\ based\ on\ clock\ period}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ rx(\textcolor{keywordtype}{int}\ mode);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ refresh\_probe();}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_timer(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ period);\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_sensor(\doxymbox{\hyperlink{classsensor__t}{sensor\_t}}\ *sensor);}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_motor(\doxymbox{\hyperlink{classmotor__t}{motor\_t}}\ *motor);}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_vector(vector\_t\ *vector);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_index();}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ \ \ \ Set\ methods\ string\ outline}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ \ \ \ structure\ <type>:<model>:<field\ count>:DATA:<field\ 1>:<field\ 2>:...\%}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ \ \ \ tx/rx\ message\ structure}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ \ \ \ \$<header>\%<sensors>\%<motors>\%<vectors>\%<string>\$}}
+\DoxyCodeLine{00141\ \textcolor{comment}{}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ \ \ \ \$\ \ \ start\ and\ end\ of\ message}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ \ \ \ \%\ \ \ start\ of\ new\ section}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ \ \ \ *\ \ \ start\ of\ object}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ \ \ \ :\ \ \ internal\ seperators}}
+\DoxyCodeLine{00146\ \textcolor{comment}{}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{/*\ MISC\ FUNCTIONS\ */}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{keywordtype}{void}\ map\_vector(vector\_t\ *vecta,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str,\ \textcolor{keywordtype}{size\_t}\ n);}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

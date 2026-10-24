@@ -1,0 +1,54 @@
+\chapter{Downloading / Compiling AVOE }
+\hypertarget{Downloading_01_2_01Compiling_01AVOE}{}\label{Downloading_01_2_01Compiling_01AVOE}\index{Downloading / Compiling AVOE@{Downloading / Compiling AVOE}}
+\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md10}{}\doxysection{\texorpdfstring{Downloading AVOE}{Downloading AVOE}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md10}
+\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md11}{}\doxysubsection{\texorpdfstring{Getting Latest Version on Github}{Getting Latest Version on Github}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md11}
+Before compiling latest version of AVOE it is advised to get the latest version\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md12}{}\doxysubsubsection{\texorpdfstring{First time Downloading?}{First time Downloading?}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md12}
+AVOE can be cloned from the git repository from this command 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ clone\ https://github.com/URI-\/Hydrobotics-\/Team/AVOE.git}
+
+\end{DoxyCode}
+\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md13}{}\doxysubsubsection{\texorpdfstring{Already Downloaded?}{Already Downloaded?}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md13}
+Go into the repository on the command and type the following command
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ pull}
+
+\end{DoxyCode}
+
+
+This will ensure that the latest version of the repository is updated.\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md14}{}\doxysection{\texorpdfstring{Compiling AVOE}{Compiling AVOE}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md14}
+AVOE is compiled via a {\ttfamily  bash } script\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md15}{}\doxysubsection{\texorpdfstring{Before Compiling}{Before Compiling}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md15}
+Ensure you have the following Dependencies
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/\ gcc/g++}
+\DoxyCodeLine{-\/\ make\ and\ cmake\ (for\ cmake\ build\ option)}
+\DoxyCodeLine{-\/\ libc6-\/dev}
+\DoxyCodeLine{-\/\ linux-\/headers}
+
+\end{DoxyCode}
+\hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md16}{}\doxysubsection{\texorpdfstring{Compiling with Bash}{Compiling with Bash}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md16}
+Make sure you are in the core directory in the AVOE repository 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\string~/AVOE/core/\ }
+
+\end{DoxyCode}
+ to compile enter the following command see below for the options 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{/build.sh\ <option>\ }
+
+\end{DoxyCode}
+ \hypertarget{Downloading_01_2_01Compiling_01AVOE_autotoc_md17}{}\doxysubsubsection{\texorpdfstring{Compilation options}{Compilation options}}\label{Downloading_01_2_01Compiling_01AVOE_autotoc_md17}
+There are options when you compile
+
+
+\begin{DoxyTable}{2}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Option  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Description  \\
+virtual  &compiles program using dummy data  \\
+virtual\+\_\+verbose  &Similar to virtual with verbose debug messages  \\
+virtual\+\_\+g  &Builds virtual target with the Address Sanitizer  \\
+physical  &Builds the physical AVOE target with real world data  \\
+\end{DoxyTable}

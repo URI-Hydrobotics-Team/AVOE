@@ -39,7 +39,7 @@ void log_t::init(){
 void log_t::log(const char *data){
 	// write timestamp and log input 
 
-/**
+/*
  * I moved this here instead of the init function 
  * it writes the header file here it should only once;
  */

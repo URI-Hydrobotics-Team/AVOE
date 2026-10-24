@@ -1,3 +1,5 @@
+@mainpage
+
 # AVOE core components
 
 ## Overview

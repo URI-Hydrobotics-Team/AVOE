@@ -1,0 +1,169 @@
+\doxysection{/\+home/\+\+Andrew/\+\+Documents/\+\+Code Projects/\+hydrobotics/\+\+AVOEMK2/\+core/\+vehicle\+\_\+setup.h File Reference}
+\hypertarget{vehicle__setup_8h}{}\label{vehicle__setup_8h}\index{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/vehicle\_setup.h@{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/vehicle\_setup.h}}
+{\ttfamily \+\#include "{}config.\+h"{}}\newline
+{\ttfamily \+\#include $<$ctime$>$}\newline
+{\ttfamily \+\#include "{}sensor.\+h"{}}\newline
+{\ttfamily \+\#include "{}motor.\+h"{}}\newline
+{\ttfamily \+\#include "{}vehicle.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+middleware/\+general-\/sensor/\+imu.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+middleware/\+general-\/sensor/\+leak.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+middleware/\+general-\/sensor/\+pressure.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+drivers/\+sensors/\+imu-\/dummy/\+driver.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+drivers/\+sensors/\+pressure-\/sensor-\/dummy/\+driver.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+drivers/\+sensors/\+leak-\/sensor-\/dummy/\+driver.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+controllers/\+tardigrade\+\_\+basic/\+controller.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+controllers/\+tardigrade/\+controller.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+mission\+\_\+control/\+tardigrade\+\_\+mc\+\_\+relative/\+mission.\+h"{}}\newline
+{\ttfamily \+\#include "{}../\+plugins/\+mission\+\_\+control/\+tardigrade\+\_\+mc\+\_\+relative/\+mc.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_aa9c9f76aeb0ce6fb9e6487cb0f05c1d2}{thruster\+\_\+\+BPH}} (1)
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_a4f10245da4f32456a3904a8907771b73}{thruster\+\_\+\+BSH}} (1)
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_a771614c7f60e11a1c31a0f4398eb1088}{thruster\+\_\+\+SH}} (1)
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_a9cf5fdddf0c1bb54a6dc04c4c3fd5ab2}{thruster\+\_\+Y}} (1)
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_a8dea7b04224a55399498e33d863eaaa5}{thruster\+\_\+\+PS}} (1)
+\item 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_ada52b83af32e6767b5f8798f2cfeb02a}{thruster\+\_\+\+SS}} (1)
+\item 
+\doxymbox{\hyperlink{classvehicle__t}{vehicle\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_adbaa6378f6f39c1e41ccd7a902cd4993}{tardigrade}} ("{}Tardigrade"{}, "{}2"{}, "{}AUV"{})
+\item 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_a34921c3a41322ab9fa29410ab8beca0e}{tardigrade\+\_\+imu}} (8)
+\item 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_ab01ce22ef320fd6228404e8607b2d012}{tardigrade\+\_\+pressure}} (4)
+\item 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} \doxymbox{\hyperlink{vehicle__setup_8h_ad1834f7c4d208fbbe243d188507aea26}{tardigrade\+\_\+leak}} (1)
+\item 
+void \doxymbox{\hyperlink{vehicle__setup_8h_aab1cbf50b14c19177534f43e671f9e93}{tardigrade\+\_\+setup\+\_\+virtual}} ()
+\item 
+void \doxymbox{\hyperlink{vehicle__setup_8h_a4d8e4169bf59c8b5f72a0d524b3cc976}{tardigrade\+\_\+update\+\_\+sensors\+\_\+dummy}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Dummy\+\_\+\+BNO055 \doxymbox{\hyperlink{vehicle__setup_8h_a9a1595de0da9a47ecfbb316909a3f1a7}{dummy\+\_\+imu}}
+\item 
+pressure\+\_\+driver \doxymbox{\hyperlink{vehicle__setup_8h_ad32e9eb09b13246bf3e67fb19f950e51}{dummy\+\_\+pressure}}
+\item 
+leak\+\_\+sensor \doxymbox{\hyperlink{vehicle__setup_8h_aa4e9dced24f3c655cf1fe8fafb5100c9}{dummy\+\_\+leak}}
+\item 
+tardigrade\+\_\+basic\+\_\+controller\+\_\+t \doxymbox{\hyperlink{vehicle__setup_8h_af3f50f62b3f09a5788ab02787bc7dae9}{controller}}
+\item 
+tardigrade\+\_\+controller\+\_\+t \doxymbox{\hyperlink{vehicle__setup_8h_a3d6cbc457cc875e0981698d3d7501c36}{controller\+\_\+full}}
+\end{DoxyCompactItemize}
+
+
+\label{vehicle__setup_8h_doc-func-members}
+\Hypertarget{vehicle__setup_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{vehicle__setup_8h_adbaa6378f6f39c1e41ccd7a902cd4993}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade@{tardigrade}}
+\index{tardigrade@{tardigrade}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade()}{tardigrade()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_adbaa6378f6f39c1e41ccd7a902cd4993} 
+\doxymbox{\hyperlink{classvehicle__t}{vehicle\+\_\+t}} tardigrade (\begin{DoxyParamCaption}\item[{"{}Tardigrade"{}}]{}{, }\item[{"{}2"{}}]{}{, }\item[{"{}AUV"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a34921c3a41322ab9fa29410ab8beca0e}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade\_imu@{tardigrade\_imu}}
+\index{tardigrade\_imu@{tardigrade\_imu}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade\_imu()}{tardigrade\_imu()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a34921c3a41322ab9fa29410ab8beca0e} 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} tardigrade\+\_\+imu (\begin{DoxyParamCaption}\item[{8}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_ad1834f7c4d208fbbe243d188507aea26}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade\_leak@{tardigrade\_leak}}
+\index{tardigrade\_leak@{tardigrade\_leak}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade\_leak()}{tardigrade\_leak()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_ad1834f7c4d208fbbe243d188507aea26} 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} tardigrade\+\_\+leak (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_ab01ce22ef320fd6228404e8607b2d012}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade\_pressure@{tardigrade\_pressure}}
+\index{tardigrade\_pressure@{tardigrade\_pressure}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade\_pressure()}{tardigrade\_pressure()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_ab01ce22ef320fd6228404e8607b2d012} 
+\doxymbox{\hyperlink{classsensor__t}{sensor\+\_\+t}} tardigrade\+\_\+pressure (\begin{DoxyParamCaption}\item[{4}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_aab1cbf50b14c19177534f43e671f9e93}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade\_setup\_virtual@{tardigrade\_setup\_virtual}}
+\index{tardigrade\_setup\_virtual@{tardigrade\_setup\_virtual}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade\_setup\_virtual()}{tardigrade\_setup\_virtual()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_aab1cbf50b14c19177534f43e671f9e93} 
+void tardigrade\+\_\+setup\+\_\+virtual (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a4d8e4169bf59c8b5f72a0d524b3cc976}\index{vehicle\_setup.h@{vehicle\_setup.h}!tardigrade\_update\_sensors\_dummy@{tardigrade\_update\_sensors\_dummy}}
+\index{tardigrade\_update\_sensors\_dummy@{tardigrade\_update\_sensors\_dummy}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{tardigrade\_update\_sensors\_dummy()}{tardigrade\_update\_sensors\_dummy()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a4d8e4169bf59c8b5f72a0d524b3cc976} 
+void tardigrade\+\_\+update\+\_\+sensors\+\_\+dummy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_aa9c9f76aeb0ce6fb9e6487cb0f05c1d2}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_BPH@{thruster\_BPH}}
+\index{thruster\_BPH@{thruster\_BPH}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_BPH()}{thruster\_BPH()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_aa9c9f76aeb0ce6fb9e6487cb0f05c1d2} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+\+BPH (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a4f10245da4f32456a3904a8907771b73}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_BSH@{thruster\_BSH}}
+\index{thruster\_BSH@{thruster\_BSH}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_BSH()}{thruster\_BSH()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a4f10245da4f32456a3904a8907771b73} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+\+BSH (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a8dea7b04224a55399498e33d863eaaa5}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_PS@{thruster\_PS}}
+\index{thruster\_PS@{thruster\_PS}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_PS()}{thruster\_PS()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a8dea7b04224a55399498e33d863eaaa5} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+\+PS (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a771614c7f60e11a1c31a0f4398eb1088}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_SH@{thruster\_SH}}
+\index{thruster\_SH@{thruster\_SH}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_SH()}{thruster\_SH()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a771614c7f60e11a1c31a0f4398eb1088} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+\+SH (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_ada52b83af32e6767b5f8798f2cfeb02a}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_SS@{thruster\_SS}}
+\index{thruster\_SS@{thruster\_SS}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_SS()}{thruster\_SS()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_ada52b83af32e6767b5f8798f2cfeb02a} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+\+SS (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{vehicle__setup_8h_a9cf5fdddf0c1bb54a6dc04c4c3fd5ab2}\index{vehicle\_setup.h@{vehicle\_setup.h}!thruster\_Y@{thruster\_Y}}
+\index{thruster\_Y@{thruster\_Y}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{thruster\_Y()}{thruster\_Y()}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a9cf5fdddf0c1bb54a6dc04c4c3fd5ab2} 
+\doxymbox{\hyperlink{classmotor__t}{motor\+\_\+t}} thruster\+\_\+Y (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+
+
+\label{vehicle__setup_8h_doc-var-members}
+\Hypertarget{vehicle__setup_8h_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{vehicle__setup_8h_af3f50f62b3f09a5788ab02787bc7dae9}\index{vehicle\_setup.h@{vehicle\_setup.h}!controller@{controller}}
+\index{controller@{controller}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{controller}{controller}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_af3f50f62b3f09a5788ab02787bc7dae9} 
+tardigrade\+\_\+basic\+\_\+controller\+\_\+t controller}
+
+\Hypertarget{vehicle__setup_8h_a3d6cbc457cc875e0981698d3d7501c36}\index{vehicle\_setup.h@{vehicle\_setup.h}!controller\_full@{controller\_full}}
+\index{controller\_full@{controller\_full}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{controller\_full}{controller\_full}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a3d6cbc457cc875e0981698d3d7501c36} 
+tardigrade\+\_\+controller\+\_\+t controller\+\_\+full}
+
+\Hypertarget{vehicle__setup_8h_a9a1595de0da9a47ecfbb316909a3f1a7}\index{vehicle\_setup.h@{vehicle\_setup.h}!dummy\_imu@{dummy\_imu}}
+\index{dummy\_imu@{dummy\_imu}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{dummy\_imu}{dummy\_imu}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_a9a1595de0da9a47ecfbb316909a3f1a7} 
+Dummy\+\_\+\+BNO055 dummy\+\_\+imu}
+
+\Hypertarget{vehicle__setup_8h_aa4e9dced24f3c655cf1fe8fafb5100c9}\index{vehicle\_setup.h@{vehicle\_setup.h}!dummy\_leak@{dummy\_leak}}
+\index{dummy\_leak@{dummy\_leak}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{dummy\_leak}{dummy\_leak}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_aa4e9dced24f3c655cf1fe8fafb5100c9} 
+leak\+\_\+sensor dummy\+\_\+leak}
+
+\Hypertarget{vehicle__setup_8h_ad32e9eb09b13246bf3e67fb19f950e51}\index{vehicle\_setup.h@{vehicle\_setup.h}!dummy\_pressure@{dummy\_pressure}}
+\index{dummy\_pressure@{dummy\_pressure}!vehicle\_setup.h@{vehicle\_setup.h}}
+\doxysubsubsection{\texorpdfstring{dummy\_pressure}{dummy\_pressure}}
+{\footnotesize\ttfamily \label{vehicle__setup_8h_ad32e9eb09b13246bf3e67fb19f950e51} 
+pressure\+\_\+driver dummy\+\_\+pressure}
+

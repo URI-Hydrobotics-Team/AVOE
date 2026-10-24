@@ -5,6 +5,11 @@
 
 
 */
+/**
+ * @file io.h
+ * @brief AVOE core input and output functions
+ * 
+ */
 #ifndef AVOE_COMM_T
 #define AVOE_COMM_T
 
@@ -12,7 +17,6 @@
 #include "motor.h"
 #include "../lib/network.h"
 #include "../lib/clock.h"
-
 #define INDEX_SIZE 64
 #define PER_FIELD_BUFFER_LEN 128
 
@@ -36,6 +40,10 @@
 
 /* AVOE ONE WAY COMMUNICATION OBJECTS */
 
+
+/**
+ * @brief Avoe communication transmitter 
+ */
 
 class avoe_comm_transmitter{
 

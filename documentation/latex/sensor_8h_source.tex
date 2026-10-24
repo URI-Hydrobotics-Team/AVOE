@@ -1,0 +1,59 @@
+\doxysection{sensor.\+h}
+\hypertarget{sensor_8h_source}{}\label{sensor_8h_source}\index{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/sensor.h@{/home/Andrew/Documents/Code Projects/hydrobotics/AVOEMK2/core/sensor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ \ \ URI\ Hydrdobotics}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ \ \ AVOE\ sensor\ class}}
+\DoxyCodeLine{00005\ \textcolor{comment}{}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ Sensor\ drivers\ will\ interface\ with\ each\ sensor\ object.\ The\ vehicle\ class\ will\ hold\ sensor\ objects\ and\ provide\ an\ interface\ for\ accessing\ them.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ SENSOR\_H}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ SENSOR\_H}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}log.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}../lib/lib.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }sensor\_t\{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *model,\ *vendor,\ *protocol,\ *type,\ **data;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ state\ =\ 0;\ \textcolor{comment}{//0\ =\ uninit.\ ,\ 1\ =\ ready\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ field\_count;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ positioning\ */}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ vector\_t\ offset;\ \textcolor{comment}{//position\ offset\ from\ center\ of\ vehicle\ in\ mm}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ vector\_t\ facing;\ \textcolor{comment}{//direction\ the\ sensor\ is\ pointed\ torwads\ if\ applicable}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ sensor\_t(\textcolor{keywordtype}{size\_t}\ fields);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \string~sensor\_t();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *m,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *v,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *t,\ vector\_t\ off,\ vector\_t\ face);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ local\_update(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *t,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ model);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *getModel();}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *getVendor();}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *getProtocol();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *getType();}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *read(\textcolor{keywordtype}{size\_t}\ field);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ getState();}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ write(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *input,\ \textcolor{keywordtype}{size\_t}\ field,\ \textcolor{keywordtype}{size\_t}\ n);}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ log(\doxymbox{\hyperlink{classlog__t}{log\_t}}\ *log);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print();}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ getFieldCount();}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ getBufferSize();\ \textcolor{comment}{//used\ for\ io.h}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ writeToBuffer(\textcolor{keywordtype}{char}\ *buffer);\ \textcolor{comment}{//\ used\ for\ io.h\ }}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
