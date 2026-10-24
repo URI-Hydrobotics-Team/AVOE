@@ -9,3 +9,5 @@ lib/Makefile
 plugins/cmake_install.cmake
 plugins/Makefile
 external/
+documentation/html
+documentation/latex
