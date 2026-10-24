@@ -41,3 +41,18 @@ The executable should be titled `avoe` in the `core` folder
 
 `./build.sh deckbox`
 
+
+
+# Documentation
+## To Compile
+first make sure to install `Doxygen`
+
+``` 
+    cd documentation 
+
+    doxygen Doxyfile
+```
+## To view
+
+in `./AVOE/documentation/html/`, open the `index.html` file in your desired browser
+
