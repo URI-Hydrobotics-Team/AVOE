@@ -10,9 +10,8 @@
 
 
 
-// --- OLD STUFF ---
 /* MISC */
-#define IMU_OFFSETS_FILENAME "irvine.bin"
+#define IMU_OFFSETS_FILENAME "offsets/irvine.bin"
 //#define IMU_OFFSETS_FILENAME "NULL" //no calibration
 
 
@@ -24,7 +23,7 @@
 #define MAX_SENSOR_ENTRIES 16
 #define MAX_PER_VEHICLE_SENSORS 8
 #define MAX_PER_VEHICLE_CLOCKS 5
-#define TARDIGRADE_SENSOR_UPDATE_INTERVAL 500
+#define TARDIGRADE_SENSOR_UPDATE_INTERVAL 100
 #define LED0 20
 #define LED1 21
 #define LED2 12
@@ -42,12 +41,6 @@
 #define PORT_DECKBOX_TELEMETRY 8110
 #define PORT_DECKBOX_INPUT 8101
 #define NETWORK_UPDATE_INTERVAL 100
-
-
-// --- NEW STUFF ---
-#define AVOE_USER_PORT 2760 // your "user" program will talk to AVOE on this port
-#define AVOE_SENSOR_PORT 7447 
-
 
 
 

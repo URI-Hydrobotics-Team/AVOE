@@ -67,7 +67,7 @@ int main(int argc, char** argv){
 
 	rx.set_message(rx_buffer, BUFFER_SIZE);
 	tx.set_message(tx_buffer, BUFFER_SIZE);
-	rx.set_timer(10);
+	rx.set_timer(100);
 	tx.set_timer(10);
 
 	while(1){
