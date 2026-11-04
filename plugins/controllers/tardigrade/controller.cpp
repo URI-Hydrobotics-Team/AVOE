@@ -85,3 +85,24 @@ void tardigrade_controller_t::send_lateral_vector(vector_t thrust_vector){
 
     }
 }
+
+//
+void tardigrade_controller_t::send_mixed_vector(vector_t translation_vector, vector_t lateral_vector){
+    double x = translation_vector.x;
+    double y = translation_vector.y;
+    double z = translation_vector.z;
+
+    double rx = lateral_vector.x;
+    double ry = lateral_vector.y;
+    double rz = lateral_vector.z;
+
+    for(size_t i = 0; i < 6; i++){
+        double translation_total = (x * translation_thrust_table[i][0]) + (y * translation_thrust_table[i][1]) + (z * translation_thrust_table[i][2]);
+        double lateral_total = (rx * lateral_thrust_table[i][0]) + (ry * lateral_thrust_table[i][1]) + (rz * lateral_thrust_table[i][2]);
+        double total = translation_total + lateral_total;
+        char  str[16];
+        memset(str, 0, sizeof(char) * 16);
+        sprintf(str, "%f", total);
+        motorTable[i]->write(str, 0, 16);
+    }
+}

@@ -65,6 +65,8 @@ class tardigrade_controller_t{
 		void init(const char *n, vehicle_t *vehicle_in);
 		void send_translation_vector(vector_t thrust_vector);
 		void send_lateral_vector(vector_t thrust_vector);
+		//Terrell Osborne  - 10/03/2026 - added this function to send a mixed vector to the motors
+		void send_mixed_vector(vector_t translation_vector, vector_t lateral_vector);
 		void overide_thrust_table(float (*translation_thrust_table_)[3], float (*lateral_thrust_table_)[3]); //NULl resets to default
 };
 
