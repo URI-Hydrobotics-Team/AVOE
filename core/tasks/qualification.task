@@ -1,15 +1,17 @@
 # AVOE qualification task file
 task_name = RoboSub Qualification;
+TASK_START
 MISSION_START
 
-TASK_START
 duration = ;
 speed = ;
 movement_type = ;
 maintain_pose = ;
+MISSION_END
+
+
 TASK_END
 
 
 
 
-MISSION_END
