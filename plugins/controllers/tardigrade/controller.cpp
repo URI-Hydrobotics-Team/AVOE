@@ -42,6 +42,13 @@ void tardigrade_controller_t::overide_thrust_table(float (*translation_thrust_ta
 
 void tardigrade_controller_t::send_translation_vector(vector_t thrust_vector){ //we assume pivot and orgin are about the center of the robot
 
+
+#ifdef VERBOSE
+	std::cout << "[DEBUG] Tardigrade Controller Send Translational\n";
+
+#endif
+
+
     double x = thrust_vector.x;
     double y = thrust_vector.y;
     double z = thrust_vector.z;
@@ -68,6 +75,11 @@ void tardigrade_controller_t::send_lateral_vector(vector_t thrust_vector){
     double rx = thrust_vector.x;
     double ry = thrust_vector.y;
     double rz = thrust_vector.z;
+
+#ifdef VERBOSE
+	std::cout << "[DEBUG] Tardigrade Controller Send Lateral\n";
+
+#endif
 
 
     for(size_t i = 0; i < 6; ++i){

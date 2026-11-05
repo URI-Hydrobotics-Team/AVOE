@@ -684,7 +684,7 @@ int map_motor(motor_t *motor, const char *message, size_t message_len){
 	}
 	
 	strncpy(field_count_str, temp_str, temp_index);
-	initStr(temp_str, 32);
+	initStr(temp_str, 32); //unecesarry should be commented out
 	temp_index = 0;
 
 	//std::cout << "DETECTED TYPE: " << type << '\n';
@@ -701,6 +701,29 @@ int map_motor(motor_t *motor, const char *message, size_t message_len){
 		return -1;
 	} 
 
+	// DATA
+
+	initStr(temp_str, 32);
+	temp_index = 0;
+	
+	for (index < message_len; index++;){
+
+		//std::cout << message[index] << '\n';
+		if (message[index] == ':'){
+			break;
+		}
+		temp_str[temp_index] = message[index];
+		temp_index++;
+	}
+
+	if (strncmp(temp_str, "DATA", 32) == 0){
+		//std::cout << "sensor_t match for \n";
+	}else{
+		return -1;
+	} 
+	
+
+	temp_index = 0;
 	char temp_field_str[128];
 	initStr(temp_field_str, 128);
 	
@@ -714,6 +737,7 @@ int map_motor(motor_t *motor, const char *message, size_t message_len){
 			temp_field_str[temp_index] = message[index];
 			temp_index++;
 		}
+		//std::cout << "temp_field_str: " << temp_field_str << '\n';
 		motor->write(temp_field_str, i, temp_index);
 		temp_index = 0;
 		initStr(temp_field_str, 128);

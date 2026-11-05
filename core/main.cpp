@@ -905,6 +905,8 @@ void tardigrade_simulation(){
 	simulation_out.add_motor(&thruster_BSH);
 	simulation_out.add_motor(&thruster_BPH);
 	simulation_out.add_motor(&thruster_Y);
+	simulation_out.add_motor(&thruster_PS);
+	simulation_out.add_motor(&thruster_SS);
 	
 	//setup network timer intervals
 	simulation_out.set_timer(100);
@@ -925,22 +927,26 @@ void tardigrade_simulation(){
 	
 	tardigrade_update_sensors_dummy();
 
+
+	translational_vector.x = 0.5;
+	translational_vector.y = 0.5;
+	translational_vector.z = 0.5;
+
 	while (1){
 		usleep(1000);
 		//the loop
 
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
-			tardigrade_update_sensors_dummy();
 			controller_full.send_translation_vector(translational_vector);
-			controller_full.send_lateral_vector(rotational_vector);
+			//controller_full.send_lateral_vector(rotational_vector);
 
-			//controller.send_vector(translational_vector);
 
 			sensor_timer.reset();
 		}
 		
 		// NETWORK REFRESH
+
 		simulation_out.refresh();
 		simulation_in.refresh();
 		telemetry.refresh();

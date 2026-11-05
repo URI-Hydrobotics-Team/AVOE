@@ -17,7 +17,7 @@
 
 /* GENERAL */
 #define LOG_DIR "log-temp"
-#define DISPLAY_OUTPUT_INTERVAL 100
+#define DISPLAY_OUTPUT_INTERVAL 2000
 
 /* VEHICLE */
 #define MAX_SENSOR_ENTRIES 16

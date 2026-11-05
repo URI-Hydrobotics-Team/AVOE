@@ -5,7 +5,7 @@
 */
 
 /* GENERAL */
-#define UI_REFRESH 200 // ui update interval in ms
+#define UI_REFRESH 2000 // ui update interval in ms
 #define NETWORK_REFRESH_INTERVAL 50
 
 
