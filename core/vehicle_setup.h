@@ -60,6 +60,10 @@ Dummy_BNO055 dummy_imu;
 pressure_driver dummy_pressure;
 leak_sensor dummy_leak;
 
+// stonefish drivers
+
+
+
 
 // real drivers
 #ifdef TARGET_TARDIGRADE
@@ -349,3 +353,95 @@ void tardigrade_update_sensors_dummy(){
 
 }
 
+
+
+
+// SIMULATION TARDIGRADE SETUP
+
+
+void tardigrade_setup_simulation(){
+
+	srand(time(NULL)); // random seed
+
+	vector_t dummyPosition(0.0, 0.0, 0.0);
+
+
+	// INIT SENSORS
+	tardigrade_imu.init("imu_stonefish", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
+	tardigrade_pressure.init("pressure_stonefish", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
+	tardigrade_leak.init("leak_stonefish", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
+	
+	// ADD SENSORS TO TARDIGRADE
+	tardigrade.addSensor(&tardigrade_imu);	
+	tardigrade.addSensor(&tardigrade_pressure);
+	tardigrade.addSensor(&tardigrade_leak);
+	
+	// INIT MOTORS
+	vector_t BPH_pos(0.0, 0.0, 0.0);
+	vector_t BPH_dir(1.0, 1.0, 1.0);
+	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", BPH_pos, BPH_dir);
+	thruster_BSH.init("BSH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SH.init("SH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_Y.init("Y", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_PS.init("PS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
+
+
+	// ADD THRUSTERS TO TARDIGRADE
+	// order matters depending on controller
+	tardigrade.addMotor(&thruster_SH);
+	tardigrade.addMotor(&thruster_BSH);
+	tardigrade.addMotor(&thruster_BPH);
+	tardigrade.addMotor(&thruster_Y);
+	tardigrade.addMotor(&thruster_SS);
+	tardigrade.addMotor(&thruster_PS);
+
+	//controller.init("tardigrade_contoller", &tardigrade);
+	controller_full.init("tardigrade_contoller_full", &tardigrade);
+}
+
+
+
+void tardigrade_update_sensors_simulation(){
+
+
+	// IMU
+	double temp = dummy_imu.get_temperature();
+	sensor_set_imu_TEMPERATURE(&tardigrade_imu, temp);
+
+	vector_t aoe = dummy_imu.get_Euler_Orientation();
+	sensor_set_imu_ABSOULUTE_ORIENTATION_EULER(&tardigrade_imu, aoe.x, aoe.y, aoe.z);
+
+	vector_t v = dummy_imu.get_Acceleration_Vector();
+	sensor_set_imu_VELOCITY(&tardigrade_imu, v.x, v.y, v.z);
+
+
+	vector4_t aoq = dummy_imu.get_Quaterion_Orientation();
+	sensor_set_imu_ABSOLUTE_ORIENTAION_QUATERNION(&tardigrade_imu, aoq.x, aoq.y, aoq.z);
+
+	vector_t av = dummy_imu.get_Angular_Velocity();
+	sensor_set_imu_ANGULAR_VELOCITY(&tardigrade_imu, av.x, av.y, av.z);
+
+	vector_t g = dummy_imu.get_Gravity_Vector();
+	sensor_set_imu_GRAVITY(&tardigrade_imu, g.x, g.y, g.z);
+
+	vector_t la = dummy_imu.get_Linear_Acceleration();
+	sensor_set_imu_LINEAR_ACCELERATION(&tardigrade_imu, la.x, la.y, la.z);
+
+	vector_t mfs = dummy_imu.get_Magnetic_Field_Strength();
+	sensor_set_imu_MAGNETIC_FIELD_STRENGTH(&tardigrade_imu, mfs.x, mfs.y, mfs.z);
+
+	//PRESSURE
+
+
+	sensor_set_pres_set_altitude(&tardigrade_pressure, dummy_pressure.getAltitude());
+	sensor_set_pres_set_depth(&tardigrade_pressure, dummy_pressure.getDepth());
+	sensor_set_pres_set_pressure(&tardigrade_pressure, dummy_pressure.getPressure());
+	sensor_set_pres_set_temperature(&tardigrade_pressure, dummy_pressure.getTemperature());
+	
+	//LEAK
+	setLEAK_STATUS(&tardigrade_leak, dummy_leak.probe());
+
+
+}

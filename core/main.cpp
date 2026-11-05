@@ -864,6 +864,136 @@ void tardigrade_virtual(){
 	}
 }
 
+// TARDIGRADE SIMULATION WORKSPACE
+
+void tardigrade_simulation(){
+	/* This mode is used with stonefish  */
+	
+
+	// TIMERS
+	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	// SENSOR SETUP CALLS
+	tardigrade_setup_simulation(); //run the setup function in the vehicle_setup.h file
+
+	// NETWORK SETUP
+	avoe_comm_receiver simulation_in("sensor", "telemetry", PORT_SIM_SENSOR_IN, IP_SIM);	
+	avoe_comm_transmitter simulation_out("motor" "telemetry" PORT_SIM_MOTOR_OUT, IP_SIM
+	avoe_comm_transmitter telemetry("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+
+
+	//bind sensors and motors to network objects
+	telemetry.add_sensor(&tardigrade_imu); //set source to imu
+	telemetry.add_sensor(&tardigrade_pressure); //set source to imu
+	telemetry.add_sensor(&tardigrade_leak); //set source to imu
+	telemetry.add_motor(&thruster_SH);
+	telemetry.add_motor(&thruster_BSH);
+	telemetry.add_motor(&thruster_BPH);
+	telemetry.add_motor(&thruster_Y);
+
+	simulation_in.add_sensor(&tardigrade_imu); //set source to imu
+	simulation_in.add_sensor(&tardigrade_pressure); //set source to imu
+	simulation_in.add_sensor(&tardigrade_leak); //set source to imu
+
+	simulation_out.add_motor(&thruster_SH);
+	simulation_out.add_motor(&thruster_BSH);
+	simulation_out.add_motor(&thruster_BPH);
+	simulation_out.add_motor(&thruster_Y);
+	
+	//setup network timer intervals
+	simulation_out.set_timer(100);
+	simulation_in.set_timer(100);
+	telemetry.set_timer(100);
+
+
+
+	vector_t translational_vector, rotational_vector;
+	
+	
+	// RESET TIMERS
+	tel_timer.reset(); 
+	sensor_timer.reset();
+	network_timer.reset();
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	tardigrade_update_sensors_dummy();
+
+	while (1){
+		usleep(1000);
+		//the loop
+
+		// UPDATE YOUR SENSORS
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			tardigrade_update_sensors_dummy();
+			controller_full.send_translation_vector(translational_vector);
+			controller_full.send_lateral_vector(rotational_vector);
+
+			//controller.send_vector(translational_vector);
+
+			sensor_timer.reset();
+		}
+		
+		// NETWORK REFRESH
+		simulation_out.refresh();
+		simulation_in.refresh();
+		telemetry.refresh();
+
+
+		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
+			//manual network functions may be placed in here
+                        trackTransmissionTime(&network_timer);
+			
+		}
+	
+
+		// DISPLAY OUTPUT AND LOGGING
+
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+			tardigrade.print();
+			std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
+			tardigrade_imu.log(&test_log); //log imu sensor data
+			tel_timer.reset(); //always reset
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Support functions for main */
 
 

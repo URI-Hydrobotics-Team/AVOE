@@ -42,6 +42,11 @@
 #define PORT_DECKBOX_INPUT 8101
 #define NETWORK_UPDATE_INTERVAL 100
 
+#define IP_SIM "127.0.0.1"
+#define PORT_SIM_SENSOR_IN 9000
+#define PORT SIM_MOTOR_OUT 9001
+
+
 
 
 #endif
