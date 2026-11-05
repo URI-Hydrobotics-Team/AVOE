@@ -883,8 +883,8 @@ void tardigrade_simulation(){
 	tardigrade_setup_simulation(); //run the setup function in the vehicle_setup.h file
 
 	// NETWORK SETUP
-	avoe_comm_receiver simulation_in("sensor", "telemetry", PORT_SIM_SENSOR_IN, IP_SIM);	
-	avoe_comm_transmitter simulation_out("motor" "telemetry" PORT_SIM_MOTOR_OUT, IP_SIM
+	avoe_comm_reciever simulation_in("sensor", "telemetry", PORT_SIM_SENSOR_IN, 2048);	
+	avoe_comm_transmitter simulation_out("motor", "telemetry", PORT_SIM_MOTOR_OUT, IP_SIM);
 	avoe_comm_transmitter telemetry("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
 
 
@@ -922,12 +922,7 @@ void tardigrade_simulation(){
 	network_timer.reset();
 
 	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
-	/*
-	need to initialize sensors first before use
-	A buffer overflow and seg fault could happen
-	when sensor_timer.getElaspedTimeMS() <= 100
-	due to appendstr access allocated but uninitialized values
-	*/
+	
 	tardigrade_update_sensors_dummy();
 
 	while (1){
@@ -962,37 +957,14 @@ void tardigrade_simulation(){
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 			tardigrade.print();
-			std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
-			tardigrade_imu.log(&test_log); //log imu sensor data
+			//std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
+			//tardigrade_imu.log(&test_log); //log imu sensor data
+
+
 			tel_timer.reset(); //always reset
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Support functions for main */
 
@@ -1005,7 +977,8 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	std::cout << "\ttardigrade_virtual\t(run tardigrade virtual configuration for testing)\n"; 
+	std::cout << "\ttardigrade_virtual\t(run the default tardigrade virtual configuration for testing)\n"; 
+	std::cout << "\ttardigrade_virtual\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
 	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
 	std::cout << "\ttardigrade_task <task number>\t(place holder robosub task)\n"; 
 
@@ -1029,6 +1002,11 @@ int main(int argc, char *argv[]){
 
 	if (strncmp(argv[1], "tardigrade_virtual", 32) == 0){
 		tardigrade_virtual();
+		return 0;
+	}
+
+	if (strncmp(argv[1], "tardigrade_simulation", 32) == 0){
+		tardigrade_simulation();
 		return 0;
 	}
 	if (strncmp(argv[1], "tardigrade_remote", 32) == 0){

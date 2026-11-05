@@ -26,13 +26,32 @@ void tardigrade_simulation(){
 }
 
 
+void printHelp(){
+
+	std::cout << "AVOE version: " << AVOE_VERSION << '\n';
+	std::cout << "\nUSAGE:\n";
+	std::cout << "\tavoe_frontend_stonefish <mode> <arguments>\n";
+
+	std::cout << "\nMODES:\n";
+	std::cout << "\thelp\t(displays this)\n";
+	std::cout << "\ttardigrade\t(tardigrade target)\n"; 
+
+
+}
+
+
+
+
+
+
+
 int main(int argc, char **argv){
 
 
 	/* parse arguments */
 
 	if (argc == 1){
-		std::cout << "At least one arguments is required. Try ./avoe-stonefish help\n";
+		std::cout << "At least one arguments is required. Try ./avoe-frontend-stonefish help\n";
 		return 0;
 
 	}

@@ -44,7 +44,7 @@
 
 #define IP_SIM "127.0.0.1"
 #define PORT_SIM_SENSOR_IN 9000
-#define PORT SIM_MOTOR_OUT 9001
+#define PORT_SIM_MOTOR_OUT 9001
 
 
 
