@@ -16,6 +16,22 @@
 #include "../../lib/clock.h"
 #include "vehicle_setup.h"
 
+/*
+
+	How it works
+	stonefish provides a callback in the form of a method apart sf::SimulationManager: SimulationStepCompleted(Scalar timeStep), this method can be overrided. 
+
+	All setup will be done in main.
+	The SimulationStepCompleted override will point to the main avoe-frontend loop.
+	the avoe-frontend loop will contain the usual AVOE stuff along with any middleware calls	
+
+
+
+*/
+
+
+
+
 void tardigrade_simulation(){
 
 	printf("[AVOE] Tardigrade Stonefish Starting\n");
