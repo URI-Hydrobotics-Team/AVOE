@@ -15,14 +15,14 @@
 #include "../lib/lib.h"
 
 
+/// @brief Sensor drivers will interface with each sensor object. The vehicle class will hold sensor objects and provide an interface for accessing them.
 class sensor_t{
 
 	private:
 		char *model, *vendor, *protocol, *type, **data;
-		int state = 0; //0 = uninit. , 1 = ready		
-		size_t field_count;
+		int state = 0; ///< 0 = Uninitialized, 1 = ready		
+		size_t field_count; ///< How many values the sensor outputs
 		/* positioning */
-
 		vector_t offset; //position offset from center of vehicle in mm
 		vector_t facing; //direction the sensor is pointed torwads if applicable
 
@@ -30,6 +30,14 @@ class sensor_t{
 
 		sensor_t(size_t fields);
 		~sensor_t();
+		/** @brief Initializes the sensor by taking the arguments as below
+		* @param m Model
+		* @param v Vendor
+		* @param p Protocol
+		* @param t Type
+		* @param off  \e Offset: position offset from the center of the Vehicle in mm.
+		* @param face \e Facing: direction on where the sensor is pointed.
+		**/
 		void init(const char *m, const char *v, const char *p, const char *t, vector_t off, vector_t face);
 		void local_update(const char *t, const char* model);
 		char *getModel();

@@ -12,6 +12,8 @@
 #include "../lib/lib.h"
 #include "log.h"
 
+
+/// @brief Motor Class
 class motor_t{
 
 	private:
