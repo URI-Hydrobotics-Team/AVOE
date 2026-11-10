@@ -4,7 +4,7 @@
 
 if [ "$1" == "virtual" ]; then
 	echo "Building Virtual AVOE Target"
-	g++ -o avoe main.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ../plugins/middleware/general-sensor/pressure.cpp ../plugins/drivers/sensors/pressure-sensor-dummy/driver.cpp ../plugins/middleware/general-sensor/leak.cpp ../plugins/drivers/sensors/leak-sensor-dummy/driver.cpp ../plugins/controllers/tardigrade_basic/controller.cpp ../plugins/controllers/tardigrade/controller.cpp ../plugins/mission_control/tardigrade_mc_relative/mc.cpp
+	g++ -o avoe main.cpp motor.cpp sensor.cpp vehicle.cpp log.cpp io.cpp ../lib/network.cpp ../lib/lib.cpp ../lib/clock.cpp ../plugins/middleware/general-sensor/imu.cpp ../plugins/drivers/sensors/imu-dummy/driver.cpp ../plugins/middleware/general-sensor/pressure.cpp ../plugins/drivers/sensors/pressure-sensor-dummy/driver.cpp ../plugins/middleware/general-sensor/leak.cpp ../plugins/drivers/sensors/leak-sensor-dummy/driver.cpp ../plugins/controllers/tardigrade_basic/controller.cpp ../plugins/controllers/tardigrade/controller.cpp ../plugins/mission_control/tardigrade_mc_relative/mc.cpp task.cpp
 
 elif [ "$1" == "virtual_verbose" ]; then
 	echo "Building Virtual AVOE Target with Verbose Debug Messages"

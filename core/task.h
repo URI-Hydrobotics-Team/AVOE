@@ -10,12 +10,12 @@
 
 
 #ifndef AVOE_TASK
-#ifdef AVOE_TASK
+#define AVOE_TASK
 
 #define FIELD_SIZE 64
 
-#include <ctsdio>
-#include <stdlib>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 

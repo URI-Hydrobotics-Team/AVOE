@@ -17,6 +17,9 @@
 #include "config.h"
 #include "log.h"
 #include "io.h"
+#include "task.h"
+
+
 
 /* target specific*/
 #include "vehicle_setup.h"
@@ -975,6 +978,49 @@ void tardigrade_simulation(){
 /* CORE MAIN FUNCTIONS */
 
 
+void parser_test(const char *filename){
+	// a test function for avoe's parsing capabilities
+
+	printf("[AVOE] Parser Test Starting\n");
+	printf("Parsing file: \"%s\"\n", filename);
+
+
+	FILE *fptr;
+	fptr = fopen(filename, "r");	
+	
+	if (fptr == NULL){
+		printf("[ERROR] could not open file\n");
+		return;
+
+	}
+
+	char buffer[64];
+	char token[64], field[64];
+	
+
+	//for (int i = 0; i < 10; i++){
+
+	while(!feof(fptr)){
+		memset(buffer, 0, 64);
+		memset(field, 0, 64);
+		memset(token, 0, 64);
+
+		readLine(buffer, 64, fptr);
+		printf("read from %s: %s\n", filename, buffer);
+		avoe_parse_config_line(buffer, field, token);		
+		printf("\textracted %s %s\n", field, token);
+
+
+	
+	}
+
+	fclose(fptr);
+
+	printf("[AVOE] Parser Test Done\n");
+}
+
+
+
 
 void avoe_standard(){
 
@@ -1036,7 +1082,8 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, comming soon)"
+	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, comming soon)\n";
+	std::cout << "\tparser_test <filename>\t(parser test)\n";
 	std::cout << "\ttardigrade_virtual\t(run the default tardigrade virtual configuration for testing)\n"; 
 	std::cout << "\ttardigrade_virtual\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
 	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
@@ -1060,6 +1107,12 @@ int main(int argc, char *argv[]){
 
 	if (strncmp(argv[1], "standard", 16) == 0){
 		avoe_standard();
+		return 0;
+	}
+
+
+	if (strncmp(argv[1], "parser_test", 16) == 0){
+		parser_test(argv[2]);
 		return 0;
 	}
 

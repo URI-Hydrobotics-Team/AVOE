@@ -1,19 +1,19 @@
 # AVOE qualification task file
-task_name = RoboSub Qualification;
+task_name=RoboSub_Qualification;
 TASK_START
 MISSION_START
 
-duration = ;
-speed = ;
-movement_type = ;
-maintain_pose = ;
+duration=100;
+speed=0.5;
+movement_type=dru;
+maintain_pose=down;
 
 
 
 # thruster table override
-thruster_table_override = false;
-translational_table = "filename.tt";
-rotational_table = "filename.tt";
+thruster_table_override=false;
+translational_table="filename.tt";
+rotational_table="filename.tt";
 
 MISSION_END
 
