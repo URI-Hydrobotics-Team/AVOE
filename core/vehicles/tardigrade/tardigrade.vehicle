@@ -1,0 +1,17 @@
+# TARDIGRADE vehicle setup
+
+VEHICLE_START
+name=Tardigrade;
+version=4;
+type=AUV;
+
+motor=sh.motor;
+motor=bsh.motor;
+motor=bph.motor;
+motor=y.motor;
+motor=ss.motor;
+motor=ps.motor;
+
+sensor=bno055.sensor;
+sensor=bar30m.sensor;
+VEHICLE_END

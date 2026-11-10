@@ -12,6 +12,7 @@
 #ifndef AVOE_TASK
 #ifdef AVOE_TASK
 
+#define FIELD_SIZE 64
 
 #include <ctsdio>
 #include <stdlib>
@@ -37,8 +38,10 @@ struct avoe_task_t{
 };
 
 
-int avoe_task_load(avoe_task_t *tasks, FILE *fptr);
+int avoe_parse_config_line(const char *input, char *field, char *token);
 
+
+int avoe_task_load(avoe_task_t *tasks, FILE *fptr);
 void tardigrade_mission_print(tardigrade_mission_basic_t* mission);
 void avoe_task_print(avoe_task_t *task);
 

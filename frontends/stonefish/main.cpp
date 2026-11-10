@@ -39,13 +39,6 @@ void tardigrade_simulation(){
 	tardigrade_setup_sensors_virtual();
 	std::cout << "[DEBUG] Sensor Setup Done\n";
 
-
-
-	//networking setup
-	avoe_comm_transmitter frontend_to_core("sensor", "telemetry", PORT_CORE_SENSOR, IP_CORE);
-	avoe_comm_reciever core_to_frontend("motor", "telemetry", PORT_CORE_MOTOR, 2048);
-
-
 	/* setup and initilizae all connections */	
 	frontend_to_core.add_sensor(&tardigrade_imu);
 	frontend_to_core.add_sensor(&tardigrade_pressure);
@@ -62,8 +55,6 @@ void tardigrade_simulation(){
 	core_to_frontend.set_timer(NETWORK_REFRESH_INTERVAL);
 	frontend_to_core.set_timer(NETWORK_REFRESH_INTERVAL);
 
-	avoe_clock_t ui_timer;
-	avoe_clock_t network_timer;
 	
 	network_timer.reset();
 	ui_timer.reset();
@@ -80,7 +71,7 @@ void tardigrade_simulation(){
 			tardigrade_imu.print();
 			tardigrade_pressure.print();
 			tardigrade_leak.print();
-			printf("MOTO PRINT");
+			printf("MOTOR PRINT");
 			thruster_SH.print();
 			thruster_PS.print();
 			thruster_SS.print();
@@ -91,9 +82,6 @@ void tardigrade_simulation(){
 		}
 
 	}
-
-
-
 
 }
 

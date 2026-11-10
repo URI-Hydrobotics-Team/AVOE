@@ -4,6 +4,9 @@
 
 */
 
+#ifndef AVOE_FRONTEND_STONEFISH_CONFIG
+#define AVOE_FRONTEND_STONEFISH_CONFIG
+
 /* GENERAL */
 #define UI_REFRESH 2000 // ui update interval in ms
 #define NETWORK_REFRESH_INTERVAL 50
@@ -15,3 +18,5 @@
 #define PORT_CORE_SENSOR 9000
 #define PORT_CORE_MOTOR 9001
 
+
+#endif

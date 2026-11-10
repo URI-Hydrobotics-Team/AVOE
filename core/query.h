@@ -1,0 +1,6 @@
+/*
+	AVOE
+	
+	framework for retriving objects from AVOE
+
+*/

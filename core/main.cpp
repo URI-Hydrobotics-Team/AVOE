@@ -972,7 +972,28 @@ void tardigrade_simulation(){
 	}
 }
 
-/* Support functions for main */
+/* CORE MAIN FUNCTIONS */
+
+
+
+void avoe_standard(){
+
+	//parse .vehicle and create vehicle object
+	//parse .network and create network objects
+	//bind objects to network
+	//parse .objects and bind vectors, controllers, etc.
+	
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+
+	while (1){
+		usleep(1000);
+
+	}
+
+
+}
+
 
 
 void printHelp(){
@@ -983,6 +1004,7 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
+	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, comming soon)"
 	std::cout << "\ttardigrade_virtual\t(run the default tardigrade virtual configuration for testing)\n"; 
 	std::cout << "\ttardigrade_virtual\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
 	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
@@ -1001,6 +1023,11 @@ int main(int argc, char *argv[]){
 
 	if (strncmp(argv[1], "help", 16) == 0){
 		printHelp();
+		return 0;
+	}
+
+	if (strncmp(argv[1], "standard", 16) == 0){
+		avoe_standard();
 		return 0;
 	}
 

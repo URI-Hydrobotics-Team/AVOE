@@ -7,6 +7,14 @@ duration = ;
 speed = ;
 movement_type = ;
 maintain_pose = ;
+
+
+
+# thruster table override
+thruster_table_override = false;
+translational_table = "filename.tt";
+rotational_table = "filename.tt";
+
 MISSION_END
 
 

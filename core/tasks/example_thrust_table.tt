@@ -1,0 +1,13 @@
+# AVOE THRUSTER TABLE EXAMPLE
+
+thruster_count = 6;
+TABLE_START
+0.00	0.0	0.8;	#SH
+0.00 	0.0 	0.85; 	#BSH
+0.00 	0.0 	0.85;	#BPH
+0.0 	0.6 	0.0; 	#Y
+1 	0.4 	0.0; 	#SS
+1 	-0.4 	0.0; 	#PS
+TABLE_END
+
+
