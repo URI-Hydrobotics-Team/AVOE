@@ -978,6 +978,38 @@ void tardigrade_simulation(){
 
 void avoe_standard(){
 
+	/*
+	SUPPORTS
+		sensor
+		motor
+		vector_t
+		log
+		io
+		
+		drivers
+			imu-dummy
+			leak-sensor-dummy
+			pressure-sensor-dummy
+			sos-leak
+			ppsti
+			avoe_user_io?
+
+
+		frotends
+			cli
+
+
+		controllers
+			tardigrade
+			tardigrade_basic
+
+		mission_control
+			tardigrade_mc_relative
+	
+
+	*/
+
+
 	//parse .vehicle and create vehicle object
 	//parse .network and create network objects
 	//bind objects to network
