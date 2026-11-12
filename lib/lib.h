@@ -20,6 +20,11 @@ void strncmpExclude(char *dest, const char *src, int key, int len);
 void readLine(char *buffer, int len, FILE *fptr);
 
 
+// parser stuff
+#define FIELD_SIZE 64
+
+int avoe_parse_config_line(const char *input, char *field_, char *token_);
+
 struct vector_t{
 	//vector for 3d space
 	double x;

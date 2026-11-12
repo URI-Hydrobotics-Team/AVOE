@@ -38,7 +38,6 @@ struct avoe_task_t{
 };
 
 
-int avoe_parse_config_line(const char *input, char *field, char *token);
 
 
 int avoe_task_load(avoe_task_t *tasks, FILE *fptr);
