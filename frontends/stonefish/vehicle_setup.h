@@ -3,6 +3,9 @@
 
 #include "config.h"
 
+#ifndef VEHICLE_SETUP_H
+#define VEHICLE_SETUP_H
+
 
 vector_t dummyPosition(0.0, 0.0, 0.0);
 
@@ -26,22 +29,4 @@ avoe_clock_t ui_timer;
 avoe_clock_t network_timer;
 
 
-
-void tardigrade_setup_sensors_virtual(){
-
-	vector_t dummyPosition(0.0, 0.0, 0.0);
-	/* AVOE init */
-	tardigrade_imu.init("imu_stonefish", "Adafruit", "I2C", "IMU", dummyPosition, dummyPosition);
-	tardigrade_pressure.init("pressure_stonefish", "BlueRobotics", "I2C", "pressure", dummyPosition, dummyPosition);
-	tardigrade_leak.init("leak_stonefish", "BlueRobotics", "GPIO", "leak", dummyPosition, dummyPosition);
-
-	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_BPH.init("BPH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_BSH.init("BSH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_SH.init("SH", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_Y.init("Y", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_PS.init("PS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-	thruster_SS.init("SS", "T200", "BlueRobotics", "PWM", "Thruster", dummyPosition, dummyPosition);
-
-
-}
+#endif

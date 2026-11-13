@@ -6,6 +6,9 @@
 
 //custom object which contains all relevant sensors and actuators where data will be exchanged between stonefish and AVOE
 
+#ifndef AVOE_SF_BRIDGE_H
+#define AVOE_SF_BRIDGE_H
+
 struct avoe_sf_tardigrade_t {
 	
 	//sensors
@@ -22,3 +25,5 @@ struct avoe_sf_tardigrade_t {
 	sf::Thruster* motor_ps;	
 
 };
+
+#endif

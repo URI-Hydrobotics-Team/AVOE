@@ -6,6 +6,11 @@
 #include <cstring>
 #include <iostream>
 
+//stonefish includes
+#include "simulation_manager.h"
+#include <Stonefish/core/GraphicalSimulationApp.h>
+
+
 /* AVOE specific includes */
 #include "config.h"
 #include "../../lib/lib.h"
@@ -14,8 +19,9 @@
 #include "../../core/io.h"
 #include "../../lib/vt100.h"
 #include "../../lib/clock.h"
-#include "vehicle_setup.h"
 
+#include "vehicle_setup.h"
+#include "vehicle_refresh.h"
 /*
 
 	How it works
@@ -32,56 +38,29 @@
 
 
 
-void tardigrade_simulation(){
+void tardigrade_simulations(const char *scenario_filename){
+
+	/* simulation setup */
 
 	printf("[AVOE] Tardigrade Stonefish Starting\n");
 
-	tardigrade_setup_sensors_virtual();
-	std::cout << "[DEBUG] Sensor Setup Done\n";
+	//setup tardigrade AVOE side
+	tardigrade_setup_avoe();
+	tardigrade_setup_avoe_objects();
 
-	/* setup and initilizae all connections */	
-	frontend_to_core.add_sensor(&tardigrade_imu);
-	frontend_to_core.add_sensor(&tardigrade_pressure);
-	frontend_to_core.add_sensor(&tardigrade_leak);
+	//setup stonefish simulation manager
 
-	core_to_frontend.add_motor(&thruster_SH);
-	core_to_frontend.add_motor(&thruster_BSH);
-	core_to_frontend.add_motor(&thruster_BPH);
-	core_to_frontend.add_motor(&thruster_Y);
-	core_to_frontend.add_motor(&thruster_PS);
-	core_to_frontend.add_motor(&thruster_SS);
+	avoe_sf_simulation_manager manager(100.0);
+	strncpy(manager.scenario_filename, scenario_filename, 64);
+
+	sf::RenderSettings s;
+    	sf::HelperSettings h;
+    	sf::GraphicalSimulationApp app("AVOE with Stonefish", "", s, h, &manager);
 
 
-	core_to_frontend.set_timer(NETWORK_REFRESH_INTERVAL);
-	frontend_to_core.set_timer(NETWORK_REFRESH_INTERVAL);
-
+    	app.Run();
 	
-	network_timer.reset();
-	ui_timer.reset();
-	while(1){
-		usleep(1000);
 
-		core_to_frontend.refresh();
-		frontend_to_core.refresh();
-
-
-		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-			std::cout << "--AVOE Stonefish--\n";
-			printf("SENSOR PRINT\n");
-			tardigrade_imu.print();
-			tardigrade_pressure.print();
-			tardigrade_leak.print();
-			printf("MOTOR PRINT");
-			thruster_SH.print();
-			thruster_PS.print();
-			thruster_SS.print();
-									
-
-			//vtClear();
-			ui_timer.reset();
-		}
-
-	}
 
 }
 
@@ -111,7 +90,12 @@ int main(int argc, char **argv){
 	}
 
 	if (strncmp(argv[1], "tardigrade", 16) == 0){
-		tardigrade_simulation();
+
+		if (argv[2] == NULL){
+			std::cout << "must specify scenario file\n";
+		}
+
+		tardigrade_simulation(argv[2]);
 		return 0;
 	
 	}
