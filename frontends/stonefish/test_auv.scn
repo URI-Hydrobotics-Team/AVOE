@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+    <!-- 1. Master Simulation Clock -->
+    <rate value="300.0"/>
+
+    <!-- 2. System Environment Configuration -->
+    <environment>
+        <ned latitude="40.0" longitude="3.0"/>
+        <ocean>
+            <water density="1000.0" jerlov="0.2"/>
+            <waves height="0.0"/>
+        </ocean>
+    </environment>
+
+    <!-- 3. Standard Material Registry -->
+    <materials>
+        <material name="Neutral" density="1000.0" restitution="0.5"/>
+        <material name="Steel" density="7891.0" restitution="0.3"/>
+    </materials>
+
+    <!-- 4. Seafloor Box Platform -->
+    <static name="Floor" type="box">
+        <dimensions xyz="20.0 20.0 1.0"/>
+        <material name="Neutral"/>
+        <world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 10.0"/>
+        <look name="default"/>
+    </static>
+
+    <!-- 5. Heavy Sinking Sphere -->
+    <dynamic name="TestSphere" type="sphere" physics="submerged" buoyant="true">
+        <dimensions radius="0.5"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+        <material name="Steel"/>
+        <look name="default"/>
+        <world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 2.0"/>
+    </dynamic>
+
+    <!-- 6. Thruster-Driven Robot
+         Hull: 2.0 x 0.6 x 0.6 m box, mass = 720 kg -> exactly neutrally buoyant
+         (rho_water * V = 1000 * 0.72 = 720 kg).
+
+         IMPORTANT: empirical testing (single-thruster odometry readings)
+         showed that an <actuator>'s own <origin rpy="..."/> does NOT rotate
+         its thrust direction - all 4 "horizontal" thrusters produced thrust
+         along Hull's local Z regardless of the yaw angle given to each one.
+         The actuator's origin appears to only place/orient the propeller
+         MESH, not the physical thrust vector.
+
+         Fix: give each angled thruster its own tiny, massless-for-practical-
+         purposes sub-link, fixed to Hull at the desired mounting angle via a
+         <joint type="fixed">. A LINK's own orientation is core rigid-body
+         kinematics (used everywhere - buoyancy, inertia, etc.), so rotating
+         the MOUNT rather than the actuator should reliably rotate the thrust
+         direction along with it. Attach the actuator to that link instead,
+         with its own origin left at identity.
+
+         2 vertical thrusters (T5, T6) stay directly on Hull with identity
+         origin - untouched, since they were already producing correct-axis
+         thrust in testing (no rotation needed for them anyway). -->
+    <robot name="SimpleVehicle" fixed="false" self_collisions="false">
+        <base_link name="Hull" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="2.0 0.6 0.6"/>
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+            <mass value="720.0"/>
+            <!-- Lowers the CG below the CB (auto-computed CG and CB
+                 otherwise coincide at the geometric centroid, giving zero
+                 righting moment -> the hull tumbles freely with nothing to
+                 stop it). 0.1 m down from center, well within the 0.3 m
+                 half-height of the box. -->
+            <cg xyz="0.0 0.0 0.1"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </base_link>
+
+        <!-- Tiny angled mounting links (0.05 m cubes, "Neutral" density so
+             they're negligible mass/buoyancy - just carry an orientation) -->
+        <link name="Mount_T1" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+        <link name="Mount_T2" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+        <link name="Mount_T3" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+        <link name="Mount_T4" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+
+        <!-- Fixed joints: this is where the mounting position AND angle now
+             live, instead of on the actuator. CORRECTED: propeller thrust
+             appears to act along the link's local X axis, not Z (confirmed
+             by empirical odometry testing - the old pitch=90deg term was
+             rotating X straight down into Z regardless of yaw, matching the
+             vertical-dominant results we kept seeing). For horizontal thrust
+             at azimuth angle, yaw alone is enough: Rz(yaw)*(1,0,0) =
+             (cos(yaw), sin(yaw), 0). -->
+        <joint name="Mount_T1_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T1"/>
+            <origin xyz="0.7 -0.25 0.0" rpy="0.0 0.0 -0.7854"/>
+        </joint>
+        <joint name="Mount_T2_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T2"/>
+            <origin xyz="0.7 0.25 0.0" rpy="0.0 0.0 0.7854"/>
+        </joint>
+        <joint name="Mount_T3_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T3"/>
+            <origin xyz="-0.7 -0.25 0.0" rpy="0.0 0.0 -2.3562"/>
+        </joint>
+        <joint name="Mount_T4_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T4"/>
+            <origin xyz="-0.7 0.25 0.0" rpy="0.0 0.0 2.3562"/>
+        </joint>
+
+        <!-- Horizontal thruster 1: Front-Right, thrust azimuth = -45 deg -->
+        <actuator name="T1_FR" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T1"/>
+        </actuator>
+
+        <!-- Horizontal thruster 2: Front-Left, thrust azimuth = +45 deg -->
+        <actuator name="T2_FL" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T2"/>
+        </actuator>
+
+        <!-- Horizontal thruster 3: Rear-Right, thrust azimuth = -135 deg -->
+        <actuator name="T3_RR" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T3"/>
+        </actuator>
+
+        <!-- Horizontal thruster 4: Rear-Left, thrust azimuth = +135 deg -->
+        <actuator name="T4_RL" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T4"/>
+        </actuator>
+
+        <link name="Mount_T5" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+        <link name="Mount_T6" type="box" physics="submerged" buoyant="true">
+            <dimensions xyz="0.05 0.05 0.05"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="Neutral"/>
+            <look name="default"/>
+        </link>
+
+        <!-- pitch = -90 deg rotates local X (thrust axis) into +Z, i.e. down
+             in NED - positive setpoint dives, matching the original design -->
+        <joint name="Mount_T5_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T5"/>
+            <origin xyz="0.5 0.0 0.0" rpy="0.0 -1.5708 0.0"/>
+        </joint>
+        <joint name="Mount_T6_Joint" type="fixed">
+            <parent name="Hull"/>
+            <child name="Mount_T6"/>
+            <origin xyz="-0.5 0.0 0.0" rpy="0.0 -1.5708 0.0"/>
+        </joint>
+
+        <!-- Vertical thruster 5: Fore (heave / pitch trim) -->
+        <actuator name="T5_VF" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T5"/>
+        </actuator>
+
+        <!-- Vertical thruster 6: Aft (heave / pitch trim) -->
+        <actuator name="T6_VA" type="thruster">
+            <specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/>
+            <propeller diameter="0.16" right="true">
+                <mesh filename="propeller.obj" scale="1.0"/>
+                <material name="Steel"/>
+                <look name="default"/>
+            </propeller>
+            <rotor_dynamics type="zero_order"/>
+            <thrust_model type="fluid_dynamics">
+                <thrust_coeff forward="0.45" reverse="0.35"/>
+                <torque_coeff value="0.02"/>
+            </thrust_model>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Mount_T6"/>
+        </actuator>
+
+        <!-- Odometry sensor: gives exact linear + angular velocity, in the
+             Hull's own frame, as nav_msgs/Odometry. Zero noise so the
+             numbers are clean for calibrating the real thrust directions
+             (no more eyeballing "up-left" from the viewport). -->
+        <sensor name="Odom" rate="20.0" type="odometry">
+            <noise position="0.0" velocity="0.0" angle="0.0" angular_velocity="0.0"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <link name="Hull"/>
+            <!-- <ros_publisher topic="/simple_vehicle/odometry"/> -->
+        </sensor>
+
+        <!-- stonefish_ros2 extension: auto-create the ROS2 setpoint subscriber
+             and state publisher for every thruster defined above, in the
+             order they were defined (T1_FR, T2_FL, T3_RR, T4_RL, T5_VF, T6_VA) -->
+        <!-- <ros_subscriber thrusters="/simple_vehicle/thruster_setpoints"/> -->
+        <!-- <ros_publisher thrusters="/simple_vehicle/thruster_state"/> -->
+
+        <world_transform rpy="0.0 0.0 0.0" xyz="3.0 0.0 5.0"/>
+    </robot>
+
+    <!-- 7. Viewport Camera -->
+    <camera name="MainCamera" width="1024" height="768">
+        <pps value="100"/>
+        <world_transform rpy="0.0 0.5 0.78" xyz="-8.0 -8.0 0.0"/>
+    </camera>
+</scenario>

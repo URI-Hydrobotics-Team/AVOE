@@ -38,7 +38,7 @@
 
 
 
-void tardigrade_simulations(const char *scenario_filename){
+void tardigrade_simulation(const char *scenario_filename){
 
 	/* simulation setup */
 

@@ -1,14 +1,10 @@
 /* functions for DEC VT100 escape codes */
 
-void vtClear(){
-	/* clear screen */
-	printf("\033[H\033[J");
+#include <cstdio>
 
-}
+#ifndef VT100_H 
+#define VT100_H
 
-
-void vtGoto(int x, int y){
-	printf("\033[%d;%dH", y, x);
-
-}
-
+void vtClear();
+void vtGoto(int x, int y);
+#endif

@@ -15,7 +15,7 @@
 
 //avoe
 #include "vehicle_setup.h"
-#include "vehicle_refresh.h""
+#include "vehicle_refresh.h"
 
 
 avoe_sf_simulation_manager::avoe_sf_simulation_manager(sf::Scalar stepsPerSecond) : SimulationManager(stepsPerSecond){

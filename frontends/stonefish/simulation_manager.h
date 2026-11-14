@@ -1,4 +1,5 @@
 #include <Stonefish/core/SimulationManager.h>
+#include "sf_bridge.h"
 
 class avoe_sf_simulation_manager : public sf::SimulationManager {
 

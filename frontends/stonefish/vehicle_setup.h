@@ -1,13 +1,14 @@
 #include "../../core/sensor.h"
 #include "../../core/motor.h"
+#include "../../lib/clock.h"
+#include "../../core/io.h"
 
 #include "config.h"
 
 #ifndef VEHICLE_SETUP_H
 #define VEHICLE_SETUP_H
 
-
-vector_t dummyPosition(0.0, 0.0, 0.0);
+/*
 
 motor_t thruster_BPH(1);
 motor_t thruster_BSH(1);
@@ -27,6 +28,6 @@ avoe_comm_reciever core_to_frontend("motor", "telemetry", PORT_CORE_MOTOR, 2048)
 
 avoe_clock_t ui_timer;
 avoe_clock_t network_timer;
-
+*/
 
 #endif
