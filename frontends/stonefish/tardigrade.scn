@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Author: Devin Hunsberger
+    Email: dhunsberger@uri.edu
+    Year: 2023
+    Copyright (C) 2022 Smart Ocean Systems Laboratory
+-->
+<scenario>
+	<rate value="300.0"/>
+
+    <environment>
+        <ned latitude="40.0" longitude="3.0"/>
+        <ocean>
+            <water density="1000.0" jerlov="0.2"/>
+            <waves height="0.0"/>
+        </ocean>
+    </environment>
+
+
+
+     <materials>
+         <material name="Neutral" density="1000.0" restitution="0.5"/>
+         <material name="Steel" density="7891.0" restitution="0.3"/>
+         <!-- <material name="Steel" density="7891.0" restitution="0.3"/> -->
+     </materials>
+
+
+<!--
+  <static name="Floor" type="box">
+       <dimensions xyz="20.0 100.0 1.0"/>
+       <material name="Neutral"/>
+       <world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 10.0"/>
+       <look name="default"/>
+   </static>
+-->
+<looks>
+	    <look name="black" rgb="1.0 1.0 1.0" roughness="0.3"/>
+	    <look name="blue" rgb="0.0 0.0 1.0" roughness="0.3"/>
+
+</looks>
+
+
+	<!--Shell Generator-->
+	<robot name = "SimpleVehicle" fixed = "false" self_collisions = "false">		
+	    <base_link name = "Vehicle" type = "compound" physics = "submerged">		
+	        <external_part name="Hull" type = "model" physics = "submerged" bouyant = "false">
+
+		    <physical>
+			<mesh filename = "tardigrade_reduced.obj" scale = "0.001"/>
+			<origin rpy = "4.7124 0.0 -1.571" xyz = "0.0 0.0 0.0"/>
+		    </physical>
+		    <visual>
+		        <mesh filename = "tardigrade_reduced.obj" scale = "0.001"/>
+		        <origin rpy="4.7124 0.0 -1.571" xyz = "0.0 0.0 0.0"/>
+		    </visual>
+		    <material name = "Steel"/>
+		    <look name = "black"/>
+		    <mass value = "30"/>
+		    <inertia xyz = "0.0 0.0 0.0"/>
+		    <compound_transform rpy = "0.0 0.0 0.0" xyz = "0.0 0.0 0.0"/>
+		    <cg xyz = "0.0 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+		</external_part>
+				
+                <!--
+		<external_part name = "Foam" type = "cylinder" physics = "surface" bouyant = "true">
+		    <dimensions radius = "0.1" height = "0.1"/>
+	            <origin xyz = "-0.2 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+		    <material name = "Foam"/>
+		    <mass value = "1.5"/>
+		    <look name = "grey"/>
+		    <compound_transform rpy = "0.0 0.0 0.0" xyz = "0.0 0.0 0.0"/>
+                    </external_part>
+                -->
+	    </base_link>
+					
+	    <link name = "Base" type = "box" physics = "submerged">
+		<dimensions xyz = "0.01 0.01 0.01"/>
+		<origin xyz = "0.0 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+		<material name = "Neutral"/>
+		<look name = "blue"/>
+	    </link>
+
+	    <joint name = "Joint1" type = "fixed">
+		<parent name = "Vehicle"/>
+		<child name = "Base"/>
+		<origin xyz = "0.0 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+		<axis xyz = "0.0 0.0 0.0"/>
+	    </joint>
+
+	    <actuator name = "BowPortHeave" type = "thruster">
+		<link name = "Base"/>
+		<origin rpy = "0.0 1.571 0.0" xyz = "0.197 0.0996 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+		<propeller diameter = "0.1" right = "true">
+		    <mesh filename = "thruster.obj" scale = "1.0"/>
+		    <material name = "Neutral"/>
+		    <look name = "blue"/>
+		</propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+	
+		</actuator>
+
+		<actuator name = "BowStarboardHeave" type = "thruster">
+		    <link name = "Base"/>
+		    <origin rpy = "0.0 1.571 0.0" xyz = "0.197 -0.0996 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+		    <propeller diameter = "0.1" right = "true">
+		        <mesh filename = "thruster.obj" scale = "1.0"/>
+			    <material name = "Neutral"/>
+			    <look name = "blue"/>
+		    </propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+	
+		</actuator>		
+
+		<actuator name = "SternHeave" type = "thruster">
+		    <link name = "Base"/>
+		    <origin rpy = "0.0 1.571 0.0" xyz = "-0.22945 0.0 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+		    <propeller diameter = "0.1" right = "true">
+			<mesh filename = "thruster.obj" scale = "1.0"/>
+			<material name = "Neutral"/>
+			<look name = "blue"/>
+		    </propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+		</actuator>		
+            
+	    <actuator name = "Yaw" type = "thruster">
+	        <link name = "Base"/>
+	        <origin rpy = "0.0 0.0 1.571" xyz = "0.3048 -0.0045 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+	        <propeller diameter = "0.1" right = "true">
+		    <mesh filename = "thruster.obj" scale = "1.0"/>
+		    <material name = "Neutral"/>
+	            <look name = "blue"/>
+	        </propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+	    </actuator>
+
+	    <actuator name = "PortSurge" type = "thruster">
+	        <link name = "Base"/>
+	        <origin rpy = "0.0 0.0 -0.5236" xyz = "-0.3048 -0.1318 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+	        <propeller diameter = "0.1" right = "true">
+	            <mesh filename = "thruster.obj" scale = "1.0"/>
+	            <material name = "Neutral"/>
+	            <look name = "blue"/>
+	        </propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+
+	    </actuator>
+					
+	    <actuator name = "StarboardSurge" type = "thruster">
+	        <link name = "Base"/>
+	        <origin rpy = "0.0 0.0 0.5236" xyz = "-0.3048 0.1318 0.0"/> 
+		<specs max_setpoint="100.0" inverted_setpoint="false" normalized_setpoint="true"/> 
+	        <propeller diameter = "0.1" right = "true">
+		    <mesh filename = "thruster.obj" scale = "1.0"/>
+		    <material name = "Neutral"/>
+		    <look name = "blue"/>
+	        </propeller>
+		<rotor_dynamics type="zero_order"/>
+		<thrust_model type="fluid_dynamics">
+                	<thrust_coeff forward="0.4315" reverse="0.3404"/>
+                	<torque_coeff value="0.01"/>
+			<max_rpm value="3000.0"/>
+            	</thrust_model>
+
+	    </actuator>
+					
+	    <sensor name="IMU" type="imu" rate="10.0">
+	        <link name="Base"/>
+	        <origin rpy = "0.0 0.0 0.0" xyz = "0.0 0.0 0.0"/>
+	        <noise angle="0.0 0.0 0.0" angular_velocity="0.0" yaw_drift="0.0" linear_acceleration="0.0"/>
+	    </sensor>
+
+	    <sensor name="CameraFront" rate="10.0" type="camera">
+	        <specs resolution_x="1920" resolution_y="1080" horizontal_fov="82"/>
+	        <origin rpy="1.5708 0.0 1.5708" xyz="0.36 0.0 -0.09"/>
+	        <link name="Base"/>
+	        <!-- <ros_publisher topic="/${robot_name}/camera/front/data"/> -->
+	    </sensor>
+            <!-- <link name="Base"/> -->
+            <!--<ros_publisher topic="/${robot_name}/echosounder/down/data"/>-->
+            <!-- </sensor> -->
+
+	<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    </robot>
+</scenario>
