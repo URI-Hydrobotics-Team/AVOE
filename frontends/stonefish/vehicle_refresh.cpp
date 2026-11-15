@@ -1,7 +1,11 @@
 #include <iostream>
 #include "vehicle_setup.h"
 #include "vehicle_refresh.h"
+#include "sf_bridge.h"
+#include "../../plugins/middleware/general-sensor/imu.h"
 
+
+#include <Stonefish/sensors/Sample.h>
 
 /*
 	This is where stonefish and AVOE objects are updated.
@@ -77,29 +81,33 @@ void tardigrade_setup_avoe(){
 
 
 
-void tardigrade_refresh_avoe(){
 
-		//called by stonefish
-		//usleep(1000);
+void tardigrade_refresh_avoe(avoe_sf_tardigrade_t *sf){
 
-		core_to_frontend.refresh();
-		frontend_to_core.refresh();
+	//called by stonefish
+	//usleep(1000);
+
+	core_to_frontend.refresh();
+	frontend_to_core.refresh();
 
 
-		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-			std::cout << "--AVOE Stonefish--\n";
-			printf("SENSOR PRINT\n");
-			tardigrade_imu.print();
-			tardigrade_pressure.print();
-			tardigrade_leak.print();
-			printf("MOTOR PRINT");
-			thruster_SH.print();
-			thruster_PS.print();
-			thruster_SS.print();
-									
+	// sensor mappings
+	avoe_sf_imu(&tardigrade_imu, sf->sensor_imu);	
 
-			//vtClear();
-			ui_timer.reset();
-		}
+	if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
+		std::cout << "--AVOE Stonefish--\n";
+		printf("SENSOR PRINT\n");
+		tardigrade_imu.print();
+		tardigrade_pressure.print();
+		tardigrade_leak.print();
+		printf("MOTOR PRINT");
+		thruster_SH.print();
+		thruster_PS.print();
+		thruster_SS.print();
+								
+
+		//vtClear();
+		ui_timer.reset();
+	}
 
 }

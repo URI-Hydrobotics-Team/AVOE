@@ -1,7 +1,9 @@
 #include <Stonefish/sensors/scalar/IMU.h>
 #include <Stonefish/sensors/scalar/Pressure.h>
 #include <Stonefish/actuators/Thruster.h>
+#include "../../plugins/middleware/general-sensor/imu.h"
 
+#include "../../core/sensor.h"
 
 
 //custom object which contains all relevant sensors and actuators where data will be exchanged between stonefish and AVOE
@@ -25,5 +27,9 @@ struct avoe_sf_tardigrade_t {
 	sf::Thruster* motor_ps;	
 
 };
+
+void avoe_sf_imu(sensor_t *avoe_imu, sf::IMU *sf_imu);
+
+
 
 #endif

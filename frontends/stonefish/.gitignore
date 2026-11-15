@@ -1,4 +1,4 @@
 *.swp
 avoe-frontend-cli
-build
+build*
 
