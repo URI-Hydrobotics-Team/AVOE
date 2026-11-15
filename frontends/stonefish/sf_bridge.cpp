@@ -37,3 +37,13 @@ void avoe_sf_imu(sensor_t *avoe_imu, sf::IMU *sf_imu){
 
 
 }
+
+
+
+
+void avoe_sf_thruster(sf::Thruster *sf_thruster, motor_t *avoe_thruster){
+
+	float value = strtof(avoe_thruster->read(0), NULL);
+	sf_thruster->setSetpoint(value);
+
+}

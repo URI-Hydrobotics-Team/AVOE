@@ -889,9 +889,14 @@ void tardigrade_simulation(){
 	avoe_comm_reciever simulation_in("sensor", "telemetry", PORT_SIM_SENSOR_IN, 2048);	
 	avoe_comm_transmitter simulation_out("motor", "telemetry", PORT_SIM_MOTOR_OUT, IP_SIM);
 	avoe_comm_transmitter telemetry("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+	avoe_comm_reciever dekcbox_control("message", "vector", PORT_DECKBOX_INPUT, 2048);
+		
 
+
+	vector_t translational_vector, rotational_vector;
 
 	//bind sensors and motors to network objects
+	// order matters
 	telemetry.add_sensor(&tardigrade_imu); //set source to imu
 	telemetry.add_sensor(&tardigrade_pressure); //set source to imu
 	telemetry.add_sensor(&tardigrade_leak); //set source to imu
@@ -911,14 +916,17 @@ void tardigrade_simulation(){
 	simulation_out.add_motor(&thruster_PS);
 	simulation_out.add_motor(&thruster_SS);
 	
+	dekcbox_control.add_vector(&translational_vector);
+	dekcbox_control.add_vector(&rotational_vector);
+
+
 	//setup network timer intervals
 	simulation_out.set_timer(100);
 	simulation_in.set_timer(100);
 	telemetry.set_timer(100);
+	dekcbox_control.set_timer(10);
 
 
-
-	vector_t translational_vector, rotational_vector;
 	
 	
 	// RESET TIMERS
@@ -930,7 +938,7 @@ void tardigrade_simulation(){
 	
 	tardigrade_update_sensors_dummy();
 
-
+	// sample vector
 	translational_vector.x = 0.5;
 	translational_vector.y = 0.5;
 	translational_vector.z = 0.5;
@@ -941,9 +949,19 @@ void tardigrade_simulation(){
 
 		// UPDATE YOUR SENSORS
 		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
-			controller_full.send_translation_vector(translational_vector);
+			//controller_full.send_translation_vector(translational_vector);
 			//controller_full.send_lateral_vector(rotational_vector);
+			
+			// send vectors to controller
+			if (translational_vector.x == 0 && translational_vector.y == 0 && translational_vector.z == 0){
 
+
+				controller_full.send_lateral_vector(rotational_vector);
+			}
+
+			if (rotational_vector.x == 0 && rotational_vector.y == 0 && rotational_vector.z == 0){ 
+				controller_full.send_translation_vector(translational_vector);
+			}
 
 			sensor_timer.reset();
 		}
@@ -953,7 +971,7 @@ void tardigrade_simulation(){
 		simulation_out.refresh();
 		simulation_in.refresh();
 		telemetry.refresh();
-
+		dekcbox_control.refresh();
 
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
@@ -1085,7 +1103,7 @@ void printHelp(){
 	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, comming soon)\n";
 	std::cout << "\tparser_test <filename>\t(parser test)\n";
 	std::cout << "\ttardigrade_virtual\t(run the default tardigrade virtual configuration for testing)\n"; 
-	std::cout << "\ttardigrade_virtual\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
+	std::cout << "\ttardigrade_simulation\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
 	std::cout << "\ttardigrade_remote\t(run remotely operable tardigrade configuration must be compiled with physical target)\n"; 
 	std::cout << "\ttardigrade_task <task number>\t(place holder robosub task)\n"; 
 

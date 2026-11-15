@@ -94,6 +94,17 @@ void tardigrade_refresh_avoe(avoe_sf_tardigrade_t *sf){
 	// sensor mappings
 	avoe_sf_imu(&tardigrade_imu, sf->sensor_imu);	
 
+
+	//thruster mappings
+
+	avoe_sf_thruster(sf->motor_bph, &thruster_BPH);
+	avoe_sf_thruster(sf->motor_bsh, &thruster_BSH);
+	avoe_sf_thruster(sf->motor_sh, &thruster_SH);
+	avoe_sf_thruster(sf->motor_ps, &thruster_PS);
+	avoe_sf_thruster(sf->motor_ss, &thruster_SS);
+	avoe_sf_thruster(sf->motor_y, &thruster_Y);
+
+
 	if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
 		std::cout << "--AVOE Stonefish--\n";
 		printf("SENSOR PRINT\n");

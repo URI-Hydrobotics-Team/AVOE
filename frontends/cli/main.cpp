@@ -199,7 +199,7 @@ void tardigrade(){
 	tm_vector.x = 0; tm_vector.y = 0; tm_vector.z = 0;
 	rt_vector.x = 0; rt_vector.y = 0; rt_vector.z = 0;
 
-	float movement_scale = .5; //default 0.5
+	float movement_scale = MOVEMENT_SCALE; //default 0.5
 
 
 
@@ -272,7 +272,7 @@ void tardigrade(){
 
 		#ifdef SIXAXIS
 		raw_controller.poll(&sixaxis);
-		convertToF710(&deckbox_input, sixaxis);
+		convertToSixaxis(&deckbox_input, sixaxis);
 		#endif
 
 	}
