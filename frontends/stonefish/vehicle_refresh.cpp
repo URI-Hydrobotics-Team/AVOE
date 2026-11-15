@@ -106,7 +106,8 @@ void tardigrade_refresh_avoe(avoe_sf_tardigrade_t *sf){
 
 
 	if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-		std::cout << "--AVOE Stonefish--\n";
+		std::cout << "AVOE Version " << AVOE_VERSION << '\n';
+		std::cout << "\tAVOE Frontend Stonefish\n";
 		printf("SENSOR PRINT\n");
 		tardigrade_imu.print();
 		tardigrade_pressure.print();

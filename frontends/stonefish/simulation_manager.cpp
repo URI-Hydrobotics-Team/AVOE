@@ -20,7 +20,7 @@
 #include "vehicle_setup.h"
 #include "vehicle_refresh.h"
 
-
+#include "../../lib/globals.h"
 avoe_sf_simulation_manager::avoe_sf_simulation_manager(sf::Scalar stepsPerSecond) : SimulationManager(stepsPerSecond){
 
 }
@@ -30,8 +30,6 @@ void avoe_sf_simulation_manager::SimulationStepCompleted(sf::Scalar timeStep){
 
 	//we will set get our stonefish objects defined in xml here
 
-
-	
 	//std::string name = test->getName(); 
 	sf::Actuator* thruster;
 	sf::Sensor* imu;

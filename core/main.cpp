@@ -943,6 +943,7 @@ void tardigrade_simulation(){
 	translational_vector.y = 0.5;
 	translational_vector.z = 0.5;
 
+	//jensen
 	while (1){
 		usleep(1000);
 		//the loop
