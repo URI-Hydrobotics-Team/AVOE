@@ -5,6 +5,11 @@
 */
 #include <cstring>
 #include <iostream>
+#include <ncurses.h>
+#include <panel.h>
+#include <termios.h>
+
+
 
 /* AVOE specific includes */
 #include "config.h"
@@ -21,6 +26,69 @@
 #include "setup.h"
 
 
+void tardigrade_manual_control_keyboard(char input, vector_t *t_vector, vector_t *r_vector, float scale){
+		bool no_input = true;
+		t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
+		r_vector->x = 0; r_vector->y = 0; r_vector->z = 0;
+		
+		if (input == 0){
+			no_input = true;
+		}
+
+		// translational
+		if (input == 'w'){
+			t_vector->x += scale;
+			no_input = false;
+		} 
+		if (input == 's'){
+			t_vector->x -= scale;
+			no_input = false;
+		} 	
+
+		if (input == 'a'){
+			t_vector->y -= scale;
+			no_input = false;
+		} 
+		if (input == 'd'){
+			t_vector->y += scale;
+			no_input = false;
+		}
+		//rotational	
+		if (input == 'i'){
+			r_vector->x += scale;
+			no_input = false;
+		}
+		if (input == 'k') {
+			r_vector->x -= scale;
+			no_input = false;
+		}
+		if (input == 'j'){
+			r_vector->z -= scale;
+			no_input = false;
+		}
+		if (input == 'l'){
+			r_vector->z += scale;
+			no_input = false;
+		}
+
+
+		// ascent and descent
+		if (input == 'z'){
+			t_vector->z += scale;
+			no_input = false;
+		} 
+		if (input == 'x'){
+			t_vector->z -= scale;
+			no_input = false;
+		}
+
+
+		if (no_input){
+
+			t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
+		}
+
+}
 
 void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_vector, vector_t *r_vector, float scale){
 		bool no_input = true;
@@ -143,6 +211,7 @@ void tardigrade_raw(){
 }
 
 void tardigrade(){
+
 	//setup controller
 	controller_t raw_controller; //raw device
 	controller_generic_raw sixaxis; //virtual raw device
@@ -200,20 +269,51 @@ void tardigrade(){
 	
 	network_timer.reset();
 	ui_timer.reset();
+
+
+	char keycode;
+
 	while(1){
 		usleep(1000);
-
 		core_to_frontend.refresh();
 		frontend_to_core.refresh();
+
+		read(STDIN_FILENO, &keycode, 1);
+
+
 		// convert controller input into movement vector
 
+		#ifndef KEYBOARD
 		tardigrade_manual_control(&deckbox_input, &tm_vector, &rt_vector, movement_scale);
 
+		#endif
+		#ifdef KEYBOARD
+		tardigrade_manual_control_keyboard(keycode, &tm_vector, &rt_vector, movement_scale);
+		#endif
+		
+
+
 		if (ui_timer.getElaspedTimeMS() > UI_REFRESH){
-			std::cout << "--AVOE deckbox-cli--\n";
+
+			keycode = 0;
+			vtClear();
+			//clear();
+			std::cout << "- - - AVOE FRONTEND CLI - - - \n";
+
+			#ifdef F710
+			std::cout << "Input Method: Logitech F710\n";
+			#endif
+			#ifdef SIXAXIS
+			std::cout << "Input Method: Sony SIXAXIS\n";
+			#endif
+			#ifdef KEYBOARD
+			std::cout << "Input Method: Keyboard\n";
+			#endif
+
+
 			tardigrade_imu.print();
-			tardigrade_pressure.print();
-			tardigrade_leak.print();
+			//tardigrade_pressure.print();
+			//tardigrade_leak.print();
 				
 	
 			//sixaxis.print();
@@ -225,8 +325,8 @@ void tardigrade(){
 
 			std::cout << "TRANSLATIONAL MOVEMENT VECTOR: " << tm_vector.x << ' ' << tm_vector.y << ' ' << tm_vector.z << '\n';			
 			std::cout << "ROTATIONAL MOVEMENT VECTOR: " << rt_vector.x << ' ' << rt_vector.y << ' ' << rt_vector.z << '\n';			
-			//vtClear();
 			ui_timer.reset();
+	
 		}
 
 		//convertToSixaxis(&deckbox_input, sixaxis);
@@ -241,6 +341,8 @@ void tardigrade(){
 		#endif
 
 	}
+
+	endwin();
 
 
 }
@@ -263,6 +365,13 @@ void printHelp(){
 
 
 int main(int argc, char *argv[]){
+
+	//setup terminal to grab user input
+	struct termios t;
+    	tcgetattr(STDIN_FILENO, &t);
+    	t.c_lflag &= ~ICANON;
+    	tcsetattr(STDIN_FILENO, TCSANOW, &t);
+    	fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
 
 
 

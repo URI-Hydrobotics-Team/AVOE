@@ -4,13 +4,20 @@ if [ "$1" == "deckbox" ]; then
 
 
 	if [ "$2" == "sixaxis" ]; then
-		echo "Gamepad: SIXAXIS"
+		echo "Input Method: SIXAXIS"
 		g++ main.cpp -o avoe-frontend-cli -DSIXAXIS ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../lib/vt100.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp ../../lib/controller.cpp
 	elif [ "$2" == "f710" ]; then
-		echo "Gamepad: F710"
+		echo "Input Method: F710"
 		g++ main.cpp -o avoe-frontend-cli -DF710 ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../lib/vt100.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp ../../lib/controller.cpp
+	elif [ "$2" == "keyboard" ]; then
+		echo "Input Method: Keyboard"
+		g++ main.cpp -o avoe-frontend-cli -DKEYBOARD ../../lib/network.cpp ../../lib/clock.cpp ../../lib/lib.cpp ../../lib/vt100.cpp ../../core/io.cpp ../../core/sensor.cpp ../../core/log.cpp ../../core/motor.cpp ../../lib/controller.cpp
 	else
-		echo "You must specify a controller type, pimp <sixaxis> or <f710>"
+
+
+
+
+		echo "You must specify an input method type: <sixaxis>, <f710>, or <keyboard>"
 	fi
 
 elif [ "$1" == "sensor-test" ]; then
