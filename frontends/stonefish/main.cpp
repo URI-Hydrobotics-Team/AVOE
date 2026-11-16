@@ -20,7 +20,7 @@
 #include "../../lib/vt100.h"
 #include "../../lib/clock.h"
 
-#include "vehicle_setup.h"
+//#include "vehicle_setup.h"
 #include "vehicle_refresh.h"
 /*
 

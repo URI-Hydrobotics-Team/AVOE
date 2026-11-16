@@ -3,3 +3,12 @@ This is AVOE's equivalent of `stonefish_ros` and operates very similairly to the
 
 ## Compilation
 The `build.sh` script is not functional, use `cmake`.
+
+```
+mkdir build
+cd build
+cmake ..
+make
+./avoe-frontend-stonefish tardigrade ../tardigrade.scn
+
+```
