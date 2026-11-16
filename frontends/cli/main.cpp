@@ -22,41 +22,6 @@
 
 
 
-void printController(controller_generic_profile *deckbox_input){
-
-std::cout << "--- INPUT STAUS ---\n";
-	
-	/* controller input*/
-	std::cout << "\tButtons:\n";
-	std::cout << "\t\tButton 1: " << deckbox_input->fc_1 << '\n';
-	std::cout << "\t\tButton 2: " << deckbox_input->fc_2 << '\n';
-	std::cout << "\t\tButton 3: " << deckbox_input->fc_3 << '\n';
-	std::cout << "\t\tButton 4: " << deckbox_input->fc_4 << '\n';
-
-	std::cout << "\t\tD-Pad Up: " << deckbox_input->dp_up << '\n';	
-	std::cout << "\t\tD-Pad Down: " << deckbox_input->dp_down << '\n';
-	std::cout << "\t\tD-Pad Left: " << deckbox_input->dp_left << '\n';
-	std::cout << "\t\tD-Pad Right: " << deckbox_input->dp_right << '\n';
-
-	std::cout << "\t\tLT1: " << deckbox_input->lt << '\n';
-	std::cout << "\t\tRT1: " << deckbox_input->rt << '\n';
-
-	std::cout << "\t\tLT2: " << deckbox_input->lt_a << '\n';
-	std::cout << "\t\tRT2: " << deckbox_input->rt_a << '\n';
-
-	std::cout << "\t\tStart: " << deckbox_input->start << '\n';
-	std::cout << "\t\tSelect: " << deckbox_input->select << '\n';
-	std::cout << "\t\tSuper: " << deckbox_input->super << '\n';
-
-	std::cout << "\tSticks:\n";
-
-	std::cout << "\t\tLeft Click: " << deckbox_input->sc_left << '\n';
-	std::cout << "\t\tRight Click: " << deckbox_input->sc_right << '\n';
-
-	std::cout << "\t\tLeft: " << deckbox_input->sll_x << ' ' << deckbox_input->sll_y << '\n';
-	std::cout << "\t\tRight: " << deckbox_input->slr_x << ' ' << deckbox_input->slr_y << '\n';
-}
-
 void tardigrade_manual_control(controller_generic_profile *input, vector_t *t_vector, vector_t *r_vector, float scale){
 		bool no_input = true;
 		t_vector->x = 0; t_vector->y = 0; t_vector->z = 0;
