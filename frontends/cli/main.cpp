@@ -5,8 +5,6 @@
 */
 #include <cstring>
 #include <iostream>
-#include <ncurses.h>
-#include <panel.h>
 #include <termios.h>
 
 
@@ -219,7 +217,7 @@ void tardigrade(){
 
 	controller_generic_profile deckbox_input; //virtual "refined" device
 
-	raw_controller.setDevice(DEFAULT_CONTROLLER);
+	raw_controller.setDevice(CONTROLLER_DEVICE);
 	raw_controller.init();
 
 	tardigrade_setup_sensors_virtual();
@@ -342,7 +340,6 @@ void tardigrade(){
 
 	}
 
-	endwin();
 
 
 }

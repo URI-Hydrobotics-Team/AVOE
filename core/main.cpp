@@ -14,6 +14,7 @@
 
 /* AVOE specific*/
 #include "../lib/globals.h"
+#include "../lib/vt100.h"
 #include "config.h"
 #include "log.h"
 #include "io.h"
@@ -984,6 +985,7 @@ void tardigrade_simulation(){
 		// DISPLAY OUTPUT AND LOGGING
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+			vtClear();
 			tardigrade.print();
 			//std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
 			//tardigrade_imu.log(&test_log); //log imu sensor data
@@ -1101,7 +1103,7 @@ void printHelp(){
 
 	std::cout << "\nMODES:\n";
 	std::cout << "\thelp\t(displays this)\n";
-	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, comming soon)\n";
+	std::cout << "\tstandard <vehicle setup file>\t(fully parsed AVOE, coming soon)\n";
 	std::cout << "\tparser_test <filename>\t(parser test)\n";
 	std::cout << "\ttardigrade_virtual\t(run the default tardigrade virtual configuration for testing)\n"; 
 	std::cout << "\ttardigrade_simulation\t(run tardigrade simulation configuration for testing with stonefish)\n"; 
