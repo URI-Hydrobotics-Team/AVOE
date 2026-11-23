@@ -16,7 +16,9 @@
 #include "../lib/clock.h"
 #include "../lib/lib.h"
 
-
+// print vehicle objects in grid to save space
+#define VEHICLE_PRINT_COL 4
+#define VEHICLE_PRINT_ROW 4
 
 class vehicle_t{
 
@@ -50,6 +52,7 @@ class vehicle_t{
 		void addSensor(sensor_t *sensor);
 		void addMotor(motor_t *motor);
 		void print();
+		void print_tile();
 
 };
 

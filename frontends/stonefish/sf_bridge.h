@@ -11,6 +11,8 @@
 
 #ifndef AVOE_SF_BRIDGE_H
 #define AVOE_SF_BRIDGE_H
+#define PI 3.14159
+
 
 struct avoe_sf_tardigrade_t {
 	

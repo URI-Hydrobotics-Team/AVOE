@@ -9,6 +9,8 @@ void vtClear(){
 
 
 void vtGoto(int x, int y){
-	printf("\033[%d;%dH", y, x);
+	//printf("\033[%d;%dH", y, x);
+	printf("%c[%d;%df",0x1B,y,x);
+
 
 }

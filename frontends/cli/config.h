@@ -6,7 +6,7 @@
 
 /* GENERAL */
 #define UI_REFRESH 200 // ui update interval in ms
-#define NETWORK_REFRESH_INTERVAL 50
+#define NETWORK_REFRESH_INTERVAL 100
 
 /* CONTROLLER */
 #define CONTROLLER_TIMEOUT 10000

@@ -11,9 +11,12 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+
+#include <cstdint>
+
 #include "log.h"
 #include "../lib/lib.h"
-
+#include "../lib/vt100.h"
 
 class sensor_t{
 
@@ -42,6 +45,7 @@ class sensor_t{
 		void write(const char *input, size_t field, size_t n);
 		void log(log_t *log);
 		void print();
+		void print_pos(uint8_t col, uint8_t row);
 		size_t getFieldCount();
 		size_t getBufferSize(); //used for io.h
 		void writeToBuffer(char *buffer); // used for io.h 

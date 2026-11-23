@@ -162,6 +162,29 @@ void sensor_t::print(){
 }
 
 
+void sensor_t::print_pos(uint8_t col, uint8_t row){
+
+	vtGoto(col, row);
+	std::cout << "START SENSOR_T PRINT\n";
+	std::cout << "METADATA:\n";
+	std::cout << "\tMODEL: " << model << '\n';
+	std::cout << "\tVENDOR: " << vendor << '\n';
+	std::cout << "\tPROTOCOL: " << protocol << '\n';
+	std::cout << "DATA:\n";
+	for (size_t i = 0; i < field_count; i++){
+		std::cout << "\tFIELD " << i << ": " << data[i] << '\n';
+
+	}
+	std::cout << "END SENSOR_T PRINT\n";
+
+}
+
+
+
+
+
+
+
 size_t sensor_t::getFieldCount(){
 	return field_count;
 }

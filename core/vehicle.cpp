@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdint>
 #include <cstring>
 
 #include "vehicle.h"
@@ -116,6 +117,52 @@ void vehicle_t::print(){
 		motor_table[i]->print();
 	}
 }
+
+void vehicle_t::print_tile(){
+	//print vehicle information for debugging purposes
+	std::cout << "vehicle_t print:\n";
+	std::cout << "\tNAME: " << name;
+	std::cout << "\tVERSION: " << version;
+	std::cout << "\tTYPE: " << type << '\n';
+
+	std::cout << "\t" << sensor_count << " sensor(s):\n";
+	
+	int index = 0;
+	for (int i = 0; i < VEHICLE_PRINT_COL; i++){
+		for (int j = 0; j < VEHICLE_PRINT_ROW; j++){
+			index = i + j*VEHICLE_PRINT_COL;
+			if (sensor_table[index]){
+				sensor_table[index]->print_pos(i, j);
+			}	
+
+		}
+
+	}
+
+
+	
+	/*
+
+	for (size_t i = 0; i < sensor_count; i++){
+		sensor_table[i]->print();
+	}
+
+
+
+
+	std::cout << "\t" << motor_count << " motor(s):\n";
+	for (size_t i = 0; i < motor_count; i++){
+		motor_table[i]->print();
+	}
+
+	*/
+	
+
+
+}
+
+
+
 
 
 

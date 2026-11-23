@@ -28,9 +28,9 @@
 
 /* 
 	MAIN.CPP
-	Essentially, this is where you setup your vehicle. Assuming you have already defined your vehicle's devices in vehicle_setup.h, you can now
-	write a function to that sets up all of your devices and other components (loggers, timers, controllers, network channels, etc.). Now you can do stuff
-	(by calling another functions or by doing everything in here, say in a while(1) loop).
+	Essentially, this is where you setup your vehicle and implement its behaviour. Assuming you have already defined your vehicle's objects in vehicle_setup.h, you can now
+	write a function that sets up all of your vehicle and systm (loggers, timers, controllers, network channels, etc.) objects. Now you have an environment
+	in which you can do stuff.
 
 */
 
@@ -654,9 +654,11 @@ void tardigrade_imu_dump(){
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
 
+			
 			//update, print and log every one second
 			tardigrade_imu.print();
 			tel_timer.reset(); //always reset
+			vtClear();
 		}
 	}
 
@@ -668,6 +670,7 @@ void tardigrade_imu_dump(){
 }
 
 
+// TARDIGRADE TELEOPRATIVE CONFIGURATION //
 void tardigrade_remote(){
 
 #ifdef TARGET_TARDIGRADE
@@ -751,7 +754,7 @@ void tardigrade_remote(){
 		rx_device.refresh();
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
-                        trackTransmissionTime(&network_timer);
+                        //trackTransmissionTime(&network_timer);
 			
 		}
 	
@@ -779,8 +782,9 @@ void tardigrade_remote(){
 
 }
 
+// TARDIGRADE DUMMY CONFIGURATION //
+
 void tardigrade_virtual(){
-	/* This is a reference setup / configuration */
 	
 
 	// TIMERS
@@ -850,7 +854,7 @@ void tardigrade_virtual(){
 
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
-                        trackTransmissionTime(&network_timer);
+                        //trackTransmissionTime(&network_timer);
 			
 		}
 	
@@ -858,8 +862,11 @@ void tardigrade_virtual(){
 		// DISPLAY OUTPUT AND LOGGING
 
 		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+
+			vtClear();
 			//update, print and log every one second
 			tardigrade.print();
+			//tardigrade.print_tile();
 			std::cout << "translational vector " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
 			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
 			tardigrade_imu.log(&test_log); //log imu sensor data
@@ -868,7 +875,7 @@ void tardigrade_virtual(){
 	}
 }
 
-// TARDIGRADE SIMULATION WORKSPACE
+// TARDIGRADE SIMULATION CONFIGURATION //
 
 void tardigrade_simulation(){
 	/* This mode is used with stonefish  */
@@ -977,7 +984,7 @@ void tardigrade_simulation(){
 
 		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
 			//manual network functions may be placed in here
-                        trackTransmissionTime(&network_timer);
+                        //trackTransmissionTime(&network_timer);
 			
 		}
 	
@@ -996,7 +1003,7 @@ void tardigrade_simulation(){
 	}
 }
 
-/* CORE MAIN FUNCTIONS */
+// CORE MAIN FUNCTIONS //
 
 
 void parser_test(const char *filename){
