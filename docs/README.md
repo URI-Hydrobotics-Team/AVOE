@@ -15,9 +15,10 @@ The Autonomous Vehicle Operating Environment is a project headed by the Universi
 ## Introduction
 AVOE should be considered a set of libraries that will help you build control software for an AUV. At the core, AVOE provides generalized components for managing sensors and motors, and an underlying subsystem that supports networking, logging, an autonomoy framework and the tools to build a ground interface (deckbox), plus reference components in the form of "plugins" for extended functionality. While our codebase contains drivers and other code for our use cases, primarily our "Tardigrade" AUV, these drivers should not be considered core to AVOE, hence why they are in `plugins/`.
 
-AVOE addresses many of the issues with `auv-hub`, an earlier project which controlled Tardigrade. `auv-hub` was very basic, poorly written, and not flexible. Our goal is for AVOE to be a general soultion for building AUV control software that can be employed for Tardigrade and future AUVs.
+AVOE addresses many of the issues with `auv-hub`, an earlier project which controlled Tardigrade. `auv-hub` was very basic, poorly written, and not flexible. Our goal is for AVOE to be a general soultion for building AUV control software that can be employed for Tardigrade and future AUVs. There was a period during the early development stages of AVOE where our team attempted to learn and integrate ROS but we found it too difficult to learn and gave up. 
 
 AVOE is written in C++, however some may call it "C-style C++" as there is a preference for implementing things in purely C whenever possible. We may even consider full C rewrite at some point.
+
 
 
 ### Directory Structure
@@ -38,11 +39,14 @@ AVOE/
 
 The files `vehicle_setup.h` and `main.cpp` are where you are expected to setup your "vehicle". `main.cpp` is essential and should at least contain some kind of bootstrap function for starting your control routines. Declaring and setting up your sensors and motors in `vehicle_setup` is not essential but is recommended. Really, you are free to structure your AVOE implementation however you want, for example, you could make a file called `connections.h` for declaring an initializing your network objects. This is explained in more detail in the "Vehicle Setup and main.cpp" section
 
+As of writing this, we are trying to transition to a system of configuration files which can be parsed by AVOE in order to instantize objects rather than staticly defining them in header files, this has yet to be implemented.
 #### `frontends/`
 
 `frontends/` refers to programs that provide an interface to view telemetry from the "vehicle" and sending control data, such as gamepad inputs, to the "vehicle". Telemetry includes but is not limited to Motors (raw thruster values in a float representation), Sensors (Output for parsed sensor info fields). We provide a "CLI" refrecne version which is used for our Tardigrade AUV. Our CLI interface is configured in the `config.h` file. This is mainly settings such as Controller timeout and IP address info to reach the AUV.
 
 Currently our frontend CLI program and the core AVOE itself are configured through a header file `config.h`, however future plans are to implement a plain text config system that can be parsed on startup to prevent the user to constantly recompile for configuration changes.
+
+There also exists a [Stonefish](https://stonefish.readthedocs.io/en/v1.5/index.html) plugin which enables simulation.
 
 #### `lib/`
 
