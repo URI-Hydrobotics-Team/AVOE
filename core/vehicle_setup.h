@@ -10,6 +10,8 @@
 
 */
 
+#ifndef VEHICLE_SETUP
+#define VEHICLE_SETUP
 
 /* tardigrade example */
 // include sensors
@@ -445,3 +447,5 @@ void tardigrade_update_sensors_simulation(){
 
 
 }
+
+#endif

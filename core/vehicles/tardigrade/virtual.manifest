@@ -1,0 +1,11 @@
+# AVOE manifest file
+
+
+MANIFEST_START
+vehicle=tardigrade.vehicle
+timer=network_timer.timer
+timer=tel_timer.timer
+timer=sensor_timer.timer
+network=tx_device1
+
+MANIFEST_END

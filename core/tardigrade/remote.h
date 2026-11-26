@@ -1,0 +1,141 @@
+/*
+
+	URI Hydrobotics
+	TARDIGRADE REMOTE
+
+*/
+
+
+/* system */
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+
+/* AVOE specific*/
+#include "../../lib/globals.h"
+#include "../../lib/vt100.h"
+#include "../config.h"
+#include "../log.h"
+#include "../io.h"
+#include "../task.h"
+
+
+
+/* target specific*/
+#include "../vehicle_setup.h"
+#include "../tasks.h"
+
+
+// TARDIGRADE TELEOPRATIVE CONFIGURATION //
+void tardigrade_remote(){
+
+#ifdef TARGET_TARDIGRADE
+
+	//this is the tardigrade production routine	
+
+	// TIMERS
+	avoe_clock_t tel_timer; //telemetry timer
+	avoe_clock_t network_timer; //telemetry timer
+	avoe_clock_t sensor_timer; //telemetry timer
+
+	// LOGGING
+	log_t test_log; // setup a logger
+	test_log.init(); // initilize the logger
+
+	// SENSOR SETUP CALLS
+	tardigrade_setup_physical(); //run the setup function in the vehicle_setup.h file
+
+	// NETWORK SETUP
+	avoe_comm_transmitter tx_device("sensor", "telemetry", PORT_DECKBOX_TELEMETRY, IP_DECKBOX);	
+	tx_device.add_sensor(&tardigrade_imu); //set source to imu
+	tx_device.add_sensor(&tardigrade_pressure); //set source to imu
+	tx_device.add_sensor(&tardigrade_leak); //set source to imu
+	tx_device.add_motor(&thruster_SH);
+	tx_device.add_motor(&thruster_BSH);
+	tx_device.add_motor(&thruster_BPH);
+	tx_device.add_motor(&thruster_Y);
+
+
+	tx_device.set_timer(100); //set 100ms transmit interval
+	
+
+	vector_t translational_vector, rotational_vector;	
+	avoe_comm_reciever rx_device("message", "vector", PORT_DECKBOX_INPUT, 2048);
+	rx_device.set_timer(10);
+	rx_device.add_vector(&translational_vector);
+	rx_device.add_vector(&rotational_vector);
+	
+	
+	// RESET TIMERS
+	tel_timer.reset(); 
+	sensor_timer.reset();
+	network_timer.reset();
+
+	std::cout << "[MAIN] AVOE SETUP COMPLETE\n"; // DONE
+	/*
+	need to initialize sensors first before use
+	A buffer overflow and seg fault could happen
+	when sensor_timer.getElaspedTimeMS() <= 100
+	due to appendstr access allocated but uninitialized values
+	*/
+	tardigrade_update_sensors_physical();
+	
+	while (1){
+		usleep(1000);
+		//the loop
+
+		// UPDATE YOUR SENSORS AND SEND THRUSTERS
+		if (sensor_timer.getElaspedTimeMS() > TARDIGRADE_SENSOR_UPDATE_INTERVAL){
+			tardigrade_update_sensors_physical();
+			
+			// send vectors to controller
+			if (translational_vector.x == 0 && translational_vector.y == 0 && translational_vector.z == 0){
+
+
+				controller_full.send_lateral_vector(rotational_vector);
+			}
+
+			if (rotational_vector.x == 0 && rotational_vector.y == 0 && rotational_vector.z == 0){ 
+				controller_full.send_translation_vector(translational_vector);
+			}
+
+			//controller.send_vector(translational_vector);
+			sensor_timer.reset();
+
+			set_ppsti_data(&thruster_BPH, &thruster_BSH, &thruster_SH, &thruster_Y, &thruster_PS, &thruster_SS);
+		}
+		
+		// NETWORK REFRESH
+		tx_device.refresh();
+		rx_device.refresh();
+		if (network_timer.getElaspedTimeMS() > NETWORK_UPDATE_INTERVAL){
+			//manual network functions may be placed in here
+                        //trackTransmissionTime(&network_timer);
+			
+		}
+	
+
+		// DISPLAY OUT
+
+		if (tel_timer.getElaspedTimeMS() > DISPLAY_OUTPUT_INTERVAL){
+
+			//update, print and log every one second
+			tardigrade.print();
+			std::cout << "TRANSLATIONAL VECTOR " << translational_vector.x << " " << translational_vector.y << " " << translational_vector.z << '\n';
+
+			std::cout << "ROTATIONAL VECTOR " << rotational_vector.x << " " << rotational_vector.y << " " << rotational_vector.z << '\n';
+			//test_log.log(imu.read(7)); //data field 7 (8th field) is temp for imu sensor
+			tardigrade_imu.log(&test_log); //log imu sensor data
+			tel_timer.reset(); //always reset
+		}
+	}
+
+
+
+
+#endif
+
+
+}
+
